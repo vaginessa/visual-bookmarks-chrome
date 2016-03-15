@@ -1,0 +1,20 @@
+{
+  "manifest_version": 2,
+  "name": "Visual bookmarks",
+  "version": "0.8",
+  "description": "Simple speed dial bookmarks page, including search, add, edit, delete and dragging bookmarks.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "chrome_url_overrides": {
+    "newtab": "newtab.html"
+  },
+  "options_page": "options.html",
+  "browser_action": {
+      "default_title": "Visual bookmarks"
+  },
+  "permissions": ["background", "bookmarks", "storage", "notifications"],
+  "background": { "scripts": [ "js/eventPage.js" ], "persistent": false }
+}
