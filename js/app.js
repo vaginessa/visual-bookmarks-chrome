@@ -59,8 +59,9 @@
         var title = getEl('#title').value;
         var url = getEl('#url').value;
         if(id !== 'New') {
-          updateBookmark(id, title, url);
-          Modal.hide();
+          if(updateBookmark(id, title, url)) {
+            Modal.hide();
+          }
         }
         else {
           if(createBookmark(title, url)) {
@@ -91,7 +92,7 @@
         sort = Sortable.create(container, {
           animation: 200,
           filter: '.bookmark__control',
-          draggable: ".column",
+          draggable: '.column',
           onUpdate: function() {
             getElAll('.bookmark', container).forEach(function(item, index) {
               bk.move(item.getAttribute('data-sort'), {
@@ -125,13 +126,13 @@
 
         while ((node = openList.pop()) !== undefined) {
           if (node.children !== undefined) {
-            if (node.parentId === "0") {
+            if (node.parentId === '0') {
               node.path = ''; // Root elements have no parent so we shouldn't show their path
             }
             node.path += node.title;
             while ((child = node.children.pop()) !== undefined) {
               if (child.children !== undefined) {
-                child.path = node.path + "/";
+                child.path = node.path + '/';
                 openList.push(child);
               }
             }
@@ -349,11 +350,11 @@
           getEl('.bookmark__link', bookmark).title = result.title;
           notifications('Bookmark updated');
         });
-      } else {
-        alert("Editing an existing Bookmark requires both a Title and a valid URL in Chrome\n\n" +
-        "For example, valid URL's start with: \n - http:// \n - https:// \n - ftp://");
+        return true;
       }
-
+      alert("Editing an existing Bookmark requires both a Title and a valid URL in Chrome\n\n" +
+        "For example, valid URL's start with: \n - http:// \n - https:// \n - ftp://");
+      return false;
     }
 
     return {
