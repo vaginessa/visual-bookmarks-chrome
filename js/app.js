@@ -328,10 +328,8 @@
         });
         return true;
       }
-      // else {
-        alert("- Adding a new Folder only requires a Title \n- Adding a new Bookmark requires both a Title and a URL");
-        return false
-      // }
+      alert("- Adding a new Folder only requires a Title \n- Adding a new Bookmark requires both a Title and a URL");
+      return false;
     }
 
     function updateBookmark(id, title, url) {
