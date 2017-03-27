@@ -3,7 +3,6 @@ const Settings = (() => {
   let default_values = {
     background_color: "#f7f7f7",
     background_image: "background_color",
-    // background_image: "background_local",
     background_external: "",
     default_folder_id: 1,
     dial_columns: 5,
@@ -25,7 +24,6 @@ const Settings = (() => {
     if (localStorage.getItem('enable_sync') === 'true') {
       chrome.storage.onChanged.addListener(function (obj, areaName) {
         Settings.restoreFromSync();
-        // alert(1);
         window.location.reload();
       });
     }
@@ -42,7 +40,6 @@ const Settings = (() => {
 
   function syncToStorage() {
     var settings_object = {};
-    // Object.keys(localStorage).forEach(function (key) {
     Object.keys(default_values).forEach(function (key) {
       if (localStorage[key]) {
         settings_object[key] = localStorage[key];
