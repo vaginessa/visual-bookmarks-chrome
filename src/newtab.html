@@ -3,26 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <title>Visual bookmarks</title>
-  <link rel="stylesheet" href="css/bookmark.css">
   <style id="generateStyles"></style>
 </head>
 <body>
+  <div class="icon-cog">
+    <a class="icon-cog__link" href="options.html"></a>
+  </div>
   <main id="main">
     <div class="container">
-      <header class="header">
+      <header class="header" id="header">
         <div class="row">
-          <div class="grid two">
-            <div class="text-center">
-              <div id="back" class="icon-back"><a class="icon-back__link"></a></div>
-              <div class="icon-cog">
-                <a class="icon-cog__link" href="options.html"></a>
-              </div>
-            </div>
-          </div>
-          <div class="grid half">
+          <div class="grid grid-9">
             <input type="text" class="form-control" placeholder="Search bookmarks" id="bookmarkSearch" required>
           </div>
-          <div class="grid four">
+          <div class="grid grid-3">
             <select name="" id="selectFolder" class="form-control"></select>
           </div>
         </div>
@@ -52,10 +46,5 @@
     </div>
   </div>
 
-  <script src='js/eventPage.js'></script>
-  <script src="js/settings.js"></script>
-  <script src="js/Sortable.min.js"></script>
-  <script src="js/helpers.js"></script>
-  <script src="js/app.js"></script>
 </body>
 </html>
