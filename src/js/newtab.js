@@ -12,7 +12,7 @@ if (!localStorage.getItem('custom_dials')) {
 }
 
 FS.init(500);
-FS.usedAndRemaining(function (used) {
+FS.usedAndRemaining(function(used) {
   if (used === 0) {
     localStorage.setItem('custom_dials', '{}');
     localStorage.setItem('background_local', '');
@@ -103,7 +103,7 @@ const Bookmarks = (() => {
     }, false);
 
     // Search bookmarks
-    const searchDebounce = Helpers.debounce(function (evt) {
+    const searchDebounce = Helpers.debounce(function(evt) {
       search(evt);
     }, 500);
     document.getElementById('bookmarkSearch').addEventListener('input', searchDebounce, false);
@@ -120,8 +120,8 @@ const Bookmarks = (() => {
         animation: 200,
         filter: '.bookmark__control',
         draggable: '.column',
-        onUpdate: function () {
-          Array.prototype.slice.call(container.querySelectorAll('.bookmark')).forEach(function (item, index) {
+        onUpdate: function() {
+          Array.prototype.slice.call(container.querySelectorAll('.bookmark')).forEach(function(item, index) {
             bk.move(item.getAttribute('data-sort'), {
               'parentId': container.getAttribute('data-folder'),
               'index': index
@@ -145,7 +145,7 @@ const Bookmarks = (() => {
     const select = document.getElementById('selectFolder');
     select.innerHTML = '';
     select.removeEventListener('change', changeFolder, false);
-    bk.getTree(function (rootNode) {
+    bk.getTree(function(rootNode) {
       let folderList = [], openList = [], node, child;
       // Never more than 2 root nodes, push both Bookmarks Bar & Other Bookmarks into array
       openList.push(rootNode[0].children[0]);
@@ -166,12 +166,12 @@ const Bookmarks = (() => {
           folderList.push(node);
         }
       }
-      folderList.sort(function (a, b) {
+      folderList.sort(function(a, b) {
         return a.path.localeCompare(b.path);
       });
 
       let arr = [];
-      folderList.forEach(function (item) {
+      folderList.forEach(function(item) {
         arr.push(`<option${item.id === startFolder() ? ' selected' : ''} value="${item.id}">${item.path}</option>`);
       });
       select.innerHTML = arr.join('');
@@ -182,12 +182,6 @@ const Bookmarks = (() => {
 
   function genBookmark(bookmark, json) {
 
-    /**
-     * Favicon feature option
-     * <div class="bookmark__title">${hasFavicon}{title}</div>
-     * http://www.google.com/s2/favicons?domain={url}
-     * @return Node img
-     */
     const hasFavicon = (localStorage.getItem('show_favicon') === 'true')
       ? '<img class="bookmark__favicon" width="16" height="16" src="chrome://favicon/{url}">'
       : '';
@@ -253,7 +247,7 @@ const Bookmarks = (() => {
     let arr = [];
     container.innerHTML = '<div class="dial-loading"><div class="loading"></div></div>';
     let storage = JSON.parse(localStorage.getItem('custom_dials'));
-    _array.forEach(function (bookmark) {
+    _array.forEach(function(bookmark) {
       if (bookmark.url !== undefined) {
         arr.push(genBookmark(bookmark, storage));
       }
@@ -274,7 +268,7 @@ const Bookmarks = (() => {
   }
 
   function createSpeedDial(id) {
-    bk.getSubTree(id, (item) => {
+    bk.getSubTree(id, function(item) {
       if (item !== undefined) {
         render(item[0].children);
         container.setAttribute('data-folder', id);
@@ -310,7 +304,7 @@ const Bookmarks = (() => {
   function search(evt) {
     let value = evt.target.value.trim().toLowerCase();
     let arr = [];
-    bk.search(value, (match) => {
+    bk.search(value, function(match) {
       if (match.length > 0) {
         if (localStorage.getItem('drag_and_drop') === 'true') {
           sort.option('disabled', true);
@@ -338,7 +332,7 @@ const Bookmarks = (() => {
     let bookmark = target.closest('.column');
     if (confirm('Are you sure you want to delete the bookmark ?', '')) {
       let id = target.getAttribute('data-id');
-      bk.remove(id, () => {
+      bk.remove(id, function() {
         container.removeChild(bookmark);
         Helpers.notifications('Bookmark removed.');
       })
@@ -351,7 +345,7 @@ const Bookmarks = (() => {
     let bookmark = target.closest('.column');
     if (confirm('Are you sure you want to delete the folder and all its contents ?', '')) {
       let id = target.getAttribute('data-id');
-      bk.removeTree(id, () => {
+      bk.removeTree(id, function() {
         container.removeChild(bookmark);
         generateFolderList();
         Helpers.notifications('Folder removed.');
@@ -384,7 +378,7 @@ const Bookmarks = (() => {
     let hash = buildBookmarkHash(title, url);
     if (hash !== undefined) {
       hash.parentId = container.getAttribute('data-folder');
-      bk.create(hash, function (result) {
+      bk.create(hash, function(result) {
         let html;
         if (result.url) {
           html = genBookmark(result);
@@ -409,7 +403,7 @@ const Bookmarks = (() => {
       hash = undefined;
     }
     if (hash !== undefined) {
-      bk.update(id, hash, function (result) {
+      bk.update(id, hash, function(result) {
         bookmark.querySelector('.bookmark__link').href = (result.url) ? result.url : '#' + result.id;
         bookmark.querySelector('.bookmark__title').textContent = result.title;
         bookmark.querySelector('.bookmark__link').title = result.title;
@@ -428,7 +422,7 @@ const Bookmarks = (() => {
 
 })();
 
-const Modal = (function () {
+const Modal = (() => {
   let isActive = null,
       overlay = document.getElementById('modal-overlay'),
       modal = document.getElementById('modal'),
@@ -457,7 +451,7 @@ const Modal = (function () {
         }
       }
       else {
-        setTimeout(function () {
+        setTimeout(() => {
           titleField.focus();
         }, 100);
         modalHead.textContent = 'Add bookmark';
@@ -508,11 +502,11 @@ const UI = (() => {
 
       if (resource && resource !== '') {
         let image = new Image();
-        image.onload = function () {
+        image.onload = function() {
           bgEl.style.backgroundImage = `url('${resource}')`;
           bgEl.style.opacity = 1;
         }
-        image.onerror = function (e) {
+        image.onerror = function(e) {
           console.warn(`Local background image resource problem: ${e.type}`);
           bgEl.style.opacity = 1;
         }

@@ -45,7 +45,7 @@ const Options = (() => {
     let optionBg = document.getElementById('option_bg');
     let options = Array.prototype.slice.call(optionBg.querySelectorAll('option'));
 
-    options.forEach((item) => {
+    options.forEach(function(item) {
       if (item.value === localStorage.getItem('background_image')) {
         item.selected = true;
         Helpers.trigger('change', optionBg);
@@ -90,7 +90,7 @@ const Options = (() => {
       return alert('Bad file type');
     }
     let fileName = `background.${file.type.replace('image/', '')}`;
-    // FS.createFile('/images/' + encodeURI(file.name), { file: file, fileType: file.type }, function (fileEntry)
+
     FS.createDir('images', function (dirEntry) {
       FS.createFile('/images/' + fileName, { file: file, fileType: file.type }, function (fileEntry) {
         document.querySelector('.c-upload__preview').style.display = '';
@@ -99,6 +99,7 @@ const Options = (() => {
         Helpers.notifications('Background image has been changed');
       });
     });
+
   }
 
   function removeFile(evt) {
