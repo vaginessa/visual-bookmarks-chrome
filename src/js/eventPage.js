@@ -81,22 +81,18 @@ function captureScreen(link, callback) {
   });
 }
 
-chrome.runtime.onInstalled.addListener(function (callback) {
-  if (callback.reason === 'update') {
-    for (var name in localStorage) {
-      console.log(name + ': ' + localStorage[name])
-      Helpers.notifications('Update your settings');
-    }
-    // localStorage.clear();
-  }
-});
+// In future
+// chrome.runtime.onInstalled.addListener(function (callback) {
+//   if (callback.reason === 'update') {
+//     for (var name in localStorage) {
+//       console.log(name + ': ' + localStorage[name])
+//       Helpers.notifications('Update your settings');
+//     }
+//   }
+// });
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.captureUrl) {
-    /**
-     * Create screen tab
-     * @return { Object }
-     */
 
     captureScreen(request.captureUrl, function (data) {
 
@@ -114,7 +110,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         let name = `${Helpers.getDomain(request.captureUrl)}_${request.id}.jpg`;
 
         FS.createDir('images', function (dirEntry) {
-          console.log(dirEntry)
           FS.createFile(`${dirEntry.fullPath}/${name}`, { file: blob, fileType: blob.type }, function (fileEntry) {
             let obj = JSON.parse(localStorage.getItem('custom_dials'));
             obj[request.id] = fileEntry.toURL();
@@ -123,7 +118,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
             try {
               sendResponse(fileEntry.toURL());
             } catch(e) {}
-
           });
         });
 
@@ -131,6 +125,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       });
     });
 
+    // send a response asynchronously (return true)
+    // this will keep the message channel open to the other end until sendResponse is called
     return true;
 
   }

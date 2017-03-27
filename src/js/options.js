@@ -74,9 +74,7 @@ const Options = (() => {
     if (localStorage.getItem('enable_sync') === 'true') {
       Settings.syncToStorage();
     }
-    // window.location = 'newtab.html';
     Helpers.notifications('Settings successfully saved');
-    // window.location.reload();
     getOptions();
   }
 
@@ -116,8 +114,8 @@ const Options = (() => {
     if (!img) return;
 
     let name = img.split('/').pop();
-    // FS.deleteFile('/images/' + decodeURI(name), function () {
-    FS.deleteFile(`/images/${name}`, function () {
+
+    FS.deleteFile(`/images/${name}`, function() {
       Helpers.notifications('This image has been removed');
       localStorage.removeItem('background_local');
       preview.innerHTML = '';
@@ -127,7 +125,7 @@ const Options = (() => {
 
   function selectBg(evt) {
 
-    Array.prototype.slice.call(document.querySelectorAll('.tbl__option')).forEach(function (item) {
+    Array.prototype.slice.call(document.querySelectorAll('.tbl__option')).forEach(function(item) {
       item.style.display = '';
     });
 
@@ -177,7 +175,7 @@ const Options = (() => {
   }
   function checkEnableSync() {
     if (this.checked) {
-      chrome.storage.sync.getBytesInUse(null, function (bytes) {
+      chrome.storage.sync.getBytesInUse(null, function(bytes) {
         if (bytes > 0) {
           if (confirm("You have previously synchronized data!!\n" +
             "Do you want to overwrite your current local settings with your previously saved remote settings?")) {
@@ -191,7 +189,7 @@ const Options = (() => {
   function generateFolderList() {
     const select = document.getElementById('selectFolder');
     select.innerHTML = '';
-    chrome.bookmarks.getTree(function (rootNode) {
+    chrome.bookmarks.getTree(function(rootNode) {
       let folderList = [], openList = [], node, child;
       // Never more than 2 root nodes, push both Bookmarks Bar & Other Bookmarks into array
       openList.push(rootNode[0].children[0]);
@@ -215,15 +213,13 @@ const Options = (() => {
       folderList.sort(function (a, b) {
         return a.path.localeCompare(b.path);
       });
-      // var frag = document.createDocumentFragment();
       let arr = [];
       let folderId = localStorage.getItem('default_folder_id');
-      folderList.forEach(function (item) {
+      folderList.forEach(function(item) {
         arr.push(`<option${item.id === folderId ? ' selected' : ''} value="${item.id}">${item.path}</option>`);
       });
       select.innerHTML = arr.join('');
-      // select.appendChild(frag);
-    })
+    });
   }
 
   return {
