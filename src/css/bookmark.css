@@ -157,6 +157,9 @@ p {
     padding: 10px;
   }
 }
+.column--ghost {
+  opacity: 0;
+}
 
 /* Bookmark */
 .bookmark,

@@ -120,6 +120,8 @@ const Bookmarks = (() => {
         animation: 200,
         filter: '.bookmark__control',
         draggable: '.column',
+        ghostClass: 'column--ghost',
+        chosenClass: 'column--chosen',
         onUpdate: function() {
           Array.prototype.slice.call(container.querySelectorAll('.bookmark')).forEach(function(item, index) {
             bk.move(item.getAttribute('data-sort'), {
