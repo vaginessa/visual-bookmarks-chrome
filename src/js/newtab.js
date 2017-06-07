@@ -529,9 +529,9 @@ const UI = (() => {
   }
 })();
 
-UI.calculateStyles();
 UI.setBG();
 Bookmarks.init();
+UI.calculateStyles();
 
 window.addEventListener('resize', function() {
   UI.calculateStyles();
