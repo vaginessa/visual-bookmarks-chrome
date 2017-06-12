@@ -37,9 +37,16 @@
             <input type="text" class="form-control" id="title" placeholder="Enter bookmark title">
             <input type="text" class="form-control" id="url" placeholder="Enter URL or leave it blank if you want to create the folder">
           </div>
+          <div class="modal__custom-image" id="customScreen">
+            <p><small>Remove folder image</small></p>
+            <div class="modal__custom-wrap">
+              <img alt="" height="120">
+              <a id="resetCustomImage" class="modal__custom-reset"></a>
+            </div>
+          </div>
           <div class="text-right">
-            <button type="submit" class="btn" id="saveBookmarkBtn">Save</button>
             <button type="button" class="btn btn--clear" id="closeModal">Cancel</button>
+            <button type="submit" class="btn" id="saveBookmarkBtn">Save</button>
           </div>
         </form>
       </div>

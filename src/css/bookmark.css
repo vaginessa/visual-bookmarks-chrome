@@ -249,7 +249,8 @@ p {
 .bookmark__del--bookmark,
 .bookmark__del--folder,
 .bookmark__edit,
-.bookmark__screen {
+.bookmark__screen,
+.bookmark__image-folder {
   position: relative;
   display: inline-block;
   width: 24px;
@@ -277,20 +278,23 @@ p {
 .bookmark__edit {
   background-image: url(../../extension/img/edit.svg);
 }
-.bookmark__screen {
+.bookmark__screen,
+.bookmark__image-folder {
   background-image: url(../../extension/img/camera.svg);
 }
 
 .bookmark__del--bookmark:hover,
 .bookmark__del--folder:hover,
 .bookmark__edit:hover,
-.bookmark__screen:hover {
+.bookmark__screen:hover,
+.bookmark__image-folder:hover {
   filter: drop-shadow(0 0 3px rgba(0,0,0,.5));
 }
 .bookmark__del--bookmark:active,
 .bookmark__del--folder:active,
 .bookmark__edit:active,
-.bookmark__screen:active {
+.bookmark__screen:active,
+.bookmark__image-folder:active {
   top: 1px;
 }
 
@@ -620,6 +624,7 @@ select {
 .c-upload__label {
   display: inline-block;
   width: 100%;
+  height: 100%;
   cursor: pointer;
 }
 .c-upload__btn {
@@ -774,6 +779,36 @@ select {
   max-width: 550px;
   margin: 0 auto;
   color: #fff;
+}
+.modal__custom-image {
+  display: none;
+}
+.modal__custom-wrap {
+  position: relative;
+  display: inline-block;
+}
+.modal__custom-wrap img {
+  display: block;
+}
+.modal__custom-reset {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 20px;
+  height: 20px;
+  padding: 15px;
+  background-color: #da3b2f;
+  background-image: url(/img/close.svg);
+  background-size: 20px;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  border: 0;
+  opacity: .5;
+  cursor: pointer;
+  transition: opacity .3s ease;
+}
+.modal__custom-wrap:hover .modal__custom-reset {
+  opacity: 1;
 }
 .modal__add {
   display: none;

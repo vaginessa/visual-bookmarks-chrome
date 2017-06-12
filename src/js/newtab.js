@@ -44,6 +44,14 @@ const Bookmarks = (() => {
     // Create speeddial
     createSpeedDial(startFolder());
 
+    container.addEventListener('change', function(evt) {
+      if (!evt.target.closest('.c-upload__input')) return;
+
+      evt.preventDefault();
+      const id = evt.target.getAttribute('data-id');
+      folderScreen(evt.target, id);
+    });
+
     container.addEventListener('click', function(evt) {
       if (evt.target.matches('.bookmark__del--bookmark')) {
         removeBookmark(evt);
@@ -60,7 +68,8 @@ const Bookmarks = (() => {
           url = '';
         }
         let id = evt.target.getAttribute('data-id');
-        Modal.show(id, title, url);
+        const screen = getCustomDial(id);
+        Modal.show(id, title, url, screen);
       }
       else if (evt.target.matches('.bookmark__screen')) {
         evt.preventDefault();
@@ -87,6 +96,9 @@ const Bookmarks = (() => {
 
     document.getElementById('formBookmark').addEventListener('submit', function(evt) {
       evt.preventDefault();
+
+      console.log(111);
+
       let id = this.getAttribute('data-action');
       let title = document.getElementById('title').value;
       let url = document.getElementById('url').value;
@@ -101,6 +113,34 @@ const Bookmarks = (() => {
         }
       }
     }, false);
+
+    // Reset custom image
+    document.getElementById('resetCustomImage').addEventListener('click', function(evt) {
+      evt.preventDefault();
+      if (!confirm('Delete this image?')) return;
+
+      const target = evt.target;
+      // const data = JSON.parse(target.getAttribute('data-bookmark'));
+      const id = target.getAttribute('data-bookmark');
+      const src = getCustomDial(id);
+
+      if (!src) return;
+
+      const name = src.split('/').pop();
+      FS.deleteFile(`/images/${name}`, function () {
+        const storage = JSON.parse(localStorage.getItem('custom_dials'));
+        delete storage[id];
+        localStorage.setItem('custom_dials', JSON.stringify(storage));
+
+        const bookmark = document.querySelector('[data-sort="' + id + '"]');
+        bookmark.querySelector('.bookmark__img').style.backgroundImage = '';
+        bookmark.querySelector('.bookmark__img').classList.add('bookmark__img--folder');
+
+        target.closest('#customScreen').style.display = '';
+        Helpers.notifications('This image has been removed');
+      });
+
+    });
 
     // Search bookmarks
     const searchDebounce = Helpers.debounce(function(evt) {
@@ -182,26 +222,27 @@ const Bookmarks = (() => {
     });
   }
 
-  function genBookmark(bookmark, json) {
+  function genBookmark(bookmark) {
 
     const hasFavicon = (localStorage.getItem('show_favicon') === 'true')
       ? '<img class="bookmark__favicon" width="16" height="16" src="chrome://favicon/{url}">'
       : '';
 
-    let storage;
-    if (json) {
-      storage = json[bookmark.id];
-    }
-    var bgImage = (storage) ? storage : '{thumbnailing_service}';
+    // let storage;
+    // if (json) {
+    //   storage = json[bookmark.id];
+    // }
+    const screen = getCustomDial(bookmark.id);
+    const bgImage = (screen) ? screen : '{thumbnailing_service}';
 
     let tpl =
       `<div class="column">
         <div class="bookmark" data-sort="{id}">
           <div class="bookmark__img" style="background-image: url('${bgImage}')"></div>
           <div class="bookmark__control bookmark__control--left">
-          <div class="bookmark__edit" data-bookmark="bookmark" data-title="{title}" data-url="{url}" data-id="{id}"></div>
-          <div class="bookmark__divider"></div>
-          <div class="bookmark__screen" data-id="{id}"></div>
+            <div class="bookmark__edit" data-bookmark="bookmark" data-title="{title}" data-url="{url}" data-id="{id}"></div>
+            <div class="bookmark__divider"></div>
+            <div class="bookmark__screen" data-id="{id}"></div>
           </div>
           <div class="bookmark__control bookmark__control--right">
           <div class="bookmark__del--bookmark" data-id="{id}"></div>
@@ -222,12 +263,29 @@ const Bookmarks = (() => {
   }
 
   function genFolder(bookmark) {
+    let imgLayout;
+    // if (json) {
+    //   screen = json[bookmark.id];
+    // }
+    const screen = getCustomDial(bookmark.id);
+
+    if (screen) {
+      imgLayout = `<div class="bookmark__img" style="background-image: url(${screen})"></div>`;
+    } else {
+      imgLayout = '<div class="bookmark__img bookmark__img--folder"></div>';
+    }
+
     let tpl =
       `<div class="column">
         <div class="bookmark" data-sort="{id}">
-          <div class="bookmark__img--folder"></div>
+          ${imgLayout}
           <div class="bookmark__control bookmark__control--left">
-          <div class="bookmark__edit" data-bookmark="folder" data-title="{title}" data-id="{id}"></div>
+            <div class="bookmark__edit" data-bookmark="folder" data-title="{title}" data-id="{id}"></div>
+            <div class="bookmark__divider"></div>
+            <div class="bookmark__image-folder">
+              <input type="file" name="" id="folderImage-{id}" class="c-upload__input" data-id="{id}">
+              <label for="folderImage-{id}" class="c-upload__label"></label>
+            </div>
           </div>
           <div class="bookmark__control bookmark__control--right">
           <div class="bookmark__del--folder" data-id="{id}"></div>
@@ -248,10 +306,10 @@ const Bookmarks = (() => {
   function render(_array) {
     let arr = [];
     container.innerHTML = '<div class="dial-loading"><div class="loading"></div></div>';
-    let storage = JSON.parse(localStorage.getItem('custom_dials'));
+    // let storage = JSON.parse(localStorage.getItem('custom_dials'));
     _array.forEach(function(bookmark) {
       if (bookmark.url !== undefined) {
-        arr.push(genBookmark(bookmark, storage));
+        arr.push(genBookmark(bookmark));
       }
       if (bookmark.children !== undefined) {
         arr.push(genFolder(bookmark));
@@ -269,6 +327,15 @@ const Bookmarks = (() => {
     }, 20);
   }
 
+  function getCustomDial(id) {
+    const storage = JSON.parse(localStorage.getItem('custom_dials'));
+    let image;
+    if (storage) {
+      image = storage[id];
+    }
+    return image;
+  }
+
   function createSpeedDial(id) {
     bk.getSubTree(id, function(item) {
       if (item !== undefined) {
@@ -279,6 +346,57 @@ const Bookmarks = (() => {
         Helpers.notifications('Can\'t find folder by id. Maybe you have not synced bookmarks', 15000);
       }
     })
+  }
+
+  function folderScreen(target, id) {
+    const file = target.files[0];
+    if (!file) return;
+
+    if (! /image\/(jpe?g|png)$/.test(file.type)) {
+      return alert('Bad file type');
+    }
+    target.value = '';
+
+    const bookmark = target.closest('.bookmark');
+    const imgEl = bookmark.querySelector('.bookmark__img');
+    let overlay;
+    bookmark.innerHTML += `<div id="overlay_id_${id}" class="bookmark__overlay"><div class="loading"></div></div>`;
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+
+    reader.onload = function() {
+
+      Helpers.resizeScreen(reader.result, function (image) {
+        const blob = Helpers.base64ToBlob(image, 'image/jpg');
+        const name = `folder-${id}.jpg`;
+
+        FS.createDir('images', function (dirEntry) {
+          FS.createFile(`/images/${name}`, { file: blob, fileType: 'jpg' }, function (fileEntry) {
+
+            const obj = JSON.parse(localStorage.getItem('custom_dials'));
+            obj[id] = fileEntry.toURL();
+            localStorage.setItem('custom_dials', JSON.stringify(obj));
+
+            bookmark.querySelector('.bookmark__img').classList.remove('bookmark__img--folder');
+            bookmark.querySelector('.bookmark__img').style.backgroundImage = `url('${fileEntry.toURL()}?refresh=${Helpers.rand(1, 9999)}')`;
+
+            if (overlay = document.getElementById('overlay_id_' + id)) {
+              bookmark.removeChild(overlay);
+            }
+            Helpers.notifications('Folder image has been changed');
+
+          });
+        });
+
+      });
+
+    }
+
+    reader.onerror = function() {
+      console.warn('Image upload failed');
+    }
+
   }
 
   function createScreen(bookmark, idBookmark, captureUrl) {
@@ -432,18 +550,27 @@ const Modal = (() => {
       modalHead = document.getElementById('modalHead'),
       titleField = document.getElementById('title'),
       urlField = document.getElementById('url'),
+      customScreen = document.getElementById('customScreen'),
       main = document.getElementById('main'),
       body = document.body,
       pageY;
 
   return {
-    show(action, title, url) {
+    show(action, title, url, screen) {
       if (isActive) return;
 
       // if action not New show modal edit
       if (action !== 'New') {
+
+        if (screen && !url) {
+          customScreen.style.display = 'block';
+          customScreen.querySelector('img').src = screen;
+          customScreen.querySelector('#resetCustomImage').setAttribute('data-bookmark', action);
+        }
+
         modalHead.textContent = `Edit bookmark - ${title}`;
         titleField.value = title;
+
         if (url) {
           urlField.style.display = '';
           urlField.value = url;
@@ -477,6 +604,8 @@ const Modal = (() => {
         main.style.top = '';
         window.scrollTo(0, pageY);
         pageY = null;
+        customScreen.style.display = '';
+        form.reset();
       }, 300);
 
       isActive = null;
@@ -533,6 +662,4 @@ UI.setBG();
 Bookmarks.init();
 UI.calculateStyles();
 
-window.addEventListener('resize', function() {
-  UI.calculateStyles();
-}, false);
+window.addEventListener('resize', () => UI.calculateStyles());
