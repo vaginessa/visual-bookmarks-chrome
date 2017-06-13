@@ -780,15 +780,30 @@ select {
   margin: 0 auto;
   color: #fff;
 }
+.modal__head {
+  margin-top: 0;
+  font-weight: 500;
+  letter-spacing: .03rem;
+}
 .modal__custom-image {
   display: none;
 }
 .modal__custom-wrap {
   position: relative;
   display: inline-block;
+  overflow: hidden;
 }
 .modal__custom-wrap img {
   display: block;
+  width: 170px;
+}
+.modal__custom-title {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px;
+  background-color: #292929;
 }
 .modal__custom-reset {
   position: absolute;
@@ -809,6 +824,9 @@ select {
 }
 .modal__custom-wrap:hover .modal__custom-reset {
   opacity: 1;
+}
+.modal__footer button + button {
+  margin-left: 10px;
 }
 .modal__add {
   display: none;
