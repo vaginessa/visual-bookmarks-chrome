@@ -14,7 +14,8 @@
   --spinner-color: var(--color-primary);
 
   /* Bookmark */
-  --bookmark-bg: #ddd;
+  /*--bookmark-bg: #ddd;*/
+  --bookmark-bg: hsla(0, 4%, 92%, .9);
   --bookmark-caption-height: 35px;
   --bookmark-caption-color: #555;
 
@@ -48,7 +49,7 @@ input[type="text"]::placeholder {
   color: var(--color-muted);
 }
 input[type="text"]:focus::placeholder {
-  color: color(var(--color-muted) lightness(90%));
+  color: color(var(--color-muted) lightness(80%));
 }
 
 body {
@@ -773,7 +774,7 @@ select {
   width: 100%;
 }
 .modal__inner {
-  padding: 0 40px 40px 40px;
+  padding: 10px 40px 40px 40px;
   display: table-cell;
   vertical-align: middle;
 }
