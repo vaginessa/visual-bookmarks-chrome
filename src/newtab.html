@@ -14,7 +14,7 @@
       <header class="header" id="header">
         <div class="row">
           <div class="grid grid-9">
-            <input type="text" class="form-control" placeholder="Search bookmarks" id="bookmarkSearch" required>
+            <input type="text" class="form-control" placeholder="Search bookmarks" id="bookmarkSearch" data-locale-message="placeholder_input_search" required>
           </div>
           <div class="grid grid-3">
             <select name="" id="selectFolder" class="form-control"></select>
@@ -34,8 +34,8 @@
         <form class="modal__form" id="formBookmark">
           <div class="modal__edit">
             <h4 class="modal__head" id="modalHead"></h4>
-            <input type="text" class="form-control" id="title" placeholder="Enter bookmark title">
-            <input type="text" class="form-control" id="url" placeholder="Enter URL or leave it blank if you want to create the folder">
+            <input type="text" class="form-control" id="title" placeholder="Enter bookmark title" data-locale-message="placeholder_input_title">
+            <input type="text" class="form-control" id="url" placeholder="Enter URL or leave it blank if you want to create the folder" data-locale-message="placeholder_input_url">
           </div>
           <div class="modal__custom-image" id="customScreen">
             <div class="modal__custom-wrap">
@@ -44,8 +44,8 @@
             </div>
           </div>
           <div class="modal__footer text-right">
-            <button type="button" class="btn btn--clear" id="closeModal">Cancel</button>
-            <button type="submit" class="btn" id="saveBookmarkBtn">Save</button>
+            <button type="button" class="btn btn--clear" id="closeModal" data-locale-message="btn_close">Cancel</button>
+            <button type="submit" class="btn" id="saveBookmarkBtn" data-locale-message="btn_save">Save</button>
           </div>
         </form>
       </div>
