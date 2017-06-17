@@ -1,0 +1,11 @@
+{
+  "ext_name": {
+    "message": "Visual bookmarks"
+  },
+  "ext_desc": {
+    "message": "Simple speed dial bookmarks page, including search, add, edit, delete and dragging bookmarks."
+  },
+  "default_title": {
+    "message": "Visaul bookmarks"
+  }
+}
