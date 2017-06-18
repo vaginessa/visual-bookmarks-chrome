@@ -263,10 +263,10 @@ const Bookmarks = (() => {
           <div class="bookmark__control bookmark__control--left">
             <button class="bookmark__edit" data-bookmark="folder" data-title="{title}" data-id="{id}"></button>
             <div class="bookmark__divider"></div>
-            <button class="bookmark__image-folder">
+            <div class="bookmark__image-folder">
               <input type="file" name="" id="folderImage-{id}" class="c-upload__input" data-id="{id}">
               <label for="folderImage-{id}" class="c-upload__label"></label>
-            </button>
+            </div>
           </div>
           <div class="bookmark__control bookmark__control--right">
             <button class="bookmark__del--folder" data-id="{id}"></button>

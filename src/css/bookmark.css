@@ -281,9 +281,11 @@ p {
 .bookmark__edit {
   background-image: url(../../extension/img/edit.svg);
 }
-.bookmark__screen,
-.bookmark__image-folder {
+.bookmark__screen {
   background-image: url(../../extension/img/camera.svg);
+}
+.bookmark__image-folder {
+  background-image: url(../../extension/img/image.svg);
 }
 
 .bookmark__del--bookmark:hover,
