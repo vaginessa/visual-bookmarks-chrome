@@ -14,7 +14,6 @@
   --spinner-color: var(--color-primary);
 
   /* Bookmark */
-  /*--bookmark-bg: #ddd;*/
   --bookmark-bg: hsla(0, 4%, 92%, .9);
   --bookmark-caption-height: 35px;
   --bookmark-caption-color: #555;
@@ -22,6 +21,7 @@
   /* Forms */
   --input-border: 1px solid #ddd;
   --input-padding: 7px 10px;
+  --input-shadow: 0 0 7px 2px color(var(--color-primary) alpha(20%));
 
   --btn: var(--color-primary);
   --btn-active: var(--color-primary-dark);
@@ -470,7 +470,7 @@ p {
 }
 .form-control:focus {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px color(var(--color-primary) alpha(20%));
+  box-shadow: var(--input-shadow);
 }
 select {
   padding-right: 28px;
@@ -518,57 +518,77 @@ select {
 }
 .checkbox input[type="checkbox"]:checked + label:before {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px color(var(--color-primary) alpha(20%));
+  box-shadow: var(--input-shadow);
 }
 .checkbox input[type="checkbox"]:checked + label:after {
   opacity: 1;
 }
+
 .switch {
   display: inline-block;
+  height: 14px;
   vertical-align: middle;
-  padding: 5px;
+  user-select: none;
 }
-.switch input[type="checkbox"] {
+
+.switch__input {
   display: none;
 }
-.switch .switch__label {
+
+.switch__label {
   position: relative;
-  display: block;
-  width: 35px;
-  height: 18px;
-  background-color: #ddd;
-  border-radius: 10px;
-  transition: background .15s ease;
+  display: inline-block;
+  min-width: 34px;
+  min-height: 14px;
   cursor: pointer;
+  font-weight: 500;
+  text-align: left;
+  margin: 0 10px 0;
 }
-.switch .switch__label::before {
-  content: '';
+
+.switch__label:after,.switch__label:before {
+  content: "";
   position: absolute;
+  margin: 0;
+  outline: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: all .2s ease;
+}
+
+.switch__label:before {
+  left: 1px;
+  width: 34px;
+  height: 14px;
+  background-color: #9e9e9e;
+  border-radius: 8px
+}
+
+.switch__label:after {
   left: 0;
-  top: 0;
-  bottom: 0;
-  margin: 2px;
-  width: 15px;
-  background-color: #fff;
+  width: 20px;
+  height: 20px;
+  background-color: #fafafa;
   border-radius: 50%;
-  box-shadow: none;
-  transition: transform .15s ease;
+  box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.34), 0 1px 7px 1px rgba(0,0,0,.1);
 }
-.switch .switch__label::after {
-  display: none;
+
+.switch__input:checked+.switch__label:before {
+  background-color: color(var(--color-primary) alpha(40%));
 }
-.switch input[type="checkbox"]:checked + .switch__label {
+
+.switch__input:checked+.switch__label:after {
   background-color: var(--color-primary);
+  transform: translate(80%,-50%)
 }
-.switch input[type="checkbox"]:checked + .switch__label::before {
-  transform: translateX(16px);
-}
+
 .inline-middle {
   display: inline-block;
   vertical-align: middle;
 }
 
-.btn {
+.btn,
+.c-upload__btn {
   position: relative;
   display: inline-block;
   margin: 0;
@@ -578,11 +598,10 @@ select {
 
   font-size: inherit;
   font-family: inherit;
-
+  font-weight: 500;
+  letter-spacing: .05rem;
   cursor: pointer;
   user-select: none;
-  transition: box-shadow 200ms cubic-bezier(.4, 0, .2, 1);
-
   color: var(--btn-color);
   border: 0;
   border-radius: var(--btn-radius);
@@ -592,13 +611,8 @@ select {
   white-space: nowrap;
   outline: 0;
 }
-.btn:hover,
-.c-upload__btn:hover {
-  box-shadow: 0 1px 3px rgba(0, 0, 0, .50);
-}
 .btn:active,
 .c-upload__btn:active {
-  box-shadow: none;
   background: var(--btn-active);
 }
 .btn-group {
@@ -610,13 +624,11 @@ select {
   transition: background-color .5s ease;
 }
 .btn--clear:hover {
-  background-color: rgba(0,0,0,.15);
-  box-shadow: none;
+  background-color: #e3e4e6;
 }
 .btn--clear:active,
 .btn--clear:focus {
-  background-color: rgba(0,0,0,.25);
-  box-shadow: none;
+  background-color: #d6d7d9;
 }
 
 .c-upload__input {
@@ -768,7 +780,7 @@ select {
   transform: scale(.99);
 }
 .modal-overlay {
-  background: rgba(0,0,0,.8);
+  background: hsla(220, 15%, 33%,.55);
 }
 .modal__outer {
   display: table;
@@ -787,7 +799,7 @@ select {
   padding: 15px;
   background-color: whitesmoke;
   border-radius: 2px;
-  box-shadow: 0 3px 20px rgba(0,0,0,.15);
+  box-shadow: 1px 3px 15px 1px rgba(0,0,0,.15);
 }
 .modal__head {
   margin-top: 0;
