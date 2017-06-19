@@ -7,11 +7,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@bitbucket.org/ivan-x/visual-bookmarks-dev.git"
+    "url": "git@github.com:k-ivan/visual-bookmarks-chrome.git"
   },
   "author": "ivan_k",
   "license": "ISC",
-  "homepage": "https://bitbucket.org/ivan-x/visual-bookmarks-dev#readme",
+  "homepage": "https://github.com/k-ivan/visual-bookmarks-chrome#readme",
   "devDependencies": {
     "autoprefixer": "^6.7.7",
     "babel-core": "^6.24.0",
