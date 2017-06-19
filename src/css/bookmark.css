@@ -310,7 +310,11 @@ p {
   left: 0;
   height: var(--bookmark-caption-height);
   line-height: var(--bookmark-caption-height);
+  padding-left: 15px;
+  padding-right: 15px;
   overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   background: #fff;
   text-align: center;
   z-index: 100;
@@ -319,19 +323,22 @@ p {
   position: relative;
   top: -2px;
   margin-right: 5px;
+  display: inline-block;
   vertical-align: middle;
 }
 .bookmark__title {
-  position: relative;
-  overflow: hidden;
-  padding: 0 15px;
+  /*position: relative;*/
+  /*overflow: hidden;*/
+  /*padding: 0 15px;*/
   font-weight: 600;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  color: #555;
+  display: inline;
+  /*white-space: nowrap;*/
+  /*text-overflow: ellipsis;*/
+  color: #333;
   text-shadow: 0 0 3px rgba(255, 255, 255, .75);
 }
-.bookmark__title:after {
+/*.bookmark__title:after {*/
+.bookmark__caption:after {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -808,6 +815,7 @@ select {
 }
 .modal__head > span {
   font-weight: 400;
+  word-break: break-all;
 }
 .modal__custom-image {
   display: none;

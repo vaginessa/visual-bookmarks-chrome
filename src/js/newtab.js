@@ -213,7 +213,7 @@ const Bookmarks = (() => {
   function genBookmark(bookmark) {
 
     const hasFavicon = (localStorage.getItem('show_favicon') === 'true')
-      ? '<img class="bookmark__favicon" width="16" height="16" src="chrome://favicon/{url}">'
+      ? '<img class="bookmark__favicon" width="16" height="16" src="chrome://favicon/{url}" alt="">'
       : '';
 
     const screen = getCustomDial(bookmark.id);
@@ -232,7 +232,8 @@ const Bookmarks = (() => {
             <button class="bookmark__del--bookmark" data-id="{id}"></button>
           </div>
           <div class="bookmark__caption">
-            <div class="bookmark__title">${hasFavicon}{title}</div>
+            ${hasFavicon}
+            <div class="bookmark__title">{title}</div>
           </div>
           <a class="bookmark__link" href="{url}" title="{title}"></a>
         </div>
@@ -272,7 +273,8 @@ const Bookmarks = (() => {
             <button class="bookmark__del--folder" data-id="{id}"></button>
           </div>
           <div class="bookmark__caption">
-            <div class="bookmark__title"><img src="/img/folder.svg" class="bookmark__favicon" width="16" height="16" alt="">{title}</div>
+            <img src="/img/folder.svg" class="bookmark__favicon" width="16" height="16" alt="">
+            <div class="bookmark__title">{title}</div>
           </div>
           <a class="bookmark__link" href="#{url}" title="{title}"></a>
         </div>
