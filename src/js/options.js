@@ -22,7 +22,7 @@ const Options = (() => {
     document.getElementById('ext_name').textContent = manifest.name;
     document.getElementById('ext_version').textContent = 'Version ' + manifest.version;
 
-    let advanced = document.querySelector('.advanced');
+    const advanced = document.querySelector('.advanced');
     document.getElementById('advanced').addEventListener('change', function() {
       (this.checked)
         ? advanced.classList.add('show-advanced')
@@ -42,8 +42,8 @@ const Options = (() => {
     document.getElementById('dial_columns').value = localStorage.getItem('dial_columns');
     document.getElementById('background_color').value = localStorage.getItem('background_color');
 
-    let optionBg = document.getElementById('option_bg');
-    let options = Array.prototype.slice.call(optionBg.querySelectorAll('option'));
+    const optionBg = document.getElementById('option_bg');
+    const options = Array.prototype.slice.call(optionBg.querySelectorAll('option'));
 
     options.forEach(function(item) {
       if (item.value === localStorage.getItem('background_image')) {
@@ -79,7 +79,7 @@ const Options = (() => {
   }
 
   function uploadFile(evt) {
-    let file = this.files[0];
+    const file = this.files[0];
     if (!file) return;
 
     this.closest('form').reset();
@@ -87,7 +87,7 @@ const Options = (() => {
     if (! /image\/(jpe?g|png)$/.test(file.type)) {
       return alert('Bad file type');
     }
-    let fileName = `background.${file.type.replace('image/', '')}`;
+    const fileName = `background.${file.type.replace('image/', '')}`;
 
     FS.createDir('images', function (dirEntry) {
       FS.createFile('/images/' + fileName, { file: file, fileType: file.type }, function (fileEntry) {
@@ -101,19 +101,19 @@ const Options = (() => {
   }
 
   function removeFile(evt) {
-    let target = evt.target.closest('#delete_upload');
+    const target = evt.target.closest('#delete_upload');
     if (!target) return;
 
     if(!confirm('Delete this image?')) return;
 
     evt.preventDefault();
-    let preview = document.getElementById('preview_upload');
-    let previewParent = preview.closest('.c-upload__preview');
-    let img = localStorage.getItem('background_local');
+    const preview = document.getElementById('preview_upload');
+    const previewParent = preview.closest('.c-upload__preview');
+    const img = localStorage.getItem('background_local');
 
     if (!img) return;
 
-    let name = img.split('/').pop();
+    const name = img.split('/').pop();
 
     FS.deleteFile(`/images/${name}`, function() {
       Helpers.notifications('This image has been removed');
@@ -130,7 +130,7 @@ const Options = (() => {
     });
 
     if (this.value === 'background_local') {
-      let imgSrc = localStorage.getItem('background_local');
+      const imgSrc = localStorage.getItem('background_local');
       if (imgSrc) {
         document.querySelector('.c-upload__preview').style.display = '';
         document.getElementById('preview_upload').innerHTML = `<img class="img-fluid" src="${imgSrc}" alt="">`;
@@ -214,7 +214,7 @@ const Options = (() => {
         return a.path.localeCompare(b.path);
       });
       let arr = [];
-      let folderId = localStorage.getItem('default_folder_id');
+      const folderId = localStorage.getItem('default_folder_id');
       folderList.forEach(function(item) {
         arr.push(`<option${item.id === folderId ? ' selected' : ''} value="${item.id}">${item.path}</option>`);
       });

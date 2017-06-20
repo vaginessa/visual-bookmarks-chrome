@@ -60,21 +60,21 @@ const Bookmarks = (() => {
         removeFolder(evt);
       }
       else if (evt.target.matches('.bookmark__edit')) {
-        let bookmark = evt.target.closest('.bookmark');
-        let title = bookmark.querySelector('.bookmark__title').textContent;
+        const bookmark = evt.target.closest('.bookmark');
+        const title = bookmark.querySelector('.bookmark__title').textContent;
         let url   = bookmark.querySelector('.bookmark__link').getAttribute('href');
         if (url.charAt(0) === '#') {
           url = '';
         }
-        let id = evt.target.getAttribute('data-id');
+        const id = evt.target.getAttribute('data-id');
         const screen = getCustomDial(id);
         Modal.show(id, title, url, screen);
       }
       else if (evt.target.matches('.bookmark__screen')) {
         evt.preventDefault();
-        let bookmark = evt.target.closest('.bookmark');
-        let idBookmark = bookmark.getAttribute('data-sort');
-        let captureUrl = bookmark.querySelector('.bookmark__link').href;
+        const bookmark = evt.target.closest('.bookmark');
+        const idBookmark = bookmark.getAttribute('data-sort');
+        const captureUrl = bookmark.querySelector('.bookmark__link').href;
 
         createScreen(bookmark, idBookmark, captureUrl);
       }
@@ -96,9 +96,9 @@ const Bookmarks = (() => {
     document.getElementById('formBookmark').addEventListener('submit', function(evt) {
       evt.preventDefault();
 
-      let id = this.getAttribute('data-action');
-      let title = document.getElementById('title').value;
-      let url = document.getElementById('url').value;
+      const id = this.getAttribute('data-action');
+      const title = document.getElementById('title').value;
+      const url = document.getElementById('url').value;
       if (id !== 'New') {
         if (updateBookmark(id, title, url)) {
           Modal.hide();
@@ -405,7 +405,7 @@ const Bookmarks = (() => {
   }
 
   function search(evt) {
-    let value = evt.target.value.trim().toLowerCase();
+    const value = evt.target.value.trim().toLowerCase();
     let arr = [];
     bk.search(value, function(match) {
       if (match.length > 0) {
@@ -424,17 +424,17 @@ const Bookmarks = (() => {
   }
 
   function changeFolder(evt) {
-    let id = this.value;
+    const id = this.value;
     window.location.hash = '#' + id;
     createSpeedDial(id);
   }
 
   function removeBookmark(evt) {
     evt.preventDefault();
-    let target = evt.target;
-    let bookmark = target.closest('.column');
+    const target = evt.target;
+    const bookmark = target.closest('.column');
     if (confirm('Are you sure you want to delete the bookmark ?', '')) {
-      let id = target.getAttribute('data-id');
+      const id = target.getAttribute('data-id');
       bk.remove(id, function() {
         container.removeChild(bookmark);
         rmCustomScreen(id);
@@ -445,10 +445,10 @@ const Bookmarks = (() => {
 
   function removeFolder(evt) {
     evt.preventDefault();
-    let target = evt.target;
-    let bookmark = target.closest('.column');
+    const target = evt.target;
+    const bookmark = target.closest('.column');
     if (confirm('Are you sure you want to delete the folder and all its contents ?', '')) {
-      let id = target.getAttribute('data-id');
+      const id = target.getAttribute('data-id');
       bk.removeTree(id, function () {
         container.removeChild(bookmark);
         rmCustomScreen(id);
@@ -473,7 +473,7 @@ const Bookmarks = (() => {
 
   function isValidUrl(url) {
     //The regex used in AngularJS to validate a URL + chrome internal pages & extension url & on-disk files
-    let URL_REGEXP = /^(http|https|ftp|file|chrome|chrome-extension):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/;
+    const URL_REGEXP = /^(http|https|ftp|file|chrome|chrome-extension):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/;
     if (URL_REGEXP.test(url)) {
       return true;
     }
@@ -513,8 +513,8 @@ const Bookmarks = (() => {
 
   function updateBookmark(id, title, url) {
     let hash = buildBookmarkHash(title, url);
-    let bookmark = document.querySelector('[data-sort="' + id + '"]');
-    let dataEdit = bookmark.querySelector('.bookmark__edit');
+    const bookmark = document.querySelector('[data-sort="' + id + '"]');
+    const dataEdit = bookmark.querySelector('.bookmark__edit');
     //Actually make sure the URL being modified is valid instead of always
     //prepending http:// to it creating new valid+invalid bookmark
     if (url.length !== 0 && !isValidUrl(url)) {
@@ -541,8 +541,7 @@ const Bookmarks = (() => {
 })();
 
 const Modal = (() => {
-  let isActive = null,
-      overlay = document.getElementById('modal-overlay'),
+  const overlay = document.getElementById('modal-overlay'),
       modal = document.getElementById('modal'),
       form = document.getElementById('formBookmark'),
       modalHead = document.getElementById('modalHead'),
@@ -550,7 +549,8 @@ const Modal = (() => {
       urlField = document.getElementById('url'),
       customScreen = document.getElementById('customScreen'),
       main = document.getElementById('main'),
-      body = document.body,
+      body = document.body;
+  let isActive = null,
       pageY;
 
   return {
@@ -614,8 +614,8 @@ const Modal = (() => {
 const UI = (() => {
   return {
     setBG() {
-      let bgEl = document.getElementById('bg');
-      let bgState = localStorage.getItem('background_image');
+      const bgEl = document.getElementById('bg');
+      const bgState = localStorage.getItem('background_image');
 
       if (bgState === 'background_color') {
         bgEl.style.backgroundColor = localStorage.getItem('background_color');
@@ -625,7 +625,7 @@ const UI = (() => {
         return;
       }
 
-      let resource = (bgState === 'background_local')
+      const resource = (bgState === 'background_local')
         ? localStorage.getItem('background_local')
         : localStorage.getItem('background_external');
 
@@ -644,7 +644,7 @@ const UI = (() => {
     },
     calculateStyles() {
       if (window.innerWidth < 768) { return (document.getElementById('generateStyles').innerHTML = ''); }
-      let ratio = 4 / 3,
+      const ratio = 4 / 3,
         container = Math.floor(document.getElementById('includeThree').offsetWidth),
         styles = document.getElementById('generateStyles'),
         colWidth = Math.floor(container / localStorage.getItem('dial_columns')),

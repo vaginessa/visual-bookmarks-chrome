@@ -106,12 +106,12 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
       Helpers.resizeScreen(data.capture, function (image) {
 
-        let blob = Helpers.base64ToBlob(image, 'image/jpg');
-        let name = `${Helpers.getDomain(request.captureUrl)}_${request.id}.jpg`;
+        const blob = Helpers.base64ToBlob(image, 'image/jpg');
+        const name = `${Helpers.getDomain(request.captureUrl)}_${request.id}.jpg`;
 
         FS.createDir('images', function (dirEntry) {
           FS.createFile(`${dirEntry.fullPath}/${name}`, { file: blob, fileType: blob.type }, function (fileEntry) {
-            let obj = JSON.parse(localStorage.getItem('custom_dials'));
+            const obj = JSON.parse(localStorage.getItem('custom_dials'));
             obj[request.id] = fileEntry.toURL();
             localStorage.setItem('custom_dials', JSON.stringify(obj));
             console.info(`Image file saved as ${fileEntry.toURL()}`);
@@ -134,7 +134,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
 chrome.browserAction.onClicked.addListener(function (current) {
 
-  var urls = [
+  const urls = [
     chrome.extension.getURL('newtab.html'),
     'chrome://newtab/'
   ];
