@@ -25,8 +25,6 @@ FS.usedAndRemaining(function(used) {
  */
 Localization();
 
-const i18n = chrome.i18n;
-
 /**
  * Bookmarks module
  */
@@ -541,8 +539,7 @@ const Bookmarks = (() => {
         bookmark.querySelector('.bookmark__link').href = (result.url) ? result.url : '#' + result.id;
         bookmark.querySelector('.bookmark__title').textContent = result.title;
         bookmark.querySelector('.bookmark__link').title = result.title;
-        // Helpers.notifications('Bookmark updated');
-        Helpers.notifications(i18n.getMessage('notice_bookmark_updated'));
+        Helpers.notifications(chrome.i18n.getMessage('notice_bookmark_updated'));
       });
       return true;
     }

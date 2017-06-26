@@ -39,7 +39,7 @@ const Settings = (() => {
   }
 
   function syncToStorage() {
-    var settings_object = {};
+    let settings_object = {};
     Object.keys(default_values).forEach(function (key) {
       if (localStorage[key]) {
         settings_object[key] = localStorage[key];
