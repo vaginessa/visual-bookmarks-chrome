@@ -3,7 +3,10 @@ import css from '../css/bookmark.css';
 import './components/polyfill';
 import FS from './components/fs';
 import Settings from './components/settings';
+import Localization from './components/localization';
 import Helpers from './components/helpers';
+
+Localization();
 
 const Options = (() => {
 
@@ -20,7 +23,7 @@ const Options = (() => {
 
     const manifest = chrome.runtime.getManifest();
     document.getElementById('ext_name').textContent = manifest.name;
-    document.getElementById('ext_version').textContent = 'Version ' + manifest.version;
+    document.getElementById('ext_version').textContent = `${chrome.i18n.getMessage('version')} ${manifest.version}`;
 
     const advanced = document.querySelector('.advanced');
     document.getElementById('advanced').addEventListener('change', function() {
@@ -74,7 +77,9 @@ const Options = (() => {
     if (localStorage.getItem('enable_sync') === 'true') {
       Settings.syncToStorage();
     }
-    Helpers.notifications('Settings successfully saved');
+    Helpers.notifications(
+      chrome.i18n.getMessage('notice_save_settings_success')
+    );
     getOptions();
   }
 
@@ -85,7 +90,7 @@ const Options = (() => {
     this.closest('form').reset();
 
     if (! /image\/(jpe?g|png)$/.test(file.type)) {
-      return alert('Bad file type');
+      return alert(chrome.i18n.getMessage('alert_file_type_fail'));
     }
     const fileName = `background.${file.type.replace('image/', '')}`;
 
@@ -94,7 +99,9 @@ const Options = (() => {
         document.querySelector('.c-upload__preview').style.display = '';
         document.getElementById('preview_upload').innerHTML = `<img class="img-fluid" src="${fileEntry.toURL()}?new=${Helpers.rand(1, 99999)}" alt="">`;
         localStorage.setItem('background_local', fileEntry.toURL());
-        Helpers.notifications('Background image has been changed');
+        Helpers.notifications(
+          chrome.i18n.getMessage('notice_bg_image_updated')
+        );
       });
     });
 
@@ -104,7 +111,7 @@ const Options = (() => {
     const target = evt.target.closest('#delete_upload');
     if (!target) return;
 
-    if(!confirm('Delete this image?')) return;
+    if (!confirm(chrome.i18n.getMessage('confirm_delete_image'), '')) return;
 
     evt.preventDefault();
     const preview = document.getElementById('preview_upload');
@@ -116,7 +123,9 @@ const Options = (() => {
     const name = img.split('/').pop();
 
     FS.deleteFile(`/images/${name}`, function() {
-      Helpers.notifications('This image has been removed');
+      Helpers.notifications(
+        chrome.i18n.getMessage('notice_image_removed')
+      );
       localStorage.removeItem('background_local');
       preview.innerHTML = '';
       previewParent.style.display = 'none';
@@ -146,16 +155,16 @@ const Options = (() => {
 
   function deleteImages(evt) {
     evt.preventDefault();
-    if(!confirm('Are you sure? All local images will be deleted')) return;
+    if(!confirm(chrome.i18n.getMessage('confirm_delete_images'), '')) return;
 
     FS.purge();
-    Helpers.notifications('All files deleted');
+    Helpers.notifications(chrome.i18n.getMessage('notice_images_removed'));
     localStorage.setItem('background_local', '');
     localStorage.setItem('custom_dials', '{}');
   }
 
   function restoreLocalOptions() {
-    if (confirm('Are you sure you want to restore default settings ?')) {
+    if (confirm(chrome.i18n.getMessage('confirm_restore_default_settings'), '')) {
       // localStorage.clear();
       Object.keys(localStorage).forEach(function(property) {
         if (property === 'background_local' || property === 'custom_dials') {
@@ -165,20 +174,25 @@ const Options = (() => {
       });
       Settings.init();
       getOptions();
-      Helpers.notifications('Default local settings are reset');
+      Helpers.notifications(
+        chrome.i18n.getMessage('notice_reset_default_settings')
+      );
     }
   }
   function clearSyncData() {
-    if (confirm("Are you sure you want to delete all previously synchronized data to start fresh?")) {
-      chrome.storage.sync.clear(Helpers.notifications('Data synchronization cleared'));
+    if (confirm(chrome.i18n.getMessage('confirm_clear_sync_settings'), '')) {
+      chrome.storage.sync.clear(
+        Helpers.notifications(
+          chrome.i18n.getMessage('notice_sync_settings_cleared')
+        )
+      );
     }
   }
   function checkEnableSync() {
     if (this.checked) {
       chrome.storage.sync.getBytesInUse(null, function(bytes) {
         if (bytes > 0) {
-          if (confirm("You have previously synchronized data!!\n" +
-            "Do you want to overwrite your current local settings with your previously saved remote settings?")) {
+          if (confirm(chrome.i18n.getMessage('confirm_sync_remote_settings'), '')) {
             Settings.restoreFromSync(getOptions);
           }
         }

@@ -3,6 +3,7 @@ import css from '../css/bookmark.css';
 import './components/polyfill';
 import Sortable from 'sortablejs';
 import Settings from './components/settings';
+import Localization from './components/localization';
 import FS from './components/fs';
 import Helpers from './components/helpers';
 
@@ -18,6 +19,13 @@ FS.usedAndRemaining(function(used) {
     localStorage.setItem('background_local', '');
   }
 });
+
+/**
+ * Localization
+ */
+Localization();
+
+const i18n = chrome.i18n;
 
 /**
  * Bookmarks module
@@ -114,7 +122,8 @@ const Bookmarks = (() => {
     // Reset custom image
     document.getElementById('resetCustomImage').addEventListener('click', function(evt) {
       evt.preventDefault();
-      if (!confirm('Delete this image?')) return;
+      // if (!confirm('Delete this image?')) return;
+      if (!confirm( chrome.i18n.getMessage('confirm_delete_image') )) return;
 
       const target = evt.target;
       // const data = JSON.parse(target.getAttribute('data-bookmark'));
@@ -125,7 +134,8 @@ const Bookmarks = (() => {
         bookmark.querySelector('.bookmark__img').classList.add('bookmark__img--folder');
 
         target.closest('#customScreen').style.display = '';
-        Helpers.notifications('This image has been removed');
+        // Helpers.notifications('This image has been removed');
+        Helpers.notifications(chrome.i18n.getMessage('notice_image_removed') );
       });
 
     });
@@ -326,7 +336,7 @@ const Bookmarks = (() => {
         container.setAttribute('data-folder', id);
       }
       else {
-        Helpers.notifications('Can\'t find folder by id. Maybe you have not synced bookmarks', 15000);
+        Helpers.notifications(chrome.i18n.getMessage('notice_cant_find_id'), 15000);
       }
     })
   }
@@ -336,7 +346,7 @@ const Bookmarks = (() => {
     if (!file) return;
 
     if (! /image\/(jpe?g|png)$/.test(file.type)) {
-      return alert('Bad file type');
+      return alert(chrome.i18n.getMessage('alert_file_type_fail'));
     }
     target.value = '';
 
@@ -367,7 +377,9 @@ const Bookmarks = (() => {
             if (overlay = document.getElementById('overlay_id_' + id)) {
               bookmark.removeChild(overlay);
             }
-            Helpers.notifications('Folder image has been changed');
+            Helpers.notifications(
+              chrome.i18n.getMessage('notice_folder_image_updated')
+            );
 
           });
         });
@@ -433,12 +445,14 @@ const Bookmarks = (() => {
     evt.preventDefault();
     const target = evt.target;
     const bookmark = target.closest('.column');
-    if (confirm('Are you sure you want to delete the bookmark ?', '')) {
+    if (confirm(chrome.i18n.getMessage('confirm_delete_bookmark'), '')) {
       const id = target.getAttribute('data-id');
       bk.remove(id, function() {
         container.removeChild(bookmark);
         rmCustomScreen(id);
-        Helpers.notifications('Bookmark removed.');
+        Helpers.notifications(
+          chrome.i18n.getMessage('notice_bookmark_removed')
+        );
       })
     }
   }
@@ -447,13 +461,15 @@ const Bookmarks = (() => {
     evt.preventDefault();
     const target = evt.target;
     const bookmark = target.closest('.column');
-    if (confirm('Are you sure you want to delete the folder and all its contents ?', '')) {
+    if (confirm(chrome.i18n.getMessage('confirm_delete_folder'), '')) {
       const id = target.getAttribute('data-id');
       bk.removeTree(id, function () {
         container.removeChild(bookmark);
         rmCustomScreen(id);
         generateFolderList();
-        Helpers.notifications('Folder removed.');
+        Helpers.notifications(
+          chrome.i18n.getMessage('notice_folder_removed')
+        );
       });
     }
   }
@@ -507,7 +523,7 @@ const Bookmarks = (() => {
       });
       return true;
     }
-    alert("- Adding a new Folder only requires a Title \n- Adding a new Bookmark requires both a Title and a URL");
+    alert(chrome.i18n.getMessage('alert_create_fail_bookmark'));
     return false;
   }
 
@@ -525,12 +541,12 @@ const Bookmarks = (() => {
         bookmark.querySelector('.bookmark__link').href = (result.url) ? result.url : '#' + result.id;
         bookmark.querySelector('.bookmark__title').textContent = result.title;
         bookmark.querySelector('.bookmark__link').title = result.title;
-        Helpers.notifications('Bookmark updated');
+        // Helpers.notifications('Bookmark updated');
+        Helpers.notifications(i18n.getMessage('notice_bookmark_updated'));
       });
       return true;
     }
-    alert("Editing an existing Bookmark requires both a Title and a valid URL in Chrome\n\n" +
-      "For example, valid URL's start with: \n - http:// \n - https:// \n - ftp://");
+    alert(chrome.i18n.getMessage('alert_update_fail_bookmark') )
     return false;
   }
 
@@ -566,7 +582,8 @@ const Modal = (() => {
           customScreen.querySelector('#resetCustomImage').setAttribute('data-bookmark', action);
         }
 
-        modalHead.innerHTML = `Edit bookmark - <span>${title}</span>`;
+        // modalHead.innerHTML = `Edit bookmark - <span>${title}</span>`;
+        modalHead.innerHTML = `${chrome.i18n.getMessage('edit_bookmark')} - <span>${title}</span>`;
         titleField.value = title;
 
         if (url) {
@@ -581,7 +598,8 @@ const Modal = (() => {
         setTimeout(() => {
           titleField.focus();
         }, 100);
-        modalHead.textContent = 'Add bookmark';
+        // modalHead.textContent = 'Add bookmark';
+        modalHead.textContent = chrome.i18n.getMessage('add_bookmark');
         urlField.style.display = '';
         titleField.value = '';
         urlField.value = '';

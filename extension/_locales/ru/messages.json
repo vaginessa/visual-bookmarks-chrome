@@ -1,0 +1,167 @@
+{
+  "ext_name": {
+    "message": "Визуальные закладки"
+  },
+  "ext_desc": {
+    "message": "Простая страница визуальных закладок, включает в себя поиск, добавление, редактирование, удаление и сортировку закладок."
+  },
+  "default_title": {
+    "message": "Визуальные закладки"
+  },
+  "placeholder_input_search": {
+    "message": "Поиск закладок"
+  },
+  "placeholder_input_title": {
+    "message": "Введите название закладки"
+  },
+  "placeholder_input_url": {
+    "message": "Введите URL или оставьте поле пустым, если вы хотите создать папку"
+  },
+  "btn_close": {
+    "message": "Отмена"
+  },
+  "btn_save": {
+    "message": "Сохранить"
+  },
+  "btn_back": {
+    "message": "Назад к закладкам"
+  },
+  "btn_clear_folder": {
+    "message": "Очистить папку"
+  },
+  "btn_reset_local_settings": {
+    "message": "Сброс локальных настроек"
+  },
+  "btn_reset_sync": {
+    "message": "Сбросить настройки синхронизации"
+  },
+  "confirm_delete_image": {
+    "message": "Удалить изображение ?"
+  },
+  "confirm_delete_images": {
+    "message": "Вы уверены? Все локальные изображения будут удалены."
+  },
+  "confirm_delete_bookmark": {
+    "message": "Вы действительно хотите удалить закладку ?"
+  },
+  "confirm_delete_folder": {
+    "message": "Вы действительно хотите удалить папку и все ее содержимое ?"
+  },
+  "confirm_restore_default_settings": {
+    "message": "Вы действительно хотите восстановить настройки по умолчанию ?"
+  },
+  "confirm_clear_sync_settings": {
+    "message": "Вы действительно хотите сбросить сихронизированные настройки ?"
+  },
+  "confirm_sync_remote_settings": {
+    "message": "Вы хотите перезаписать свои текущие локальные настройки ранее синхронизированными настройками ?"
+  },
+  "notice_image_removed": {
+    "message": "Изображение было удалено"
+  },
+  "notice_folder_image_updated": {
+    "message": "Изображение папки изменено"
+  },
+  "notice_bookmark_updated": {
+    "message": "Закладка обновлена"
+  },
+  "notice_bookmark_removed": {
+    "message": "Закладка удалена"
+  },
+  "notice_folder_removed": {
+    "message": "Удалена папка и все её содержимое"
+  },
+  "notice_images_removed": {
+    "message": "Все изображения удалены"
+  },
+  "notice_cant_find_id": {
+    "message": "Папка не найдена. Возможно, у вас нет синхронизированных закладок"
+  },
+  "notice_save_settings_success": {
+    "message": "Настройки успешно сохранены"
+  },
+  "notice_reset_default_settings": {
+    "message": "Настройки успешно сброшены"
+  },
+  "notice_sync_settings_cleared": {
+    "message": "Синхронизированные настройки сброшены"
+  },
+  "notice_bg_image_updated": {
+    "message": "Фоновая картинка была изменена"
+  },
+  "alert_create_fail_bookmark": {
+    "message": "- Для добавления новой папки требуется только заголовок.\n- Добавление новой закладки требует как заголовка, так и URL-адреса"
+  },
+  "alert_update_fail_bookmark": {
+    "message": "Редактирование существующей закладки требует как заголовка, так и действительного URL-адреса в Chrome\n\nНапример, действительные URL-адреса начинаются с\n - http:// \n - https:// \n - ftp://"
+  },
+  "alert_file_type_fail": {
+    "message": "Недопустимый тип файла\nДопустимый формат (jpg | jpeg | png)"
+  },
+  "add_bookmark": {
+    "message": "Добавить закладку"
+  },
+  "edit_bookmark": {
+    "message": "Редактировать"
+  },
+  "options": {
+    "message": "Опции"
+  },
+  "number_of_columns": {
+    "message": "Кол-во колонок в ряду"
+  },
+  "default_folder_show": {
+    "message": "Отображать папку по умолчанию"
+  },
+  "background": {
+    "message": "Фон"
+  },
+  "color": {
+    "message": "Цвет"
+  },
+  "url_image": {
+    "message": "URL-адрес картинки"
+  },
+  "local_image": {
+    "message": "Картинка с компьютера"
+  },
+  "choose_file": {
+    "message": "Выберите файл"
+  },
+  "show_header_bar": {
+    "message": "Показывать туллбар в шапке"
+  },
+  "show_favicon": {
+    "message": "Показывать иконки сайтов"
+  },
+  "drag_and_drop": {
+    "message": "Включить перетаскивание"
+  },
+  "enable_synchronization": {
+    "message": "Включить синхронизацию"
+  },
+  "advanced_settings": {
+    "message": "Расширенные настройки"
+  },
+  "thumbnail_service": {
+    "message": "Сервис миниатюр"
+  },
+  "thumbnail_help": {
+    "message": "[URL] токен будет заменен URL-адресом"
+  },
+  "careful_change": {
+    "message": "Будьте осторожны, если вы хотите изменить этот параметр"
+  },
+  "clear_local_images": {
+    "message": "Очистить папку с локальными миниатюрами"
+  },
+  "reset_local_default": {
+    "message": "Сброс к настройками по умолчанию"
+  },
+  "reset_sync_text": {
+    "message": "Удалить синхронизированные данные с сервера"
+  },
+  "version": {
+    "message": "Версия"
+  }
+}
