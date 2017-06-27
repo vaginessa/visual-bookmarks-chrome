@@ -26,7 +26,7 @@
   --btn: var(--color-primary);
   --btn-active: var(--color-primary-dark);
   --btn-color: #fff;
-  --btn-padding: 7px 20px;
+  --btn-padding: 7px 15px;
   --btn-radius: 2px;
 
   /* Helper */
@@ -621,10 +621,12 @@ select {
   text-decoration: none;
   white-space: nowrap;
   outline: 0;
+  transition: box-shadow .25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .btn:active,
 .c-upload__btn:active {
   background: var(--btn-active);
+  box-shadow: 0 8px 10px 1px rgba(0,0,0,.14),0 3px 14px 2px rgba(0,0,0,.12), 0 5px 5px -3px rgba(0,0,0,.4);
 }
 .btn-group {
   margin-top: 28px;
@@ -640,6 +642,7 @@ select {
 .btn--clear:active,
 .btn--clear:focus {
   background-color: #d6d7d9;
+  box-shadow: none;
 }
 
 .c-upload__input {
