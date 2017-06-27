@@ -26,14 +26,8 @@
   "btn_back": {
     "message": "Назад к закладкам"
   },
-  "btn_clear_folder": {
-    "message": "Очистить папку"
-  },
-  "btn_reset_local_settings": {
-    "message": "Сброс локальных настроек"
-  },
-  "btn_reset_sync": {
-    "message": "Сбросить настройки синхронизации"
+  "btn_apply": {
+    "message": "Применить"
   },
   "confirm_delete_image": {
     "message": "Удалить изображение ?"

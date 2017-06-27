@@ -26,14 +26,8 @@
   "btn_back": {
     "message": "Back to Newtab"
   },
-  "btn_clear_folder": {
-    "message": "Clear folder"
-  },
-  "btn_reset_local_settings": {
-    "message": "Reset Local Settings"
-  },
-  "btn_reset_sync": {
-    "message": "Reset Sync Settings"
+  "btn_apply": {
+    "message": "Apply"
   },
   "confirm_delete_image": {
     "message": "Delete this image ?"
