@@ -30,6 +30,11 @@ Localization();
  */
 const Bookmarks = (() => {
   const bk = chrome.bookmarks;
+  const SVGLoading = `
+    <svg class="loading" viewBox= "0 0 100 100" xmlns= "http://www.w3.org/2000/svg" >
+      <circle class="path" fill="none" stroke-width="8" stroke-linecap="round" cx="50" cy="50" r="40"></circle>
+    </svg>
+  `;
 
   const container = document.getElementById('includeThree');
   let sort = null;
@@ -296,7 +301,7 @@ const Bookmarks = (() => {
 
   function render(_array) {
     let arr = [];
-    container.innerHTML = '<div class="dial-loading"><div class="loading"></div></div>';
+    container.innerHTML = `<div class="dial-loading">${SVGLoading}</div>`;
     // let storage = JSON.parse(localStorage.getItem('custom_dials'));
     _array.forEach(function(bookmark) {
       if (bookmark.url !== undefined) {
@@ -351,7 +356,7 @@ const Bookmarks = (() => {
     const bookmark = target.closest('.bookmark');
     const imgEl = bookmark.querySelector('.bookmark__img');
     let overlay;
-    bookmark.innerHTML += `<div id="overlay_id_${id}" class="bookmark__overlay"><div class="loading"></div></div>`;
+    bookmark.innerHTML += `<div id="overlay_id_${id}" class="bookmark__overlay">${SVGLoading}</div>`;
 
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -396,7 +401,7 @@ const Bookmarks = (() => {
 
     let overlay;
 
-    bookmark.innerHTML += `<div id="overlay_id_${idBookmark}" class="bookmark__overlay"><div class="loading"></div></div>`;
+    bookmark.innerHTML += `<div id="overlay_id_${idBookmark}" class="bookmark__overlay">${SVGLoading}</div>`;
 
     chrome.runtime.sendMessage({ captureUrl: captureUrl, id: idBookmark }, (response) => {
 
