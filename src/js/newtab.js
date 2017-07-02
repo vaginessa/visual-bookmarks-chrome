@@ -4,6 +4,7 @@ import './components/polyfill';
 import Sortable from 'sortablejs';
 import Settings from './components/settings';
 import Localization from './components/localization';
+import Ripple from './components/ripple';
 import FS from './components/fs';
 import Helpers from './components/helpers';
 
@@ -24,6 +25,11 @@ FS.usedAndRemaining(function(used) {
  * Localization
  */
 Localization();
+
+/**
+ * Ripple
+ */
+Ripple.init('.md-ripple');
 
 /**
  * Bookmarks module
@@ -163,6 +169,7 @@ const Bookmarks = (() => {
         draggable: '.column',
         ghostClass: 'column--ghost',
         chosenClass: 'column--chosen',
+        preventOnFilter: false,
         onUpdate: function() {
           Array.prototype.slice.call(container.querySelectorAll('.bookmark')).forEach(function(item, index) {
             bk.move(item.getAttribute('data-sort'), {

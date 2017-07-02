@@ -220,8 +220,9 @@ p {
 .bookmark__control {
   position: absolute;
   top: 5px;
-  padding: 3px;
+  /*padding: 3px;*/
   text-align: right;
+  font-size: 0;
   z-index: 1000;
   opacity: 0;
   background: rgba(0,0,0,.5);
@@ -254,8 +255,9 @@ p {
 .bookmark__image-folder {
   position: relative;
   display: inline-block;
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
+  padding: 0;
   cursor: pointer;
   vertical-align: middle;
   border: 0;
@@ -263,13 +265,14 @@ p {
   background-repeat: no-repeat;
   background-position: center;
   background-size: 20px;
+  outline: 0;
 }
 
 .bookmark__divider {
   display: inline-block;
   width: 1px;
-  height: 24px;
-  margin: 0 5px;
+  height: 26px;
+  margin: 0 3px;
   vertical-align: middle;
   background: linear-gradient(to bottom, transparent, rgba(255,255,255,.4) 50%, transparent 100%);
 }
@@ -608,8 +611,7 @@ select {
   vertical-align: middle;
 }
 
-.btn,
-.c-upload__btn {
+.btn {
   position: relative;
   display: inline-block;
   margin: 0;
@@ -617,10 +619,11 @@ select {
   line-height: normal;
   vertical-align: middle;
 
-  font-size: inherit;
+  font-size: .9em;
   font-family: inherit;
   font-weight: 500;
   letter-spacing: .05rem;
+  text-transform: uppercase;
   cursor: pointer;
   user-select: none;
   color: var(--btn-color);
@@ -631,12 +634,12 @@ select {
   text-decoration: none;
   white-space: nowrap;
   outline: 0;
-  transition: box-shadow .25s cubic-bezier(0.4, 0, 0.2, 1);
+  /*transition: box-shadow .25s cubic-bezier(0.4, 0, 0.2, 1);*/
 }
 .btn:active,
 .c-upload__btn:active {
-  background: var(--btn-active);
-  box-shadow: 0 8px 10px 1px rgba(0,0,0,.14),0 3px 14px 2px rgba(0,0,0,.12), 0 5px 5px -3px rgba(0,0,0,.4);
+  /*background: var(--btn-active);*/
+  /*box-shadow: 0 8px 10px 1px rgba(0,0,0,.14),0 3px 14px 2px rgba(0,0,0,.12), 0 5px 5px -3px rgba(0,0,0,.4);*/
 }
 .btn-group {
   margin-top: 28px;
@@ -651,7 +654,7 @@ select {
 }
 .btn--clear:active,
 .btn--clear:focus {
-  background-color: #d6d7d9;
+  /*background-color: #d6d7d9;*/
   box-shadow: none;
 }
 
@@ -663,21 +666,20 @@ select {
   position: absolute;
   z-index: -1;
 }
-.c-upload__label {
-  display: inline-block;
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
-}
 .c-upload__btn {
   display: block;
-  padding: var(--btn-padding);
+  padding: 10px 15px;
   margin-top: 10px;
   margin-bottom: 10px;
   text-align: center;
+  text-transform: uppercase;
+  font-size: .9em;
+  font-weight: 500;
+  letter-spacing: .05rem;
   color: var(--btn-color);
   background-color: var(--btn);
   border-radius: var(--btn-radius);
+  cursor: pointer;
 }
 .c-upload__icon {
   display: inline-block;
@@ -698,6 +700,11 @@ select {
   position: absolute;
   top: 0;
   right: 0;
+  opacity: .3;
+  cursor: pointer;
+  transition: opacity .25s linear;
+}
+.c-upload__remove > button {
   width: 20px;
   height: 20px;
   padding: 15px;
@@ -707,9 +714,8 @@ select {
   background-size: 20px;
   background-repeat: no-repeat;
   background-position: center;
-  opacity: .3;
   cursor: pointer;
-  transition: opacity .25s linear;
+  outline: 0;
 }
 .c-upload__preview:hover .c-upload__remove {
   opacity: .85;
@@ -736,6 +742,10 @@ select {
 .icon-cog:hover {
   transition: opacity .3s linear;
   opacity: 1;
+}
+.icon-cog__wrap {
+  width: 100%;
+  height: 100%;
 }
 .icon-cog__link {
   display: block;
@@ -796,7 +806,7 @@ select {
   z-index: 5000;
   opacity: 0;
   visibility: hidden;
-  transition: all .3s ease;
+  transition: all .25s ease;
 }
 .modal {
   position: absolute;
@@ -881,4 +891,18 @@ select {
 }
 .modal--show .modal {
   transform: scale(1);
+}
+
+/* Ripple */
+.ripple-container {
+  position: relative;
+  overflow: hidden;
+}
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  transition: all .8s ease-out;
+  pointer-events: none;
+  z-index: 99999;
 }

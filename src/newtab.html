@@ -7,7 +7,9 @@
 </head>
 <body>
   <div class="icon-cog">
-    <a class="icon-cog__link" href="options.html"></a>
+    <div class="icon-cog__wrap md-ripple">
+      <a class="icon-cog__link" href="options.html"></a>
+    </div>
   </div>
   <main id="main">
     <div class="container">
@@ -44,8 +46,8 @@
             </div>
           </div>
           <div class="modal__footer text-right">
-            <button type="button" class="btn btn--clear" id="closeModal" data-locale-message="btn_close">Cancel</button>
-            <button type="submit" class="btn" id="saveBookmarkBtn" data-locale-message="btn_save">Save</button>
+            <button type="button" class="btn btn--clear md-ripple" id="closeModal" data-locale-message="btn_close">Cancel</button>
+            <button type="submit" class="btn md-ripple" id="saveBookmarkBtn" data-locale-message="btn_save">Save</button>
           </div>
         </form>
       </div>

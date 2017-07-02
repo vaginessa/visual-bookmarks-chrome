@@ -4,9 +4,12 @@ import './components/polyfill';
 import FS from './components/fs';
 import Settings from './components/settings';
 import Localization from './components/localization';
+import Ripple from './components/ripple';
 import Helpers from './components/helpers';
 
 Localization();
+
+Ripple.init('.md-ripple');
 
 const Options = (() => {
 

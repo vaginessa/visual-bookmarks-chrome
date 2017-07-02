@@ -41,15 +41,18 @@
           <div class="c-upload">
             <form action="#0" method="post">
               <input type="file" name="" id="bgFile" class="c-upload__input">
-              <label for="bgFile" class="c-upload__label">
-                <span class="c-upload__btn">
+              <label for="bgFile" class="c-upload__btn md-ripple">
+                <!--<span class="c-upload__btn">-->
+                <!--<span>-->
                   <svg class="c-upload__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"></path></svg>
                   <span class="c-upload__name" data-locale-message="choose_file">Choose a file</span>
-                </span>
+                <!--</span>-->
               </label>
             </form>
             <div class="c-upload__preview">
-              <button class="c-upload__remove" id="delete_upload"></button>
+              <div class="c-upload__remove">
+                <button class="md-ripple" id="delete_upload"></button>
+              </div>
               <div id="preview_upload"></div>
             </div>
           </div>
@@ -120,26 +123,26 @@
       <div class="tbl">
         <div class="tbl__setting" data-locale-message="clear_local_images">Clear folder with local images</div>
         <div class="tbl__value">
-          <button class="btn" id="clear_images" data-locale-message="btn_apply">Clear folder</button>
+          <button class="btn md-ripple" id="clear_images" data-locale-message="btn_apply">Clear folder</button>
         </div>
       </div>
       <div class="tbl">
         <div class="tbl__setting" data-locale-message="reset_local_default">Reset Local Settings to Default Values</div>
         <div class="tbl__value">
-          <button class="btn" id="restore_local" data-locale-message="btn_apply">Reset Local Settings</button>
+          <button class="btn md-ripple" id="restore_local" data-locale-message="btn_apply">Reset Local Settings</button>
         </div>
       </div>
       <div class="tbl">
         <div class="tbl__setting" data-locale-message="reset_sync_text">Delete Synchronized Data from Server</div>
         <div class="tbl__value">
-          <button class="btn" id="restore_sync" data-locale-message="btn_apply">Reset Sync Settings</button>
+          <button class="btn md-ripple" id="restore_sync" data-locale-message="btn_apply">Reset Sync Settings</button>
         </div>
       </div>
     </div>
 
     <div class="btn-group text-center">
-      <button id="save" class="btn"  data-locale-message="btn_save">Save</button>
-      <a href="newtab.html" class="btn" data-locale-message="btn_back">Back to Newtab</a>
+      <button id="save" class="btn md-ripple"  data-locale-message="btn_save">Save</button>
+      <a href="newtab.html" class="btn btn--clear md-ripple" data-locale-message="btn_back">Back to Newtab</a>
     </div>
 
   </div>
