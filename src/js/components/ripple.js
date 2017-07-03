@@ -39,7 +39,7 @@ const Ripple = function () {
     posY = evt.pageY - (top + window.pageYOffset);
 
     const dimmension = Math.max(width, height);
-    const bgColor = target.getAttribute('data-ripple-color') || 'rgba(0,0,0, .3)';
+    const bgColor = target.getAttribute('data-ripple-color') || 'rgba(255,255,255, .5)';
 
     el.style.width = `${dimmension}px`;
     el.style.height = `${dimmension}px`;
@@ -48,14 +48,15 @@ const Ripple = function () {
     el.style.backgroundColor = bgColor;
 
     setTimeout(() => {
-      el.style.cssText += `transform: scale(3); opacity: 0.5`;
+      el.style.cssText += `transform: scale(2.5); opacity: 0.5`;
     }, 10);
   }
 
   function hideRipple(sel, evt) {
+    if (!span) return true;
     if (evt.type === 'mouseout' && !evt.target.closest(sel)) return true;
     if (evt.type === 'mouseup' && evt.which !== 1) return true;
-    if (!span) return true;
+    // console.log(evt.type, evt.target);
 
     const el = span;
     span.style.opacity = 0;

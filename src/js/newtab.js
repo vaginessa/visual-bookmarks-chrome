@@ -631,7 +631,7 @@ const Modal = (() => {
         pageY = null;
         customScreen.style.display = '';
         form.reset();
-      }, 300);
+      }, 250);
 
       isActive = null;
     }
