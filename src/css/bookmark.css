@@ -644,6 +644,9 @@ select {
 .btn-group {
   margin-top: 28px;
 }
+.btn-group .btn + .btn {
+  margin-left: 10px;
+}
 .btn--clear {
   color: inherit;
   background-color: transparent;

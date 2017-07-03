@@ -26,8 +26,6 @@ const Ripple = function () {
 
     if (!target) return;
 
-    // evt.preventDefault();
-
     target.classList.add('ripple-container');
     const el = span = getRipple(target);
 
@@ -39,7 +37,7 @@ const Ripple = function () {
     posY = evt.pageY - (top + window.pageYOffset);
 
     const dimmension = Math.max(width, height);
-    const bgColor = target.getAttribute('data-ripple-color') || 'rgba(255,255,255, .5)';
+    const bgColor = target.getAttribute('data-ripple-color') || 'rgba(255,255,255, .7)';
 
     el.style.width = `${dimmension}px`;
     el.style.height = `${dimmension}px`;
@@ -56,7 +54,6 @@ const Ripple = function () {
     if (!span) return true;
     if (evt.type === 'mouseout' && !evt.target.closest(sel)) return true;
     if (evt.type === 'mouseup' && evt.which !== 1) return true;
-    // console.log(evt.type, evt.target);
 
     const el = span;
     span.style.opacity = 0;
