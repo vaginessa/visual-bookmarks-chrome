@@ -823,7 +823,7 @@ select {
   transform: scale(.99);
 }
 .modal-overlay {
-  background: hsla(220, 15%, 33%,.55);
+  background: rgba(51, 51, 51, .55);
 }
 .modal__outer {
   display: table;
