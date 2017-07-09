@@ -69,9 +69,9 @@ const Ripple = function () {
   module.init = function (selector) {
     handlerShow = showRipple.bind(null, selector);
     handlerHide = hideRipple.bind(null, selector);
-    document.addEventListener('mousedown', handlerShow);
-    document.addEventListener('mouseout', handlerHide);
-    document.addEventListener('mouseup', handlerHide);
+    document.body.addEventListener('mousedown', handlerShow);
+    document.body.addEventListener('mouseout', handlerHide);
+    document.body.addEventListener('mouseup', handlerHide);
   };
 
   return module;
