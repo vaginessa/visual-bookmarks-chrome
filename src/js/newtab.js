@@ -361,7 +361,6 @@ const Bookmarks = (() => {
     target.value = '';
 
     const bookmark = target.closest('.bookmark');
-    const imgEl = bookmark.querySelector('.bookmark__img');
     let overlay;
     bookmark.innerHTML += `<div id="overlay_id_${id}" class="bookmark__overlay">${SVGLoading}</div>`;
 
@@ -381,8 +380,9 @@ const Bookmarks = (() => {
             obj[id] = fileEntry.toURL();
             localStorage.setItem('custom_dials', JSON.stringify(obj));
 
-            bookmark.querySelector('.bookmark__img').classList.remove('bookmark__img--folder');
-            bookmark.querySelector('.bookmark__img').style.backgroundImage = `url('${fileEntry.toURL()}?refresh=${Helpers.rand(1, 9999)}')`;
+            const imgEl = bookmark.querySelector('.bookmark__img');
+            imgEl.classList.remove('bookmark__img--folder');
+            imgEl.style.backgroundImage = `url('${fileEntry.toURL()}?refresh=${Helpers.rand(1, 9999)}')`;
 
             if (overlay = document.getElementById('overlay_id_' + id)) {
               bookmark.removeChild(overlay);
@@ -587,7 +587,7 @@ const Modal = (() => {
 
         if (screen && !url) {
           customScreen.style.display = 'block';
-          customScreen.querySelector('img').src = screen;
+          customScreen.querySelector('img').src = `${screen}?refresh=${Helpers.rand(1, 9999)}`;
           customScreen.querySelector('#resetCustomImage').setAttribute('data-bookmark', action);
         }
 
