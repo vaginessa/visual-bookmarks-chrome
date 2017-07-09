@@ -871,18 +871,21 @@ select {
   position: absolute;
   top: 0;
   right: 0;
+  opacity: .3;
+  transition: opacity .3s ease;
+}
+.modal__custom-reset > button {
   width: 20px;
   height: 20px;
   padding: 15px;
+  border: 0;
   background-color: #da3b2f;
-  background-image: url(/img/close.svg);
+  background-image: url(../../extension/img/close.svg);
   background-size: 20px;
   background-repeat: no-repeat;
   background-position: 50%;
-  border: 0;
-  opacity: .5;
   cursor: pointer;
-  transition: opacity .3s ease;
+  outline: 0;
 }
 .modal__custom-wrap:hover .modal__custom-reset {
   opacity: 1;
