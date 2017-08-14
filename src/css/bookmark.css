@@ -752,6 +752,25 @@ select {
   z-index: 9999;
   /*transform: translateZ(0);*/
   will-change: transform;
+  overflow: hidden;
+}
+.icon-cog::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,.3);
+  border-radius: 50%;
+  transform: scale(0);
+  opacity: 0;
+  transition: all .3s ease;
+  z-index: -1;
+}
+.icon-cog:hover::after {
+  transform: scale(1.5);
+  opacity: 1;
 }
 .icon-cog:hover {
   transition: opacity .3s linear;
