@@ -4,12 +4,15 @@ import './components/polyfill';
 import FS from './components/fs';
 import Settings from './components/settings';
 import Localization from './components/localization';
+import TabsSlider from './components/tabsSlider';
 import Ripple from './components/ripple';
 import Helpers from './components/helpers';
 
 Localization();
 
 Ripple.init('.md-ripple');
+
+let tabs = new TabsSlider('.tabs');
 
 const Options = (() => {
 
@@ -27,13 +30,6 @@ const Options = (() => {
     const manifest = chrome.runtime.getManifest();
     document.getElementById('ext_name').textContent = manifest.name;
     document.getElementById('ext_version').textContent = `${chrome.i18n.getMessage('version')} ${manifest.version}`;
-
-    const advanced = document.querySelector('.advanced');
-    document.getElementById('advanced').addEventListener('change', function() {
-      (this.checked)
-        ? advanced.classList.add('show-advanced')
-        : advanced.classList.remove('show-advanced');
-    }, false);
 
     document.getElementById('save').addEventListener('click', setOptions, false);
     document.getElementById('restore_local').addEventListener('click', restoreLocalOptions, false);
@@ -100,11 +96,12 @@ const Options = (() => {
     FS.createDir('images', function (dirEntry) {
       FS.createFile('/images/' + fileName, { file: file, fileType: file.type }, function (fileEntry) {
         document.querySelector('.c-upload__preview').style.display = '';
-        document.getElementById('preview_upload').innerHTML = `<img class="img-fluid" src="${fileEntry.toURL()}?new=${Helpers.rand(1, 99999)}" alt="">`;
+        document.getElementById('preview_upload').innerHTML = `<div class="c-upload__preview-image" style="background-image: url(${fileEntry.toURL()}?new=${Helpers.rand(1, 99999)});"><div>`;
         localStorage.setItem('background_local', fileEntry.toURL());
         Helpers.notifications(
           chrome.i18n.getMessage('notice_bg_image_updated')
         );
+        tabs.recalc();
       });
     });
 
@@ -132,6 +129,7 @@ const Options = (() => {
       localStorage.removeItem('background_local');
       preview.innerHTML = '';
       previewParent.style.display = 'none';
+      tabs.recalc();
     });
   }
 
@@ -145,7 +143,7 @@ const Options = (() => {
       const imgSrc = localStorage.getItem('background_local');
       if (imgSrc) {
         document.querySelector('.c-upload__preview').style.display = '';
-        document.getElementById('preview_upload').innerHTML = `<img class="img-fluid" src="${imgSrc}" alt="">`;
+        document.getElementById('preview_upload').innerHTML = `<div class="c-upload__preview-image" style="background-image: url(${imgSrc});"><div>`;
       } else {
         document.querySelector('.c-upload__preview').style.display = 'none';
         document.getElementById('preview_upload').innerHTML = '';
@@ -154,6 +152,7 @@ const Options = (() => {
 
     localStorage.setItem('background_image', this.value);
     document.getElementById(this.value).style.display = 'block';
+    tabs.recalc();
   }
 
   function deleteImages(evt) {

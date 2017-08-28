@@ -24,7 +24,7 @@
     "message": "Сохранить"
   },
   "btn_back": {
-    "message": "Назад к закладкам"
+    "message": "К закладкам"
   },
   "btn_apply": {
     "message": "Применить"
@@ -100,6 +100,15 @@
   },
   "options": {
     "message": "Опции"
+  },
+  "view_setting": {
+    "message": "Вид"
+  },
+  "general_setting": {
+    "message": "Общие"
+  },
+  "advanced_setting": {
+    "message": "Расширенные"
   },
   "number_of_columns": {
     "message": "Кол-во колонок в ряду"

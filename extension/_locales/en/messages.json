@@ -24,7 +24,7 @@
     "message": "Save"
   },
   "btn_back": {
-    "message": "Back to Newtab"
+    "message": "To bookmarks"
   },
   "btn_apply": {
     "message": "Apply"
@@ -100,6 +100,15 @@
   },
   "options": {
     "message": "Options"
+  },
+  "view_setting": {
+    "message": "View"
+  },
+  "general_setting": {
+    "message": "General"
+  },
+  "advanced_setting": {
+    "message": "Advanced"
   },
   "number_of_columns": {
     "message": "Number of Columns"
