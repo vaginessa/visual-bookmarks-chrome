@@ -418,6 +418,7 @@ p {
   min-height: 100vh;
 }
 .options {
+  min-width: 480px;
   background: #f7f7f7;
   color: #646464;
 }
