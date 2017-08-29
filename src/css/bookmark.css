@@ -426,7 +426,7 @@ p {
 }
 .settings-container {
   flex: 1 0 auto;
-  padding-top: 20px;
+  padding-top: 50px;
 }
 .footer {
   flex: 0 0 auto;
