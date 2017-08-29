@@ -143,7 +143,7 @@ const Options = (() => {
       const imgSrc = localStorage.getItem('background_local');
       if (imgSrc) {
         document.querySelector('.c-upload__preview').style.display = '';
-        document.getElementById('preview_upload').innerHTML = `<div class="c-upload__preview-image" style="background-image: url(${imgSrc});"><div>`;
+        document.getElementById('preview_upload').innerHTML = `<div class="c-upload__preview-image" style="background-image: url(${imgSrc}?new=${Helpers.rand(1, 99999)});"><div>`;
       } else {
         document.querySelector('.c-upload__preview').style.display = 'none';
         document.getElementById('preview_upload').innerHTML = '';
