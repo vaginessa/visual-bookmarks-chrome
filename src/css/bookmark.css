@@ -171,6 +171,10 @@ p {
   opacity: 0;
 }
 
+.header .form-control {
+  margin-bottom: 0;
+}
+
 /* Bookmark */
 .bookmark,
 .bookmark--create {
