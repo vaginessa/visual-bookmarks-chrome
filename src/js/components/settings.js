@@ -10,7 +10,7 @@ const Settings = (() => {
     enable_sync: "false",
     show_toolbar: "true",
     show_favicon: "true",
-    thumbnailing_service: "http://api.webthumbnail.org/?width=500&height=400&screen=1280&url=[URL]"
+    thumbnailing_service: "http://free.pagepeeker.com/v2/thumbs.php?size=x&url=[URL]"
   };
 
   function init() {
