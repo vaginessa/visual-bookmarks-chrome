@@ -140,6 +140,9 @@
   "drag_and_drop": {
     "message": "Enable Drag & Drop"
   },
+  "auto_generate_thumbnail": {
+    "message": "Generating a thumbnail when creating a bookmark"
+  },
   "enable_synchronization": {
     "message": "Enable Synchronization"
   },

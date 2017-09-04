@@ -58,6 +58,7 @@ const Options = (() => {
     document.getElementById('background_external').value = localStorage.getItem('background_external');
     document.getElementById('thumbnailing_service').value = localStorage.getItem('thumbnailing_service');
     document.getElementById('drag_and_drop').checked = localStorage.getItem('drag_and_drop') === "true";
+    document.getElementById('auto_generate_thumbnail').checked = localStorage.getItem('auto_generate_thumbnail') === "true";
     document.getElementById('show_toolbar').checked = localStorage.getItem('show_toolbar') === "true";
     document.getElementById('show_favicon').checked = localStorage.getItem('show_favicon') === "true";
     document.getElementById('enable_sync').checked = localStorage.getItem('enable_sync') === "true";
@@ -70,6 +71,7 @@ const Options = (() => {
     localStorage.setItem('background_external', document.getElementById('background_external').value);
     localStorage.setItem('thumbnailing_service', document.getElementById('thumbnailing_service').value);
     localStorage.setItem('drag_and_drop', document.getElementById('drag_and_drop').checked);
+    localStorage.setItem('auto_generate_thumbnail', document.getElementById('auto_generate_thumbnail').checked);
     localStorage.setItem('show_toolbar', document.getElementById('show_toolbar').checked);
     localStorage.setItem('show_favicon', document.getElementById('show_favicon').checked);
     localStorage.setItem('enable_sync', document.getElementById('enable_sync').checked);

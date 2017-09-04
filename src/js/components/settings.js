@@ -7,6 +7,7 @@ const Settings = (() => {
     default_folder_id: 1,
     dial_columns: 5,
     drag_and_drop: "true",
+    auto_generate_thumbnail: "true",
     enable_sync: "false",
     show_toolbar: "true",
     show_favicon: "true",

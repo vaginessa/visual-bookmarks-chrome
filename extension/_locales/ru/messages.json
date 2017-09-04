@@ -140,6 +140,9 @@
   "drag_and_drop": {
     "message": "Включить перетаскивание"
   },
+  "auto_generate_thumbnail": {
+    "message": "Генерация миниатюры при создании закладки"
+  },
   "enable_synchronization": {
     "message": "Включить синхронизацию"
   },

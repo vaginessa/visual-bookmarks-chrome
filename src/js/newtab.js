@@ -138,7 +138,7 @@ const Bookmarks = (() => {
       // const data = JSON.parse(target.getAttribute('data-bookmark'));
       const id = target.getAttribute('data-bookmark');
       rmCustomScreen(id, function() {
-        const bookmark = document.querySelector('[data-sort="' + id + '"]');
+        const bookmark = container.querySelector('[data-sort="' + id + '"]');
         bookmark.querySelector('.bookmark__img').style.backgroundImage = '';
         bookmark.querySelector('.bookmark__img').classList.add('bookmark__img--folder');
 
@@ -530,6 +530,10 @@ const Bookmarks = (() => {
           html = genFolder(result);
         }
         container.querySelector('.column--nosort').insertAdjacentHTML('beforeBegin', html);
+        if (localStorage.getItem('auto_generate_thumbnail') === 'true' && result.url) {
+          const bookmark = container.querySelector('[data-sort="' + result.id + '"]');
+          createScreen(bookmark, result.id, result.url);
+        }
       });
       return true;
     }
@@ -539,7 +543,7 @@ const Bookmarks = (() => {
 
   function updateBookmark(id, title, url) {
     let hash = buildBookmarkHash(title, url);
-    const bookmark = document.querySelector('[data-sort="' + id + '"]');
+    const bookmark = container.querySelector('[data-sort="' + id + '"]');
     const dataEdit = bookmark.querySelector('.bookmark__edit');
     //Actually make sure the URL being modified is valid instead of always
     //prepending http:// to it creating new valid+invalid bookmark
