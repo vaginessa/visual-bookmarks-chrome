@@ -83,11 +83,9 @@ function captureScreen(link, callback) {
 
 // In future
 // chrome.runtime.onInstalled.addListener(function (callback) {
-//   if (callback.reason === 'update') {
-//     for (var name in localStorage) {
-//       console.log(name + ': ' + localStorage[name])
-//       Helpers.notifications('Update your settings');
-//     }
+//   if (callback.reason === 'update' && callback.previousVersion === 'x.x.x') {
+//     console.log(callback, localStorage)
+//     Helpers.notifications('Update your settings');
 //   }
 // });
 

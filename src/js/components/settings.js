@@ -11,7 +11,7 @@ const Settings = (() => {
     enable_sync: "false",
     show_toolbar: "true",
     show_favicon: "true",
-    thumbnailing_service: "http://free.pagepeeker.com/v2/thumbs.php?size=x&url=[URL]"
+    thumbnailing_service: "https://logo.clearbit.com/[URL]"
   };
 
   function init() {
@@ -21,6 +21,12 @@ const Settings = (() => {
         localStorage.setItem(name, default_values[name]);
       }
     });
+
+    // Replace option thumbnailing_service
+    const arr = ['http://free.pagepeeker.com/v2/thumbs.php?size=x&url=[URL]', 'http://api.webthumbnail.org/?width=500&height=400&screen=1280&url=[URL]'];
+    if (arr.indexOf(localStorage.getItem('thumbnailing_service')) > -1) {
+      localStorage.setItem('thumbnailing_service', 'https://logo.clearbit.com/[URL]');
+    }
 
     if (localStorage.getItem('enable_sync') === 'true') {
       chrome.storage.onChanged.addListener(function (obj, areaName) {

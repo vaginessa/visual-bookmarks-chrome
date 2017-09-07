@@ -73,6 +73,21 @@ export default {
 
   },
 
+  imageLoaded(img, cbObj) {
+  // for (let img of imgsPath) {
+    const image = new Image();
+
+    image.onload = () => {
+      cbObj.done && cbObj.done(img);
+    }
+    image.onerror = () => {
+      cbObj.fail && cbObj.fail(img)
+    }
+
+    image.src = img;
+  // }
+  },
+
   base64ToBlob(base64, type, callback) {
   // convert base64 to raw binary data held in a string
   // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this

@@ -32,6 +32,11 @@ Localization();
 Ripple.init('.md-ripple');
 
 /**
+ * Settings
+ */
+Settings.init();
+
+/**
  * Bookmarks module
  */
 const Bookmarks = (() => {
@@ -47,9 +52,6 @@ const Bookmarks = (() => {
 
   function init() {
     if (!container) return;
-
-    // settings.js
-    Settings.init();
 
     // header show
     if (localStorage.getItem('show_toolbar') === 'false') {
@@ -237,12 +239,16 @@ const Bookmarks = (() => {
       : '';
 
     const screen = getCustomDial(bookmark.id);
-    const bgImage = (screen) ? screen : '{thumbnailing_service}';
+    const thumbContainer = (screen)
+      ?
+        `<div class="bookmark__img" style="background-image: url('${screen}');"></div>`
+      :
+        `<div class="bookmark__img bookmark__img--external" data-fail-thumb="/img/404.svg" data-external-thumb="{thumbnailing_service}"></div>`;
 
-    let tpl =
+    const tpl =
       `<div class="column">
         <div class="bookmark" data-sort="{id}">
-          <div class="bookmark__img" style="background-image: url('${bgImage}')"></div>
+          ${thumbContainer}
           <div class="bookmark__control bookmark__control--left">
             <button class="bookmark__edit" data-bookmark="bookmark" data-title="{title}" data-url="{url}" data-id="{id}"></button>
             <div class="bookmark__divider"></div>
@@ -262,7 +268,8 @@ const Bookmarks = (() => {
     return Helpers.templater(tpl, {
       id: bookmark.id,
       url: bookmark.url,
-      thumbnailing_service: localStorage.getItem('thumbnailing_service').replace('[URL]', encodeURIComponent(bookmark.url)),
+      // thumbnailing_service: localStorage.getItem('thumbnailing_service').replace('[URL]', encodeURIComponent(bookmark.url)),
+      thumbnailing_service: localStorage.getItem('thumbnailing_service').replace('[URL]', Helpers.getDomain(bookmark.url)),
       title: bookmark.title,
     });
   }
@@ -277,7 +284,7 @@ const Bookmarks = (() => {
       imgLayout = '<div class="bookmark__img bookmark__img--folder"></div>';
     }
 
-    let tpl =
+    const tpl =
       `<div class="column">
         <div class="bookmark" data-sort="{id}">
           ${imgLayout}
@@ -327,6 +334,21 @@ const Bookmarks = (() => {
             <a class="bookmark__link--create" id="add"></a>
           </div>
         </div>`;
+
+      // loaded external images
+      let imgsPath = [];
+      const thumbs = container.querySelectorAll('.bookmark__img--external');
+      for (let img of thumbs) {
+        Helpers.imageLoaded(img.dataset.externalThumb, {
+          done(data) {
+            img.style.backgroundImage = `url(${data})`;
+          },
+          fail() {
+            img.style.backgroundImage = `url(${img.dataset.failThumb})`;
+          }
+        });
+      }
+
     }, 20);
   }
 
@@ -410,6 +432,8 @@ const Bookmarks = (() => {
 
     bookmark.innerHTML += `<div id="overlay_id_${idBookmark}" class="bookmark__overlay">${SVGLoading}</div>`;
 
+    const image = bookmark.querySelector('.bookmark__img');
+
     chrome.runtime.sendMessage({ captureUrl: captureUrl, id: idBookmark }, (response) => {
 
       if (response.warning) {
@@ -417,9 +441,20 @@ const Bookmarks = (() => {
         if (overlay = document.getElementById('overlay_id_' + idBookmark)) {
           bookmark.removeChild(overlay);
         }
+
+        Helpers.imageLoaded(image.dataset.externalThumb, {
+          done(data) {
+            image.style.backgroundImage = `url(${data})`;
+          },
+          fail() {
+            image.style.backgroundImage = `url(${image.dataset.failThumb})`;
+          }
+        })
         return false;
       }
-      bookmark.querySelector('.bookmark__img').style.backgroundImage = `url('${response}?refresh=${Helpers.rand(1, 9999)}')`;
+
+      image.classList.remove('bookmark__img--external');
+      image.style.backgroundImage = `url('${response}?refresh=${Helpers.rand(1, 9999)}')`;
       if (overlay = document.getElementById('overlay_id_' + idBookmark)) {
         bookmark.removeChild(overlay);
       }
@@ -530,9 +565,23 @@ const Bookmarks = (() => {
           html = genFolder(result);
         }
         container.querySelector('.column--nosort').insertAdjacentHTML('beforeBegin', html);
-        if (localStorage.getItem('auto_generate_thumbnail') === 'true' && result.url) {
-          const bookmark = container.querySelector('[data-sort="' + result.id + '"]');
-          createScreen(bookmark, result.id, result.url);
+        const bookmark = container.querySelector('[data-sort="' + result.id + '"]');
+
+        if (result.url) {
+          if (localStorage.getItem('auto_generate_thumbnail') === 'true') {
+            createScreen(bookmark, result.id, result.url);
+          } else {
+            const image = bookmark.querySelector('.bookmark__img');
+            image.classList.add('bookmark__img--external');
+            Helpers.imageLoaded(image.dataset.externalThumb, {
+              done(data) {
+                image.style.backgroundImage = `url(${data})`;
+              },
+              fail() {
+                image.style.backgroundImage = image.dataset.failThumb;
+              }
+            })
+          }
         }
       });
       return true;
@@ -661,16 +710,16 @@ const UI = (() => {
         : localStorage.getItem('background_external');
 
       if (resource && resource !== '') {
-        let image = new Image();
-        image.onload = function() {
-          bgEl.style.backgroundImage = `url('${resource}')`;
-          bgEl.style.opacity = 1;
-        }
-        image.onerror = function(e) {
-          console.warn(`Local background image resource problem: ${e.type}`);
-          bgEl.style.opacity = 1;
-        }
-        image.src = resource;
+        Helpers.imageLoaded(resource, {
+          done(data) {
+            bgEl.style.backgroundImage = `url('${data}')`;
+            bgEl.style.opacity = 1;
+          },
+          fail() {
+            console.warn(`Local background image resource problem: ${e.type}`);
+            bgEl.style.opacity = 1;
+          }
+        });
       }
     },
     calculateStyles() {
@@ -688,7 +737,7 @@ const UI = (() => {
 })();
 
 UI.setBG();
-Bookmarks.init();
 UI.calculateStyles();
+Bookmarks.init();
 
 window.addEventListener('resize', () => UI.calculateStyles());

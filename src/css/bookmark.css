@@ -215,11 +215,13 @@ p {
   background-position: center top;
   background-size: cover;
 }
+.bookmark__img--external,
+.bookmark__img--folder {
+  background-size: 50% auto;
+  background-position: center;
+}
 .bookmark__img--folder {
   background-image: url(../../extension/img/folder.svg);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 80px;
 }
 .bookmark__img--add {
   bottom: 0;

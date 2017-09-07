@@ -132,10 +132,10 @@
     "message": "Choose a file"
   },
   "show_header_bar": {
-    "message": "Show header toolbar"
+    "message": "Show search bar and folder selection"
   },
   "show_favicon": {
-    "message": "Show Favicon"
+    "message": "show the Favicon next to the title"
   },
   "drag_and_drop": {
     "message": "Enable Drag & Drop"
