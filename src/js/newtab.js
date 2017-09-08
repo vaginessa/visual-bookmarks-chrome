@@ -336,7 +336,6 @@ const Bookmarks = (() => {
         </div>`;
 
       // loaded external images
-      let imgsPath = [];
       const thumbs = container.querySelectorAll('.bookmark__img--external');
       for (let img of thumbs) {
         Helpers.imageLoaded(img.dataset.externalThumb, {
