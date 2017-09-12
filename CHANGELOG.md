@@ -1,6 +1,11 @@
 # Visual bookmarks changelog
 
-## [2.10.0](https://chrome.google.com/webstore/detail/visual-bookmarks/jdbgjlehkajddoapdgpdjmlpdalfnenf "Link to extension") (2017-09-06)
+## [2.10.1](https://chrome.google.com/webstore/detail/visual-bookmarks/jdbgjlehkajddoapdgpdjmlpdalfnenf "Link to extension") (2017-09-06)
+### Fixes
+* Fixes in localization files
+* Fixes in styles
+
+## 2.10.0 (2017-09-06)
 ### Features
 * Change the service of thumbnails to logos (experimental)
 ### Fixes
