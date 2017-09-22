@@ -1,10 +1,14 @@
 # Visual bookmarks changelog
 
-## 2.10.2 (no release)
+## 2.10.2 (https://chrome.google.com/webstore/detail/visual-bookmarks/jdbgjlehkajddoapdgpdjmlpdalfnenf "Link to extension") (2017-09-22)
 ### Changes
-* Caption height changed
+* Custom scrollbar theme
+* Added placeholder content loader
+### Fixes
+* Fixes in styles
+* Fixes in js
 
-## [2.10.1](https://chrome.google.com/webstore/detail/visual-bookmarks/jdbgjlehkajddoapdgpdjmlpdalfnenf "Link to extension") (2017-09-12)
+## 2.10.1 (2017-09-12)
 ### Fixes
 * Fixes in localization files
 * Fixes in styles
