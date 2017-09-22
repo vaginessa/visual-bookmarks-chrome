@@ -315,7 +315,8 @@ const Bookmarks = (() => {
 
   function render(_array) {
     let arr = [];
-    container.innerHTML = `<div class="dial-loading">${SVGLoading}</div>`;
+
+    // container.innerHTML = `<div class="dial-loading">${SVGLoading}</div>`;
     // let storage = JSON.parse(localStorage.getItem('custom_dials'));
     _array.forEach(function(bookmark) {
       if (bookmark.url !== undefined) {
@@ -735,8 +736,8 @@ const UI = (() => {
   }
 })();
 
-UI.setBG();
 UI.calculateStyles();
 Bookmarks.init();
 
+window.addEventListener('load', () => UI.setBG(),);
 window.addEventListener('resize', () => UI.calculateStyles());
