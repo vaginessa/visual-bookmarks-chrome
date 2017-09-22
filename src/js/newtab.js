@@ -326,7 +326,7 @@ const Bookmarks = (() => {
         arr.push(genFolder(bookmark));
       }
     });
-    setTimeout(() => {
+    // setTimeout(() => {
       container.innerHTML =
       `${arr.join('')}
         <div class="column--nosort">
@@ -349,7 +349,7 @@ const Bookmarks = (() => {
         });
       }
 
-    }, 20);
+    // }, 20);
   }
 
   function getCustomDial(id) {

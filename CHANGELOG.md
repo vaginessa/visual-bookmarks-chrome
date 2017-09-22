@@ -1,6 +1,6 @@
 # Visual bookmarks changelog
 
-## 2.10.2 (https://chrome.google.com/webstore/detail/visual-bookmarks/jdbgjlehkajddoapdgpdjmlpdalfnenf "Link to extension") (2017-09-22)
+## 2.10.3 (https://chrome.google.com/webstore/detail/visual-bookmarks/jdbgjlehkajddoapdgpdjmlpdalfnenf "Link to extension") (2017-09-22)
 ### Changes
 * Custom scrollbar theme
 * Added placeholder content loader
