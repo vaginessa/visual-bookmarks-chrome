@@ -250,18 +250,12 @@ p {
 .bookmark__img--folder {
   background-image: url(../../extension/img/folder.svg);
 }
-.bookmark__img--fake,
 .bookmark__img--add {
   bottom: 0;
+  background-image: url(../../extension/img/add.svg);
   background-repeat: no-repeat;
   background-position: center;
   background-size: 50px;
-}
-.bookmark__img--fake {
-  background-image: url(../../extension/img/image--dark.svg)
-}
-.bookmark__img--add {
-  background-image: url(../../extension/img/add.svg);
   z-index: -1;
 }
 /*  Image icon placeholder  */
@@ -655,11 +649,12 @@ select {
 .checkbox input[type="checkbox"] + label:after {
   content: '';
   position: absolute;
-  top: -1px;
-  left: -3px;
-  width: 21px;
-  height: 21px;
-  background: url(../../extension/img/checkmark.png) no-repeat;
+  top: -2px;
+  left: 0px;
+  width: 16px;
+  height: 16px;
+  background: url(../../extension/img/check.svg) no-repeat;
+  background-size: 16px;
   opacity: 0;
   transition: opacity .2s ease;
 }
