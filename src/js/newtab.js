@@ -63,10 +63,7 @@ const Bookmarks = (() => {
 
     // Vertical center
     if (localStorage.getItem('vertical_center') === 'true') {
-      // const content = document.getElementById('content');
-      // if (content.scrollHeight) {
       document.getElementById('content').classList.add('flex-vertical-center');
-      // }
     }
 
     // Create speeddial

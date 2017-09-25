@@ -134,6 +134,11 @@ p {
     width: 1350px;
   }
 }
+@media (min-width: 1600px) {
+  .container {
+    width: 1350px;
+  }
+}
 .content {
   padding: 20px 0;
 }
