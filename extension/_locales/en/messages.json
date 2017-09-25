@@ -113,6 +113,9 @@
   "number_of_columns": {
     "message": "Number of Columns"
   },
+  "vertical_center": {
+    "message": "Vertical centering"
+  },
   "default_folder_show": {
     "message": "Default Folder to Show"
   },

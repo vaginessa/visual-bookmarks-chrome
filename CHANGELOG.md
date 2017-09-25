@@ -1,6 +1,12 @@
 # Visual bookmarks changelog
 
-## 2.10.4 (https://chrome.google.com/webstore/detail/visual-bookmarks/jdbgjlehkajddoapdgpdjmlpdalfnenf "Link to extension") (2017-09-23)
+## [2.11.0](https://chrome.google.com/webstore/detail/visual-bookmarks/jdbgjlehkajddoapdgpdjmlpdalfnenf "Link to extension") (2017-09-25)
+### Changes
+* Added option of vertical centering
+* Increased number of columns
+* Replacement all float on flex
+
+## 2.10.4 (2017-09-23)
 ### Changes
 * Custom scrollbar theme
 * Added placeholder content loader

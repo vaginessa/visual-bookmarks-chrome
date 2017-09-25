@@ -6,6 +6,7 @@ const Settings = (() => {
     background_external: "",
     default_folder_id: 1,
     dial_columns: 5,
+    vertical_center: "false",
     drag_and_drop: "true",
     auto_generate_thumbnail: "true",
     enable_sync: "false",

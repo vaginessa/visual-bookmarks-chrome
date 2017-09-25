@@ -55,9 +55,15 @@ const Bookmarks = (() => {
 
     // header show
     if (localStorage.getItem('show_toolbar') === 'false') {
-      document.getElementById('header').style.display = 'none';
+      // document.getElementById('header').style.display = 'none';
+      document.getElementById('main').classList.add('hidden-toolbar');
     } else {
       generateFolderList();
+    }
+
+    // Vertical center
+    if (localStorage.getItem('vertical_center') === 'true') {
+      document.getElementById('content').classList.add('flex-vertical-center');
     }
 
     // Create speeddial
@@ -722,16 +728,27 @@ const UI = (() => {
         });
       }
     },
-    calculateStyles() {
-      if (window.innerWidth < 768) { return (document.getElementById('generateStyles').innerHTML = ''); }
-      const ratio = 4 / 3,
-        container = Math.floor(document.getElementById('includeThree').offsetWidth),
-        styles = document.getElementById('generateStyles'),
-        colWidth = Math.floor(container / localStorage.getItem('dial_columns')),
-        colHeight = colWidth / ratio;
+    calculateStyles(e) {
+      // if (window.innerWidth < 768) { return (document.getElementById('generateStyles').innerHTML = ''); }
 
+      const columns = parseInt(localStorage.getItem('dial_columns'));
+      const styles = document.getElementById('generateStyles');
+      const ratio = 4 / 3;
+
+      if (columns >= 8 && window.innerWidth < 1170) {
+        console.log(columns)
+        const colWidth = Math.floor(1170  / columns);
+        const colHeight = colWidth / ratio;
+        styles.innerHTML = `.bookmarks {justify-content: center} .column, .column--nosort {width: ${colWidth}px; height: ${colHeight}px}`;
+        return;
+      }
+
+      if (window.innerWidth < 768) return;
+
+      const container = Math.floor(document.getElementById('includeThree').offsetWidth);
+      const colWidth = Math.floor(container / columns);
+      const colHeight = colWidth / ratio;
       styles.innerHTML = `.column, .column--nosort {width: ${colWidth}px; height: ${colHeight}px}`;
-
     }
   }
 })();
@@ -740,4 +757,4 @@ UI.calculateStyles();
 Bookmarks.init();
 
 window.addEventListener('load', () => UI.setBG(),);
-window.addEventListener('resize', () => UI.calculateStyles());
+window.addEventListener('resize', e => UI.calculateStyles(e));
