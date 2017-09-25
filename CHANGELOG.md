@@ -1,6 +1,6 @@
 # Visual bookmarks changelog
 
-## 2.11.0 (https://chrome.google.com/webstore/detail/visual-bookmarks/jdbgjlehkajddoapdgpdjmlpdalfnenf "Link to extension") (2017-09-25)
+## [2.11.0](https://chrome.google.com/webstore/detail/visual-bookmarks/jdbgjlehkajddoapdgpdjmlpdalfnenf "Link to extension") (2017-09-25)
 ### Changes
 * Added option of vertical centering
 * Increased number of columns
