@@ -55,9 +55,18 @@ const Bookmarks = (() => {
 
     // header show
     if (localStorage.getItem('show_toolbar') === 'false') {
-      document.getElementById('header').style.display = 'none';
+      // document.getElementById('header').style.display = 'none';
+      document.getElementById('main').classList.add('hidden-toolbar');
     } else {
       generateFolderList();
+    }
+
+    // Vertical center
+    if (localStorage.getItem('vertical_center') === 'true') {
+      // const content = document.getElementById('content');
+      // if (content.scrollHeight) {
+      document.getElementById('content').classList.add('flex-vertical-center');
+      // }
     }
 
     // Create speeddial

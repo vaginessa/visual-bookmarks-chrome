@@ -113,6 +113,9 @@
   "number_of_columns": {
     "message": "Кол-во колонок в ряду"
   },
+  "vertical_center": {
+    "message": "Вертикальное центрирование"
+  },
   "default_folder_show": {
     "message": "Отображать папку по умолчанию"
   },
