@@ -728,15 +728,14 @@ const UI = (() => {
         });
       }
     },
-    calculateStyles(e) {
+    calculateStyles() {
       // if (window.innerWidth < 768) { return (document.getElementById('generateStyles').innerHTML = ''); }
-
       const columns = parseInt(localStorage.getItem('dial_columns'));
       const styles = document.getElementById('generateStyles');
       const ratio = 4 / 3;
 
-      if (columns >= 8 && window.innerWidth < 1170) {
-        console.log(columns)
+      // if there are 8 or more columns and a small resolution
+      if (columns >= 8 && window.innerWidth < 1200) {
         const colWidth = Math.floor(1170  / columns);
         const colHeight = colWidth / ratio;
         styles.innerHTML = `.bookmarks {justify-content: center} .column, .column--nosort {width: ${colWidth}px; height: ${colHeight}px}`;
@@ -757,4 +756,4 @@ UI.calculateStyles();
 Bookmarks.init();
 
 window.addEventListener('load', () => UI.setBG(),);
-window.addEventListener('resize', e => UI.calculateStyles(e));
+window.addEventListener('resize', () => UI.calculateStyles());

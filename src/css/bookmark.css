@@ -179,31 +179,18 @@ p {
 }
 .column,
 .column--nosort {
-  /*float: left;
-  min-height: 1px;*/
   padding: var(--column-padding);
 }
 @media (max-width: 768px) {
   .bookmarks {
     justify-content: center;
   }
-}
-/*@media (max-width: 680px) {
   .column,
   .column--nosort {
-    height: 150px;
+    width: 155px;
+    height: 115px;
   }
 }
-@media (max-width: 560px) {
-  .column,
-  .column--nosort {
-    float: none;
-    margin: 0 auto;
-    width: 250px;
-    height: 180px;
-    padding: 10px;
-  }
-}*/
 .column--ghost {
   opacity: 0;
 }
@@ -343,8 +330,8 @@ p {
 .bookmark__image-folder {
   position: relative;
   display: inline-block;
-  width: 28px;
-  height: 28px;
+  width: 27px;
+  height: 25px;
   padding: 0;
   cursor: pointer;
   vertical-align: middle;
@@ -352,15 +339,15 @@ p {
   background-color: transparent;
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 20px;
+  background-size: 18px;
   outline: 0;
 }
 
 .bookmark__divider {
   display: inline-block;
   width: 1px;
-  height: 26px;
-  margin: 0 3px;
+  height: 23px;
+  margin: 0 2px;
   vertical-align: middle;
   background: linear-gradient(to bottom, transparent, rgba(255,255,255,.4) 50%, transparent 100%);
 }
@@ -418,17 +405,11 @@ p {
   vertical-align: middle;
 }
 .bookmark__title {
-  /*position: relative;*/
-  /*overflow: hidden;*/
-  /*padding: 0 15px;*/
   font-weight: 600;
   display: inline;
-  /*white-space: nowrap;*/
-  /*text-overflow: ellipsis;*/
   color: #333;
   text-shadow: 0 0 3px rgba(255, 255, 255, .75);
 }
-/*.bookmark__title:after {*/
 .bookmark__caption:after {
   position: absolute;
   top: 0;
@@ -438,7 +419,6 @@ p {
   background: linear-gradient(to left, #fff 20%, transparent 100%);
   content: '';
 }
-
 .bookmark__overlay {
   @apply --absolute-fill;
   z-index: 99999;
