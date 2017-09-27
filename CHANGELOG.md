@@ -1,6 +1,8 @@
 # Visual bookmarks changelog
 
-## [2.11.1](https://chrome.google.com/webstore/detail/visual-bookmarks/jdbgjlehkajddoapdgpdjmlpdalfnenf "Link to extension") (2017-09-26)
+## [2.11.2](https://chrome.google.com/webstore/detail/visual-bookmarks/jdbgjlehkajddoapdgpdjmlpdalfnenf "Link to extension") (2017-09-27)
+### Changes
+* The custom picture for the folder now has an auto size
 ### Bugs
 * Fixed a bug when calculating styles on a small resolution
 ### Fixes

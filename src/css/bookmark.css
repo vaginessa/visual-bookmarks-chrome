@@ -247,6 +247,10 @@ p {
 .bookmark__img--folder {
   background-image: url(../../extension/img/folder.svg);
 }
+.bookmark__img--auto {
+  background-size: auto;
+  background-position: 50% 50%;
+}
 .bookmark__img--add {
   bottom: 0;
   background-image: url(../../extension/img/add.svg);

@@ -148,10 +148,10 @@ const Bookmarks = (() => {
       rmCustomScreen(id, function() {
         const bookmark = container.querySelector('[data-sort="' + id + '"]');
         bookmark.querySelector('.bookmark__img').style.backgroundImage = '';
+        bookmark.querySelector('.bookmark__img').classList.remove('bookmark__img--auto');
         bookmark.querySelector('.bookmark__img').classList.add('bookmark__img--folder');
 
         target.closest('#customScreen').style.display = '';
-        // Helpers.notifications('This image has been removed');
         Helpers.notifications(chrome.i18n.getMessage('notice_image_removed') );
       });
 
@@ -285,7 +285,7 @@ const Bookmarks = (() => {
     const screen = getCustomDial(bookmark.id);
 
     if (screen) {
-      imgLayout = `<div class="bookmark__img" style="background-image: url(${screen})"></div>`;
+      imgLayout = `<div class="bookmark__img bookmark__img--auto" style="background-image: url(${screen})"></div>`;
     } else {
       imgLayout = '<div class="bookmark__img bookmark__img--folder"></div>';
     }
@@ -410,6 +410,7 @@ const Bookmarks = (() => {
 
             const imgEl = bookmark.querySelector('.bookmark__img');
             imgEl.classList.remove('bookmark__img--folder');
+            imgEl.classList.add('bookmark__img--auto');
             imgEl.style.backgroundImage = `url('${fileEntry.toURL()}?refresh=${Helpers.rand(1, 9999)}')`;
 
             if (overlay = document.getElementById('overlay_id_' + id)) {
