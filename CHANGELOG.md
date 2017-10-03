@@ -1,9 +1,10 @@
 # Visual bookmarks changelog
 
-## [2.11.3](https://chrome.google.com/webstore/detail/visual-bookmarks/jdbgjlehkajddoapdgpdjmlpdalfnenf "Link to extension") (2017-10-03)
+## [2.11.4](https://chrome.google.com/webstore/detail/visual-bookmarks/jdbgjlehkajddoapdgpdjmlpdalfnenf "Link to extension") (2017-10-03)
 ### Changes
 * Optimized the code with the header toolbar turned off
 ### Fixes
+* Hidden add button when searching
 * Fixes in styles
 * Fixes in js
 

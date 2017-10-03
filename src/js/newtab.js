@@ -317,7 +317,7 @@ const Bookmarks = (() => {
     });
   }
 
-  function render(_array) {
+  function render(_array, isCreate = false) {
     let arr = [];
 
     // container.innerHTML = `<div class="dial-loading">${SVGLoading}</div>`;
@@ -331,27 +331,32 @@ const Bookmarks = (() => {
       }
     });
     // setTimeout(() => {
-      container.innerHTML =
-      `${arr.join('')}
-        <div class="column--nosort">
+    container.innerHTML =
+    `${arr.join('')}
+      ${isCreate
+        ?
+        `<div class="column--nosort">
           <div class="bookmark--create">
             <div class="bookmark__img--add"></div>
             <a class="bookmark__link--create" id="add"></a>
           </div>
-        </div>`;
-
-      // loaded external images
-      const thumbs = container.querySelectorAll('.bookmark__img--external');
-      for (let img of thumbs) {
-        Helpers.imageLoaded(img.dataset.externalThumb, {
-          done(data) {
-            img.style.backgroundImage = `url(${data})`;
-          },
-          fail() {
-            img.style.backgroundImage = `url(${img.dataset.failThumb})`;
-          }
-        });
+        </div>`
+        : ``
       }
+    `;
+
+    // loaded external images
+    const thumbs = container.querySelectorAll('.bookmark__img--external');
+    for (let img of thumbs) {
+      Helpers.imageLoaded(img.dataset.externalThumb, {
+        done(data) {
+          img.style.backgroundImage = `url(${data})`;
+        },
+        fail() {
+          img.style.backgroundImage = `url(${img.dataset.failThumb})`;
+        }
+      });
+    }
 
     // }, 20);
   }
@@ -368,7 +373,7 @@ const Bookmarks = (() => {
   function createSpeedDial(id) {
     bk.getSubTree(id, function(item) {
       if (item !== undefined) {
-        render(item[0].children);
+        render(item[0].children, true);
         container.setAttribute('data-folder', id);
       }
       else {
