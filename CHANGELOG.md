@@ -1,6 +1,13 @@
 # Visual bookmarks changelog
 
-## [2.11.2](https://chrome.google.com/webstore/detail/visual-bookmarks/jdbgjlehkajddoapdgpdjmlpdalfnenf "Link to extension") (2017-09-27)
+## [2.11.3](https://chrome.google.com/webstore/detail/visual-bookmarks/jdbgjlehkajddoapdgpdjmlpdalfnenf "Link to extension") (2017-10-03)
+### Changes
+* Optimized the code with the header toolbar turned off
+### Fixes
+* Fixes in styles
+* Fixes in js
+
+## 2.11.2 (2017-09-27)
 ### Changes
 * The custom picture for the folder now has an auto size
 ### Bugs

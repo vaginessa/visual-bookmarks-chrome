@@ -90,6 +90,7 @@ body {
   font-family: var(--font-family);
   font-size: var(--font-size-base);
   overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 h1 {
@@ -940,12 +941,13 @@ select {
   position: fixed;
   z-index: -1;
   top: 0;
-  right: 0;
+  /* stock for scrollbar width */
+  right: -20px;
   bottom: 0;
   left: 0;
 
   will-change: transform;
-  transform: scale(1.03);
+  /*transform: scale(1.03);*/
   transition: opacity .55s linear;
 
   opacity: 0;
@@ -986,7 +988,8 @@ select {
 }
 .modal-overlay {
   background: rgba(51, 51, 51, .55);
-  transform: scale(1.03);
+  /* stock for scrollbar width */
+  right: -20px;
 }
 .modal__outer {
   display: table;
@@ -1028,7 +1031,7 @@ select {
   display: block;
   width: 170px;
   height: 120px;
-  object-fit: cover;
+  object-fit: contain;
 }
 .modal__custom-reset {
   position: absolute;
@@ -1069,7 +1072,7 @@ select {
 }
 
 /* Fix for custom scrollbar */
-@media(max-width: 800px) {
+/*@media(max-width: 800px) {
   body {
     overflow-x: hidden;
   }
@@ -1077,7 +1080,7 @@ select {
   .modal-overlay {
     transform: scale(1.1);
   }
-}
+}*/
 
 /* Ripple */
 .ripple-container {
