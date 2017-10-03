@@ -142,9 +142,6 @@ p {
 .content {
   padding: 20px 0;
 }
-.hidden-toolbar .header {
-  display: none;
-}
 .flex-vertical-center {
   display: flex;
   /* content padding + header height */
@@ -265,8 +262,8 @@ p {
 .bookmark__img--folder {
   background-image: url(../../extension/img/folder.svg);
 }
-.bookmark__img--auto {
-  background-size: auto;
+.bookmark__img--contain {
+  background-size: contain;
   background-position: 50% 50%;
 }
 .bookmark__img--add {

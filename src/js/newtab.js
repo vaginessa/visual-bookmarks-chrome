@@ -53,14 +53,6 @@ const Bookmarks = (() => {
   function init() {
     if (!container) return;
 
-    // header show
-    if (localStorage.getItem('show_toolbar') === 'false') {
-      // document.getElementById('header').style.display = 'none';
-      document.getElementById('main').classList.add('hidden-toolbar');
-    } else {
-      generateFolderList();
-    }
-
     // Vertical center
     if (localStorage.getItem('vertical_center') === 'true') {
       document.getElementById('content').classList.add('flex-vertical-center');
@@ -68,6 +60,18 @@ const Bookmarks = (() => {
 
     // Create speeddial
     createSpeedDial(startFolder());
+
+    // Search bookmarks if toolbar enable
+    if (localStorage.getItem('show_toolbar') === 'false') {
+      document.getElementById('header').remove();
+      document.getElementById('main').classList.add('hidden-toolbar');
+    } else {
+      generateFolderList();
+      const searchDebounce = Helpers.debounce(function(evt) {
+        search(evt);
+      }, 500);
+      document.getElementById('bookmarkSearch').addEventListener('input', searchDebounce, false);
+    }
 
     container.addEventListener('change', function(evt) {
       if (!evt.target.closest('.c-upload__input')) return;
@@ -148,7 +152,7 @@ const Bookmarks = (() => {
       rmCustomScreen(id, function() {
         const bookmark = container.querySelector('[data-sort="' + id + '"]');
         bookmark.querySelector('.bookmark__img').style.backgroundImage = '';
-        bookmark.querySelector('.bookmark__img').classList.remove('bookmark__img--auto');
+        bookmark.querySelector('.bookmark__img').classList.remove('bookmark__img--contain');
         bookmark.querySelector('.bookmark__img').classList.add('bookmark__img--folder');
 
         target.closest('#customScreen').style.display = '';
@@ -157,16 +161,10 @@ const Bookmarks = (() => {
 
     });
 
-    // Search bookmarks
-    const searchDebounce = Helpers.debounce(function(evt) {
-      search(evt);
-    }, 500);
-    document.getElementById('bookmarkSearch').addEventListener('input', searchDebounce, false);
-
     // Change the current dial if the page hash changes
     window.addEventListener('hashchange', function(evt) {
       createSpeedDial(startFolder());
-      generateFolderList();
+      (localStorage.getItem('show_toolbar') === 'true') && generateFolderList();
     }, false);
 
     // Dragging option
@@ -285,7 +283,7 @@ const Bookmarks = (() => {
     const screen = getCustomDial(bookmark.id);
 
     if (screen) {
-      imgLayout = `<div class="bookmark__img bookmark__img--auto" style="background-image: url(${screen})"></div>`;
+      imgLayout = `<div class="bookmark__img bookmark__img--contain" style="background-image: url(${screen})"></div>`;
     } else {
       imgLayout = '<div class="bookmark__img bookmark__img--folder"></div>';
     }
@@ -410,7 +408,7 @@ const Bookmarks = (() => {
 
             const imgEl = bookmark.querySelector('.bookmark__img');
             imgEl.classList.remove('bookmark__img--folder');
-            imgEl.classList.add('bookmark__img--auto');
+            imgEl.classList.add('bookmark__img--contain');
             imgEl.style.backgroundImage = `url('${fileEntry.toURL()}?refresh=${Helpers.rand(1, 9999)}')`;
 
             if (overlay = document.getElementById('overlay_id_' + id)) {
