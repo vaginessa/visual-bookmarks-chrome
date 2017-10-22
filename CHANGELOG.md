@@ -1,6 +1,11 @@
 # Visual bookmarks changelog
 
-## [2.11.4](https://chrome.google.com/webstore/detail/visual-bookmarks/jdbgjlehkajddoapdgpdjmlpdalfnenf "Link to extension") (2017-10-03)
+## [2.11.5](https://chrome.google.com/webstore/detail/visual-bookmarks/jdbgjlehkajddoapdgpdjmlpdalfnenf "Link to extension") (2017-10-22)
+### Fixes
+* Fixed bug of updating thumbnail at timeout
+* Setting the default folder selection is now local and not synchronized
+
+## 2.11.4 (2017-10-03)
 ### Changes
 * Optimized the code with the header toolbar turned off
 ### Fixes

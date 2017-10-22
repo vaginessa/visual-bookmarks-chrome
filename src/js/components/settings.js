@@ -40,7 +40,10 @@ const Settings = (() => {
   function restoreFromSync(cb) {
     chrome.storage.sync.get(function (sync_object) {
       Object.keys(sync_object).forEach(function (key) {
-        localStorage.setItem(key, sync_object[key]);
+        // because of different id`s on different computers, we will exclude the default folder from synchronization
+        if (key !== 'default_folder_id') {
+          localStorage.setItem(key, sync_object[key]);
+        }
       });
       cb && cb();
     });
@@ -49,7 +52,8 @@ const Settings = (() => {
   function syncToStorage() {
     let settings_object = {};
     Object.keys(default_values).forEach(function (key) {
-      if (localStorage[key]) {
+      // because of different id`s on different computers, we will exclude the default folder from synchronization
+      if (localStorage[key] && key !== 'default_folder_id') {
         settings_object[key] = localStorage[key];
       }
     });

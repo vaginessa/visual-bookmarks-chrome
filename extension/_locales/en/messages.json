@@ -170,6 +170,9 @@
   "reset_sync_text": {
     "message": "Delete Synchronized Data from Server"
   },
+  "option_not_sync": {
+    "message": "Option is not synchronized"
+  },
   "version": {
     "message": "Version"
   }
