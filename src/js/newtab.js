@@ -451,15 +451,6 @@ const Bookmarks = (() => {
         if (overlay = document.getElementById('overlay_id_' + idBookmark)) {
           bookmark.removeChild(overlay);
         }
-
-        Helpers.imageLoaded(image.dataset.externalThumb, {
-          done(data) {
-            image.style.backgroundImage = `url(${data})`;
-          },
-          fail() {
-            image.style.backgroundImage = `url(${image.dataset.failThumb})`;
-          }
-        })
         return false;
       }
 
