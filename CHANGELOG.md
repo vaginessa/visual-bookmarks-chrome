@@ -1,6 +1,10 @@
 # Visual bookmarks changelog
 
-## [2.11.5](https://chrome.google.com/webstore/detail/visual-bookmarks/jdbgjlehkajddoapdgpdjmlpdalfnenf "Link to extension") (2017-10-22)
+## [2.12.0](https://chrome.google.com/webstore/detail/visual-bookmarks/jdbgjlehkajddoapdgpdjmlpdalfnenf "Link to extension") (2018-01-01)
+### Features
+* Added support for uploading a custom thumbnail for all bookmarks(previously only for folders).
+
+## 2.11.5 (2017-10-22)
 ### Fixes
 * Fixed bug of updating thumbnail at timeout
 * Setting the default folder selection is now local and not synchronized
