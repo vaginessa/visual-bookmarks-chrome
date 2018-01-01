@@ -27,6 +27,6 @@
     "webpack": "^2.2.1"
   },
   "dependencies": {
-    "sortablejs": "^1.5.1"
+    "sortablejs": "^1.7.0"
   }
 }
