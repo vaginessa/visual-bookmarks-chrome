@@ -53,8 +53,8 @@
   "notice_image_removed": {
     "message": "This image has been removed"
   },
-  "notice_folder_image_updated": {
-    "message": "Folder image has been updated"
+  "notice_thumb_image_updated": {
+    "message": "Bookmark thumb has been updated"
   },
   "notice_bookmark_updated": {
     "message": "Bookmark updated"

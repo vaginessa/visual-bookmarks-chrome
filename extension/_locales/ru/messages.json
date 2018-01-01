@@ -53,8 +53,8 @@
   "notice_image_removed": {
     "message": "Изображение было удалено"
   },
-  "notice_folder_image_updated": {
-    "message": "Изображение папки изменено"
+  "notice_thumb_image_updated": {
+    "message": "Изображение закладки обновлено"
   },
   "notice_bookmark_updated": {
     "message": "Закладка обновлена"

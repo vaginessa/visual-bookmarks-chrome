@@ -312,7 +312,6 @@ p {
     transform: rotate(-45deg);
   }
 */
-
 .bookmark__control {
   position: absolute;
   top: 5px;
@@ -320,13 +319,14 @@ p {
   font-size: 0;
   z-index: 1000;
   opacity: 0;
-  background: rgba(0,0,0,.5);
+  background: rgba(29,29,29,.75);
   border-radius: 1px;
   transition: opacity .2s ease;
 }
 
 .bookmark__control--left {
   left: 5px;
+  z-index: 1100;
 }
 .bookmark__control--right {
   right: 5px;
@@ -343,11 +343,12 @@ p {
   outline: 3px solid color(var(--color-primary) alpha(20%));
 }
 
+.bookmark__more,
 .bookmark__del--bookmark,
 .bookmark__del--folder,
 .bookmark__edit,
 .bookmark__screen,
-.bookmark__image-folder {
+.bookmark__image-upload {
   position: relative;
   display: inline-block;
   width: 27px;
@@ -361,6 +362,32 @@ p {
   background-position: center;
   background-size: 18px;
   outline: 0;
+  opacity: 0.8;
+  transition: opacity .25s;
+}
+
+.bookmark__more {
+  opacity: 1;
+  background-image: url(../../extension/img/more.svg);
+}
+
+.bookmark__control-wrap {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  white-space: nowrap;
+  visibility: hidden;
+  opacity: 0;
+  transition: all .32s;
+  background-color: #292929;
+  pointer-events: none;
+}
+
+.bookmark__more:hover .bookmark__control-wrap {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: all;
 }
 
 .bookmark__divider {
@@ -382,22 +409,23 @@ p {
 .bookmark__screen {
   background-image: url(../../extension/img/camera.svg);
 }
-.bookmark__image-folder {
-  background-image: url(../../extension/img/image.svg);
+.bookmark__image-upload {
+  background-image: url(../../extension/img/upload.svg);
 }
 
 .bookmark__del--bookmark:hover,
 .bookmark__del--folder:hover,
 .bookmark__edit:hover,
 .bookmark__screen:hover,
-.bookmark__image-folder:hover {
-  filter: drop-shadow(0 0 3px rgba(0,0,0,.5));
+.bookmark__image-upload:hover {
+  /* filter: drop-shadow(0 0 3px rgba(0,0,0,.5)); */
+  opacity: 1;
 }
 .bookmark__del--bookmark:active,
 .bookmark__del--folder:active,
 .bookmark__edit:active,
 .bookmark__screen:active,
-.bookmark__image-folder:active {
+.bookmark__image-upload:active {
   top: 1px;
 }
 

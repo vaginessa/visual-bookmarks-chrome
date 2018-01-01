@@ -6,8 +6,8 @@ export default {
       'webkitTransition': 'webkitTransitionEnd'
     };
     let fake = document.createElement('fake');
-    for(let name in prefix) {
-      if(fake.style[name] !== undefined) {
+    for (let name in prefix) {
+      if (fake.style[name] !== undefined) {
         return prefix[name];
       }
     }
@@ -48,14 +48,14 @@ export default {
   },
 
   templater(tpl, data) {
-    return tpl.replace(/\{(.*?)\}/g, function(str, a) {
+    return tpl.replace(/\%(.*?)\%/g, function (str, a) {
       return data[a] || '';
     });
   },
 
   notifications(message, delay = 5000) {
 
-    if(window.timerNotice) {
+    if (window.timerNotice) {
       chrome.notifications.clear(message);
       clearTimeout(window.timerNotice);
     }
@@ -65,7 +65,7 @@ export default {
       iconUrl: 'icons/icon128.png',
       title: 'Visual bookmarks',
       message: message
-    }, function() {
+    }, function () {
       window.timerNotice = setTimeout(() => {
         chrome.notifications.clear(message);
       }, delay)
@@ -74,7 +74,7 @@ export default {
   },
 
   imageLoaded(img, cbObj) {
-  // for (let img of imgsPath) {
+    // for (let img of imgsPath) {
     const image = new Image();
 
     image.onload = () => {
@@ -85,12 +85,12 @@ export default {
     }
 
     image.src = img;
-  // }
+    // }
   },
 
   base64ToBlob(base64, type, callback) {
-  // convert base64 to raw binary data held in a string
-  // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
+    // convert base64 to raw binary data held in a string
+    // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
     let dataURI = base64;
     let contentType = type || '';
 
@@ -108,7 +108,7 @@ export default {
 
     // write the ArrayBuffer to a blob, and you're done
     var bb = new Blob([ab], { type: contentType });
-    if(callback) return callback(bb);
+    if (callback) return callback(bb);
     return bb;
   },
 
