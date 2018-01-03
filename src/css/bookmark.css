@@ -39,15 +39,6 @@
   --light-scrollbar-hover-color: hsla(0, 0%, 97%, 0.9);
   --dark-scrollbar-color: hsla(0, 0%, 20%, 0.5);
   --dark-scrollbar-hover-color: hsla(0, 0%, 20%, 0.9);
-
-  /* Helper */
-  --absolute-fill: {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-  };
 }
 /* Base */
 *,
@@ -261,7 +252,7 @@ p {
   background-position: center;
 }
 .bookmark__img--folder {
-  background-image: url(../../extension/img/folder.svg);
+  background-image: url(../img/folder.svg);
 }
 .bookmark__img--contain {
   background-size: contain;
@@ -269,7 +260,7 @@ p {
 }
 .bookmark__img--add {
   bottom: 0;
-  background-image: url(../../extension/img/add.svg);
+  background-image: url(../img/add.svg);
   background-repeat: no-repeat;
   background-position: center;
   background-size: 50px;
@@ -334,8 +325,12 @@ p {
 
 .bookmark__link,
 .bookmark__link--create {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   display: block;
-  @apply --absolute-fill;
   z-index: 500;
 }
 
@@ -368,7 +363,7 @@ p {
 
 .bookmark__more {
   opacity: 1;
-  background-image: url(../../extension/img/more.svg);
+  background-image: url(../img/more.svg);
 }
 
 .bookmark__control-wrap {
@@ -401,16 +396,16 @@ p {
 
 .bookmark__del--bookmark,
 .bookmark__del--folder {
-  background-image: url(../../extension/img/close.svg);
+  background-image: url(../img/close.svg);
 }
 .bookmark__edit {
-  background-image: url(../../extension/img/edit.svg);
+  background-image: url(../img/edit.svg);
 }
 .bookmark__screen {
-  background-image: url(../../extension/img/camera.svg);
+  background-image: url(../img/camera.svg);
 }
 .bookmark__image-upload {
-  background-image: url(../../extension/img/upload.svg);
+  background-image: url(../img/upload.svg);
 }
 
 .bookmark__del--bookmark:hover,
@@ -468,7 +463,11 @@ p {
   content: '';
 }
 .bookmark__overlay {
-  @apply --absolute-fill;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   z-index: 99999;
   background: rgba(255,255,255,.95);
 }
@@ -691,7 +690,7 @@ select {
   left: 0px;
   width: 16px;
   height: 16px;
-  background: url(../../extension/img/check.svg) no-repeat;
+  background: url(../img/check.svg) no-repeat;
   background-size: 16px;
   opacity: 0;
   transition: opacity .2s ease;
@@ -890,7 +889,7 @@ select {
   padding: 15px 18px;
   border: 0;
   background-color: rgba(51,51,51,.25);
-  background-image: url(../../extension/img/close.svg);
+  background-image: url(../img/close.svg);
   background-size: 20px;
   background-repeat: no-repeat;
   background-position: center;
@@ -959,7 +958,7 @@ select {
   cursor: pointer;
 }
 .icon-cog__link {
-  background-image: url(../../extension/img/cog.svg);
+  background-image: url(../img/cog.svg);
   transition: transform .3s ease;
 }
 .icon-cog__link:hover {
@@ -1074,7 +1073,7 @@ select {
   padding: 15px 18px;
   border: 0;
   background-color: rgba(51,51,51,.25);
-  background-image: url(../../extension/img/close.svg);
+  background-image: url(../img/close.svg);
   background-size: 20px;
   background-repeat: no-repeat;
   background-position: 50%;

@@ -1,4 +1,5 @@
 import css from '../css/bookmark.css';
+import '../img/404.svg';
 
 import './components/polyfill';
 import Sortable from 'sortablejs';
@@ -77,10 +78,10 @@ const Bookmarks = (() => {
       if (!evt.target.closest('.c-upload__input')) return;
 
       evt.preventDefault();
-      // const id = evt.target.getAttribute('data-id');
-      let data = evt.target.getAttribute('data-id');
-      data = JSON.parse(data);
+
+      let data = JSON.parse(evt.target.getAttribute('data-id'));
       data.target = evt.target;
+
       uploadScreen(data);
     });
 

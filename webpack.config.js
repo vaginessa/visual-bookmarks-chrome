@@ -22,12 +22,20 @@ module.exports = {
         exclude: [/node_modules/],
         use: [{
           loader: 'babel-loader',
-          options: { presets: ['es2015'] }
+          options: { presets: ['env'] }
         }]
       },
       {
         test: /\.(png|jpe?g|svg)/i,
-        loader: 'file-loader?name=[name].[ext]&publicPath=../img/&outputPath=img/'
+        use: [{
+          loader: 'file-loader',
+          options: {
+            name: 'img/[name].[ext]',
+            publicPath: '/'
+          }
+        }]
+        // loader: 'file-loader?name=[name].[ext]&publicPath=../img/&outputPath=img/'
+        // loader: 'file-loader?name=[name].[ext]&publicPath=/&outputPath=img/'
       },
       {
         test: /\.css$/,
