@@ -100,7 +100,7 @@ const Options = (() => {
     FS.createDir('images', function (dirEntry) {
       FS.createFile('/images/' + fileName, { file: file, fileType: file.type }, function (fileEntry) {
         document.querySelector('.c-upload__preview').style.display = '';
-        document.getElementById('preview_upload').innerHTML = `<div class="c-upload__preview-image" style="background-image: url(${fileEntry.toURL()}?new=${Helpers.rand(1, 99999)});"><div>`;
+        document.getElementById('preview_upload').innerHTML = `<div class="c-upload__preview-image" style="background-image: url(${fileEntry.toURL()}?new=${Date.now()});"><div>`;
         localStorage.setItem('background_local', fileEntry.toURL());
         Helpers.notifications(
           chrome.i18n.getMessage('notice_bg_image_updated')
@@ -147,7 +147,7 @@ const Options = (() => {
       const imgSrc = localStorage.getItem('background_local');
       if (imgSrc) {
         document.querySelector('.c-upload__preview').style.display = '';
-        document.getElementById('preview_upload').innerHTML = `<div class="c-upload__preview-image" style="background-image: url(${imgSrc}?new=${Helpers.rand(1, 99999)});"><div>`;
+        document.getElementById('preview_upload').innerHTML = `<div class="c-upload__preview-image" style="background-image: url(${imgSrc}?new=${Date.now()});"><div>`;
       } else {
         document.querySelector('.c-upload__preview').style.display = 'none';
         document.getElementById('preview_upload').innerHTML = '';

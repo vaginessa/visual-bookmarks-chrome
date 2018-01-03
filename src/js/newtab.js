@@ -447,7 +447,7 @@ const Bookmarks = (() => {
               imgEl.classList.add('bookmark__img--contain');
             }
 
-            imgEl.style.backgroundImage = `url('${fileEntry.toURL()}?refresh=${Helpers.rand(1, 9999)}')`;
+            imgEl.style.backgroundImage = `url('${fileEntry.toURL()}?refresh=${Date.now()}')`;
 
             if (overlay = document.getElementById('overlay_id_' + id)) {
               bookmark.removeChild(overlay);
@@ -488,7 +488,7 @@ const Bookmarks = (() => {
       }
 
       image.classList.remove('bookmark__img--external');
-      image.style.backgroundImage = `url('${response}?refresh=${Helpers.rand(1, 9999)}')`;
+      image.style.backgroundImage = `url('${response}?refresh=${Date.now()}')`;
       if (overlay = document.getElementById('overlay_id_' + idBookmark)) {
         bookmark.removeChild(overlay);
       }
@@ -674,7 +674,7 @@ const Modal = (() => {
 
         if (screen && !url) {
           customScreen.style.display = 'block';
-          customScreen.querySelector('img').src = `${screen}?refresh=${Helpers.rand(1, 9999)}`;
+          customScreen.querySelector('img').src = `${screen}?refresh=${Date.now()}`;
           customScreen.querySelector('#resetCustomImage').setAttribute('data-bookmark', action);
         }
 
