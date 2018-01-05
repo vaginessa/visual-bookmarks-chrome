@@ -66,11 +66,15 @@ const Options = (() => {
   }
 
   function setOptions() {
+
+    let external = document.getElementById('background_external').value.trim();
+    external = (external !== '') ? checkUrl(external) : '';
+
     localStorage.setItem('dial_columns', document.getElementById('dial_columns').value);
     localStorage.setItem('vertical_center', document.getElementById('vertical_center').checked);
     localStorage.setItem('default_folder_id', document.getElementById('selectFolder').value);
     localStorage.setItem('background_color', document.getElementById('background_color').value);
-    localStorage.setItem('background_external', document.getElementById('background_external').value);
+    localStorage.setItem('background_external', external);
     localStorage.setItem('thumbnailing_service', document.getElementById('thumbnailing_service').value);
     localStorage.setItem('drag_and_drop', document.getElementById('drag_and_drop').checked);
     localStorage.setItem('auto_generate_thumbnail', document.getElementById('auto_generate_thumbnail').checked);
@@ -84,6 +88,13 @@ const Options = (() => {
       chrome.i18n.getMessage('notice_save_settings_success')
     );
     getOptions();
+  }
+
+  function checkUrl(url) {
+    if (!/^(f|ht)tps?:\/\//i.test(url)) {
+      url = `http://${url}`;
+    }
+    return url;
   }
 
   function uploadFile(evt) {

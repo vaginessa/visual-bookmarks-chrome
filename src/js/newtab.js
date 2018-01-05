@@ -750,8 +750,8 @@ const UI = (() => {
             bgEl.style.backgroundImage = `url('${data}')`;
             bgEl.style.opacity = 1;
           },
-          fail() {
-            console.warn(`Local background image resource problem: ${e.type}`);
+          fail(e) {
+            console.warn(`Local background image resource problem: ${e}`);
             bgEl.style.opacity = 1;
           }
         });
