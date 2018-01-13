@@ -1038,9 +1038,25 @@ select {
   box-shadow: 1px 3px 15px 1px rgba(0,0,0,.15);
 }
 .modal__head {
+  margin-bottom: 15px;
+}
+.modal__title {
+  position: relative;
   margin-top: 0;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
   font-weight: 500;
+  font-size: 16px;
   letter-spacing: .03rem;
+}
+.modal__title::after {
+  content: '';
+  position: absolute;
+  left: -15px;
+  right: -15px;
+  bottom: 0;
+  height: 1px;
+  background-color: #ddd;
 }
 .modal__head > span {
   font-weight: 400;

@@ -666,6 +666,14 @@ const Modal = (() => {
 
   let isActive = null, pageY;
 
+  function changeTitle(e) {
+    const value = e.target.value.trim();
+    const elem = document.getElementById('desc');
+    if (elem) {
+      elem.textContent = value;
+    }
+  }
+
   return {
     show(action, title, url, screen) {
       if (isActive) return;
@@ -680,7 +688,10 @@ const Modal = (() => {
         }
 
         // modalHead.innerHTML = `Edit bookmark - <span>${title}</span>`;
-        modalHead.innerHTML = `${chrome.i18n.getMessage('edit_bookmark')} - <span>${title}</span>`;
+        modalHead.innerHTML = `
+          <h4 class="modal__title">${chrome.i18n.getMessage('edit_bookmark')}</h4>
+          <span id="desc">${title}</span>
+        `;
         titleField.value = title;
 
         if (url) {
@@ -690,13 +701,18 @@ const Modal = (() => {
         else {
           urlField.style.display = 'none';
         }
+
+        // Bind event change title bookmark
+        titleField.addEventListener('input', changeTitle);
+
       }
       else {
         setTimeout(() => {
           titleField.focus();
         }, 100);
         // modalHead.textContent = 'Add bookmark';
-        modalHead.textContent = chrome.i18n.getMessage('add_bookmark');
+        // modalHead.textContent = chrome.i18n.getMessage('add_bookmark');
+        modalHead.innerHTML = `<div class="modal__title">${chrome.i18n.getMessage('add_bookmark')}</div>`;
         urlField.style.display = '';
         titleField.value = '';
         urlField.value = '';
@@ -710,6 +726,8 @@ const Modal = (() => {
     },
     hide() {
       if (!isActive) return;
+
+      titleField.removeEventListener('input', changeTitle);
 
       body.classList.remove('modal--show');
       setTimeout(() => {
