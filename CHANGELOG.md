@@ -1,6 +1,6 @@
 # Visual bookmarks changelog
 
-## [2.12.3](https://chrome.google.com/webstore/detail/visual-bookmarks/jdbgjlehkajddoapdgpdjmlpdalfnenf "Link to extension") (2018-01-01)
+## [2.12.5](https://chrome.google.com/webstore/detail/visual-bookmarks/jdbgjlehkajddoapdgpdjmlpdalfnenf "Link to extension") (2018-01-01)
 ### Features
 * Added support for uploading a custom thumbnail for all bookmarks(previously only for folders).
 ### Changes
