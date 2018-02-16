@@ -134,6 +134,9 @@
   "choose_file": {
     "message": "Choose a file"
   },
+  "show_settings_icon": {
+    "message": "Show the settings icon"
+  },
   "show_header_bar": {
     "message": "Show search bar and folder selection"
   },

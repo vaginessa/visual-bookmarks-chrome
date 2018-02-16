@@ -11,6 +11,7 @@ const Settings = (() => {
     auto_generate_thumbnail: "true",
     enable_sync: "false",
     show_toolbar: "true",
+    show_settings_icon: "true",
     show_create_column: "true",
     show_favicon: "true",
     thumbnailing_service: "https://logo.clearbit.com/[URL]"

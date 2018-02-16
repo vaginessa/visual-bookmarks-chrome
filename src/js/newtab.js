@@ -62,6 +62,12 @@ const Bookmarks = (() => {
     // Create speeddial
     createSpeedDial(startFolder());
 
+    // Hide the settings icon if setting_icon disable
+    if (localStorage.getItem('show_settings_icon') === 'false') {
+      const icon = document.getElementById('settings_icon');
+      icon.parentNode.removeChild(icon);
+    }
+
     // Search bookmarks if toolbar enable
     if (localStorage.getItem('show_toolbar') === 'false') {
       document.getElementById('header').remove();

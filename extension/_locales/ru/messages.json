@@ -134,6 +134,9 @@
   "choose_file": {
     "message": "Выберите файл"
   },
+  "show_settings_icon": {
+    "message": "Показывать иконку настроек"
+  },
   "show_header_bar": {
     "message": "Показывать панель поиска и выбора папки"
   },
