@@ -389,9 +389,12 @@ const Bookmarks = (() => {
   }
 
   function createSpeedDial(id) {
+
+    const hasCreate = (localStorage.getItem('show_create_column') === "true");
+
     bk.getSubTree(id, function (item) {
       if (item !== undefined) {
-        render(item[0].children, true);
+        render(item[0].children, hasCreate);
         container.setAttribute('data-folder', id);
       }
       else {

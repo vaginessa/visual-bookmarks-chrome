@@ -48,7 +48,7 @@ const Options = (() => {
     const optionBg = document.getElementById('option_bg');
     const options = Array.prototype.slice.call(optionBg.querySelectorAll('option'));
 
-    options.forEach(function(item) {
+    options.forEach(function (item) {
       if (item.value === localStorage.getItem('background_image')) {
         item.selected = true;
         Helpers.trigger('change', optionBg);
@@ -61,6 +61,7 @@ const Options = (() => {
     document.getElementById('drag_and_drop').checked = localStorage.getItem('drag_and_drop') === "true";
     document.getElementById('auto_generate_thumbnail').checked = localStorage.getItem('auto_generate_thumbnail') === "true";
     document.getElementById('show_toolbar').checked = localStorage.getItem('show_toolbar') === "true";
+    document.getElementById('show_create_column').checked = localStorage.getItem('show_create_column') === "true";
     document.getElementById('show_favicon').checked = localStorage.getItem('show_favicon') === "true";
     document.getElementById('enable_sync').checked = localStorage.getItem('enable_sync') === "true";
   }
@@ -79,6 +80,7 @@ const Options = (() => {
     localStorage.setItem('drag_and_drop', document.getElementById('drag_and_drop').checked);
     localStorage.setItem('auto_generate_thumbnail', document.getElementById('auto_generate_thumbnail').checked);
     localStorage.setItem('show_toolbar', document.getElementById('show_toolbar').checked);
+    localStorage.setItem('show_create_column', document.getElementById('show_create_column').checked);
     localStorage.setItem('show_favicon', document.getElementById('show_favicon').checked);
     localStorage.setItem('enable_sync', document.getElementById('enable_sync').checked);
     if (localStorage.getItem('enable_sync') === 'true') {
@@ -137,7 +139,7 @@ const Options = (() => {
 
     const name = img.split('/').pop();
 
-    FS.deleteFile(`/images/${name}`, function() {
+    FS.deleteFile(`/images/${name}`, function () {
       Helpers.notifications(
         chrome.i18n.getMessage('notice_image_removed')
       );
@@ -150,7 +152,7 @@ const Options = (() => {
 
   function selectBg(evt) {
 
-    Array.prototype.slice.call(document.querySelectorAll('.tbl__option')).forEach(function(item) {
+    Array.prototype.slice.call(document.querySelectorAll('.tbl__option')).forEach(function (item) {
       item.style.display = '';
     });
 
@@ -172,7 +174,7 @@ const Options = (() => {
 
   function deleteImages(evt) {
     evt.preventDefault();
-    if(!confirm(chrome.i18n.getMessage('confirm_delete_images'), '')) return;
+    if (!confirm(chrome.i18n.getMessage('confirm_delete_images'), '')) return;
 
     FS.purge();
     Helpers.notifications(chrome.i18n.getMessage('notice_images_removed'));
@@ -183,7 +185,7 @@ const Options = (() => {
   function restoreLocalOptions() {
     if (confirm(chrome.i18n.getMessage('confirm_restore_default_settings'), '')) {
       // localStorage.clear();
-      Object.keys(localStorage).forEach(function(property) {
+      Object.keys(localStorage).forEach(function (property) {
         if (property === 'background_local' || property === 'custom_dials') {
           return;
         }
@@ -207,7 +209,7 @@ const Options = (() => {
   }
   function checkEnableSync() {
     if (this.checked) {
-      chrome.storage.sync.getBytesInUse(null, function(bytes) {
+      chrome.storage.sync.getBytesInUse(null, function (bytes) {
         if (bytes > 0) {
           if (confirm(chrome.i18n.getMessage('confirm_sync_remote_settings'), '')) {
             Settings.restoreFromSync(getOptions);
@@ -220,7 +222,7 @@ const Options = (() => {
   function generateFolderList() {
     const select = document.getElementById('selectFolder');
     select.innerHTML = '';
-    chrome.bookmarks.getTree(function(rootNode) {
+    chrome.bookmarks.getTree(function (rootNode) {
       let folderList = [], openList = [], node, child;
       // Never more than 2 root nodes, push both Bookmarks Bar & Other Bookmarks into array
       openList.push(rootNode[0].children[0]);
@@ -246,7 +248,7 @@ const Options = (() => {
       });
       let arr = [];
       const folderId = localStorage.getItem('default_folder_id');
-      folderList.forEach(function(item) {
+      folderList.forEach(function (item) {
         arr.push(`<option${item.id === folderId ? ' selected' : ''} value="${item.id}">${item.path}</option>`);
       });
       select.innerHTML = arr.join('');

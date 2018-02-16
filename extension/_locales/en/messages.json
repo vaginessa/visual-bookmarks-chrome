@@ -137,6 +137,9 @@
   "show_header_bar": {
     "message": "Show search bar and folder selection"
   },
+  "show_create_column": {
+    "message": "Show column for adding a bookmark"
+  },
   "show_favicon": {
     "message": "Show the Favicon next to the title"
   },
