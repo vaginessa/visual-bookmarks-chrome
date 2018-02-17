@@ -73,11 +73,27 @@ const Bookmarks = (() => {
       document.getElementById('header').remove();
       document.getElementById('main').classList.add('hidden-toolbar');
     } else {
+      const searchReset = document.getElementById('searchReset');
       generateFolderList();
       const searchDebounce = Helpers.debounce(function (evt) {
+        const value = evt.target.value;
+
+        (value.length > 0)
+          ? searchReset.classList.add('show')
+          : searchReset.classList.remove('show');
+
         search(evt);
       }, 500);
-      document.getElementById('bookmarkSearch').addEventListener('input', searchDebounce, false);
+      const fieldEl = document.getElementById('bookmarkSearch');
+      fieldEl.addEventListener('input', searchDebounce, false);
+      // Form input reset handler
+      searchReset.addEventListener('click', function () {
+        fieldEl.value = '';
+        // Helpers.trigger('input', fieldEl);
+        createSpeedDial(startFolder());
+        fieldEl.focus();
+        searchReset.classList.remove('show');
+      }, false);
     }
 
     container.addEventListener('change', function (evt) {
