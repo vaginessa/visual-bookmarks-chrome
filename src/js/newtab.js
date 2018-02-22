@@ -93,6 +93,10 @@ const Bookmarks = (() => {
         createSpeedDial(startFolder());
         fieldEl.focus();
         searchReset.classList.remove('show');
+
+        if (localStorage.getItem('drag_and_drop') === 'true') {
+          sort.option('disabled', false);
+        }
       }, false);
     }
 
