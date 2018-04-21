@@ -56,6 +56,9 @@
   "notice_thumb_image_updated": {
     "message": "Изображение закладки обновлено"
   },
+  "notice_bookmark_created": {
+    "message": "Закладка создана"
+  },
   "notice_bookmark_updated": {
     "message": "Закладка обновлена"
   },
@@ -93,7 +96,7 @@
     "message": "Недопустимый тип файла\nДопустимый формат (jpg | jpeg | png)"
   },
   "add_bookmark": {
-    "message": "Добавить закладку"
+    "message": "Добавить в закладки"
   },
   "edit_bookmark": {
     "message": "Редактировать закладку"

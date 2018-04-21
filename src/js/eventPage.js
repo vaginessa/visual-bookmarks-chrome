@@ -1,3 +1,4 @@
+// import Settings from './components/settings';
 import FS from './components/fs';
 import Helpers from './components/helpers';
 
@@ -81,13 +82,54 @@ function captureScreen(link, callback) {
   });
 }
 
+function handlerCreateBookmark(data) {
+  chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+    chrome.bookmarks.create({
+      'parentId': window.localStorage.getItem('default_folder_id'),
+      'url': data.pageUrl,
+      'title': tabs[0].title
+    }, function(response) {
+
+      Helpers.notifications(chrome.i18n.getMessage('notice_bookmark_created'));
+
+      captureScreen(response.url, function (data) {
+
+        Helpers.resizeScreen(data.capture, function (image) {
+          const blob = Helpers.base64ToBlob(image, 'image/jpg');
+          const name = `${Helpers.getDomain(response.url)}_${response.id}.jpg`;
+
+          FS.createDir('images', function (dirEntry) {
+            FS.createFile(`${dirEntry.fullPath}/${name}`, { file: blob, fileType: blob.type }, function (fileEntry) {
+              const obj = JSON.parse(localStorage.getItem('custom_dials'));
+              obj[response.id] = fileEntry.toURL();
+              localStorage.setItem('custom_dials', JSON.stringify(obj));
+            });
+          });
+
+        });
+
+      });
+
+    });
+
+  });
+}
+
 // In future
-// chrome.runtime.onInstalled.addListener(function (callback) {
-//   if (callback.reason === 'update' && callback.previousVersion === 'x.x.x') {
-//     console.log(callback, localStorage)
-//     Helpers.notifications('Update your settings');
-//   }
-// });
+chrome.runtime.onInstalled.addListener(function (callback) {
+  // if (callback.reason === 'update' && callback.previousVersion === 'x.x.x') {}
+  chrome.contextMenus.create({
+    id: 'create-bookmarks',
+    title: chrome.i18n.getMessage('add_bookmark'),
+    contexts: ['page']
+  });
+});
+
+chrome.contextMenus.onClicked.addListener(function(data) {
+  switch(data.menuItemId) {
+    case 'create-bookmarks': handlerCreateBookmark(data); break;
+  }
+});
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.captureUrl) {

@@ -56,6 +56,9 @@
   "notice_thumb_image_updated": {
     "message": "Bookmark thumb has been updated"
   },
+  "notice_bookmark_created": {
+    "message": "Bookmark created"
+  },
   "notice_bookmark_updated": {
     "message": "Bookmark updated"
   },
@@ -93,7 +96,7 @@
     "message": "Bad file type\nValid file type (jpg | jpeg | png)"
   },
   "add_bookmark": {
-    "message": "Add bookmark"
+    "message": "Add to bookmarks"
   },
   "edit_bookmark": {
     "message": "Edit bookmark"

@@ -1144,17 +1144,6 @@ select {
   transform: scale(1);
 }
 
-/* Fix for custom scrollbar */
-/*@media(max-width: 800px) {
-  body {
-    overflow-x: hidden;
-  }
-  .bg,
-  .modal-overlay {
-    transform: scale(1.1);
-  }
-}*/
-
 /* Ripple */
 .ripple-container {
   position: relative;
@@ -1165,7 +1154,8 @@ select {
   will-change: transform;
   border-radius: 50%;
   transform: scale(0);
-  transition: all .8s ease-out;
+  /* transition: all 1s ease-out; */
+  transition: all 1s cubic-bezier(.215, .61, .5, .75);
   pointer-events: none;
   z-index: 99999;
 }
