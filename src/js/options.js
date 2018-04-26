@@ -5,7 +5,7 @@ import FS from './components/fs';
 import Settings from './components/settings';
 import Localization from './components/localization';
 import TabsSlider from './components/tabsSlider';
-import Ripple from './components/ripple';
+import Ripple from '@k-ivan/md-ripple';
 import Helpers from './components/helpers';
 
 Localization();

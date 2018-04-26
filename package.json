@@ -28,6 +28,7 @@
     "webpack": "^3.10.0"
   },
   "dependencies": {
+    "@k-ivan/md-ripple": "^1.0.4",
     "sortablejs": "^1.7.0"
   }
 }

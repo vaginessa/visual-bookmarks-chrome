@@ -3,12 +3,11 @@ import '../img/404.svg';
 
 import './components/polyfill';
 import Sortable from 'sortablejs';
+import Ripple from '@k-ivan/md-ripple';
 import Settings from './components/settings';
 import Localization from './components/localization';
-import Ripple from './components/ripple';
 import FS from './components/fs';
 import Helpers from './components/helpers';
-
 
 if (!localStorage.getItem('custom_dials')) {
   localStorage.setItem('custom_dials', '{}');
