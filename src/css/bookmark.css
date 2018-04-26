@@ -1151,11 +1151,10 @@ select {
 }
 .ripple {
   position: absolute;
-  will-change: transform;
+  will-change: transform, opacity;
   border-radius: 50%;
   transform: scale(0);
-  /* transition: all 1s ease-out; */
-  transition: all 1s cubic-bezier(.215, .61, .5, .75);
+  transition: transform .8s ease-out, opacity .8s ease-out;
   pointer-events: none;
   z-index: 99999;
 }
