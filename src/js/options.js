@@ -8,6 +8,9 @@ import TabsSlider from './components/tabsSlider';
 import Ripple from '@k-ivan/md-ripple';
 import Helpers from './components/helpers';
 
+// Set lang attr
+document.documentElement.setAttribute('lang', chrome.i18n.getMessage('@@ui_locale'));
+
 Localization();
 
 Ripple.init('.md-ripple');

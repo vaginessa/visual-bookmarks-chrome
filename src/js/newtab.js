@@ -9,6 +9,9 @@ import Localization from './components/localization';
 import FS from './components/fs';
 import Helpers from './components/helpers';
 
+// Set lang attr
+document.documentElement.setAttribute('lang', chrome.i18n.getMessage('@@ui_locale'));
+
 if (!localStorage.getItem('custom_dials')) {
   localStorage.setItem('custom_dials', '{}');
 }
