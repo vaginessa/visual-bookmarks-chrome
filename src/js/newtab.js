@@ -383,7 +383,7 @@ const Bookmarks = (() => {
       ${isCreate
         ?
         `<div class="column--nosort">
-          <div class="bookmark--create">
+          <div class="bookmark--create md-ripple">
             <div class="bookmark__img--add"></div>
             <a class="bookmark__link--create" id="add"></a>
           </div>

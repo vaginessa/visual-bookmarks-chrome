@@ -158,21 +158,19 @@ p {
   padding: 10px 5px;
 }
 
-.search-label {
-  left: 0;
-  /* position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 15px; */
-  /* width: 18px;
-  height: 18px; */
-  /* margin: auto; */
-}
-.search-icon {
-  fill: var(--color-primary-dark);
-}
 .search-wrap {
   position: relative;
+}
+.search-label {
+  left: 0;
+  color: #999;
+}
+.search-wrap input:focus + .search-label {
+  color: var(--color-primary-dark);
+}
+
+.search-icon {
+  fill: currentColor;
 }
 
 .field-icon {
