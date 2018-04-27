@@ -148,8 +148,8 @@ p {
 .row {
   display: flex;
   flex-flow: row wrap;
-  margin-left: -var(--column-padding);
-  margin-right: -var(--column-padding);
+  margin-left: calc(-1 * var(--column-padding));
+  margin-right: calc(-1 * var(--column-padding));
 }
 
 .header__items {
