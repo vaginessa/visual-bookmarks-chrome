@@ -1,5 +1,6 @@
 import css from '../css/bookmark.css';
-import '../img/404.svg';
+// import '../img/404.svg';
+import '../img/broken-image.svg';
 
 import './components/polyfill';
 import Sortable from 'sortablejs';
@@ -279,7 +280,7 @@ const Bookmarks = (() => {
       ?
       `<div class="bookmark__img" style="background-image: url('${screen}');"></div>`
       :
-      `<div class="bookmark__img bookmark__img--external" data-fail-thumb="/img/404.svg" data-external-thumb="%thumbnailing_service%"></div>`;
+      `<div class="bookmark__img bookmark__img--external" data-fail-thumb="/img/broken-image.svg" data-external-thumb="%thumbnailing_service%"></div>`;
 
     const tpl =
       `<div class="column">
