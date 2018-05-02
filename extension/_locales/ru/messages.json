@@ -56,6 +56,9 @@
   "notice_thumb_image_updated": {
     "message": "Изображение закладки обновлено"
   },
+  "notice_bookmark_exist": {
+    "message": "Закладка уже существует"
+  },
   "notice_bookmark_created": {
     "message": "Закладка создана"
   },

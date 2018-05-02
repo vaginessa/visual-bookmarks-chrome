@@ -56,6 +56,9 @@
   "notice_thumb_image_updated": {
     "message": "Bookmark thumb has been updated"
   },
+  "notice_bookmark_exist": {
+    "message": "Bookmark already exists"
+  },
   "notice_bookmark_created": {
     "message": "Bookmark created"
   },

@@ -84,32 +84,45 @@ function captureScreen(link, callback) {
 
 function handlerCreateBookmark(data) {
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
-    chrome.bookmarks.create({
-      'parentId': window.localStorage.getItem('default_folder_id'),
-      'url': data.pageUrl,
-      'title': tabs[0].title
-    }, function(response) {
+    // const searchQuery = {
+    //   url: data.pageUrl,
+    //   title: tabs[0].title
+    // }
+    chrome.bookmarks.search(data.pageUrl, function (matches) {
+      const isExist = matches.some( match => match.url === data.pageUrl );
 
-      Helpers.notifications(chrome.i18n.getMessage('notice_bookmark_created'));
+      if (isExist) {
+        // Bookmarks exist
+        Helpers.notifications(chrome.i18n.getMessage('notice_bookmark_exist'));
+      }
+      else {
+        // Create
+        chrome.bookmarks.create({
+          'parentId': window.localStorage.getItem('default_folder_id'),
+          'url': data.pageUrl,
+          'title': tabs[0].title
+        }, function(response) {
 
-      captureScreen(response.url, function (data) {
+          Helpers.notifications(chrome.i18n.getMessage('notice_bookmark_created'));
 
-        Helpers.resizeScreen(data.capture, function (image) {
-          const blob = Helpers.base64ToBlob(image, 'image/jpg');
-          const name = `${Helpers.getDomain(response.url)}_${response.id}.jpg`;
+          captureScreen(response.url, function (data) {
 
-          FS.createDir('images', function (dirEntry) {
-            FS.createFile(`${dirEntry.fullPath}/${name}`, { file: blob, fileType: blob.type }, function (fileEntry) {
-              const obj = JSON.parse(localStorage.getItem('custom_dials'));
-              obj[response.id] = fileEntry.toURL();
-              localStorage.setItem('custom_dials', JSON.stringify(obj));
+            Helpers.resizeScreen(data.capture, function (image) {
+              const blob = Helpers.base64ToBlob(image, 'image/jpg');
+              const name = `${Helpers.getDomain(response.url)}_${response.id}.jpg`;
+
+              FS.createDir('images', function (dirEntry) {
+                FS.createFile(`${dirEntry.fullPath}/${name}`, { file: blob, fileType: blob.type }, function (fileEntry) {
+                  const obj = JSON.parse(localStorage.getItem('custom_dials'));
+                  obj[response.id] = fileEntry.toURL();
+                  localStorage.setItem('custom_dials', JSON.stringify(obj));
+                });
+              });
             });
           });
-
         });
 
-      });
-
+      }
     });
 
   });
