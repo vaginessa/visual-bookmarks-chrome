@@ -41,9 +41,11 @@ export default {
     }
   },
 
-  trigger(evt, el) {
-    let event = document.createEvent('HTMLEvents');
-    event.initEvent(evt, true, false);
+  trigger(evt, el, flags = {}) {
+    const event = new Event(evt, {
+      ...{ bubbles: false, cancelable: false },
+      ...flags
+    });
     el.dispatchEvent(event);
   },
 
@@ -53,22 +55,27 @@ export default {
     });
   },
 
-  notifications(message, delay = 5000) {
+  notifications(message, id) {
+    id = id || message;
 
-    if (window.timerNotice) {
-      chrome.notifications.clear(message);
-      clearTimeout(window.timerNotice);
-    }
+    // For requireInteraction
+    // if (window.timerNotice) {
+    //   chrome.notifications.clear(message);
+    //   clearTimeout(window.timerNotice);
+    // }
 
-    chrome.notifications.create(message, {
+    chrome.notifications.create(id, {
       type: 'basic',
       iconUrl: 'icons/icon128.png',
       title: 'Visual bookmarks',
       message: message
+      // requireInteraction: true
     }, function () {
-      window.timerNotice = setTimeout(() => {
-        chrome.notifications.clear(message);
-      }, delay)
+      // For requireInteraction
+      // window.timerNotice = setTimeout(() => {
+      //   chrome.notifications.clear(id);
+      //   window.timerNotice = null;
+      // }, delay)
     })
 
   },

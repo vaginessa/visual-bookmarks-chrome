@@ -179,6 +179,16 @@ const NewTab = (() => {
 
 })();
 
+function networkStatus (evt) {
+  if (evt.type === 'online') {
+    location.reload();
+    Helpers.notifications(chrome.i18n.getMessage('notice_online'), 'idConnection');
+  }
+  else {
+    Helpers.notifications(chrome.i18n.getMessage('notice_offline'), 'idConnection');
+  }
+}
+
 
 // Set lang attr
 document.documentElement.setAttribute('lang', chrome.i18n.getMessage('@@ui_locale'));
@@ -202,7 +212,7 @@ Settings.init();
  * UI
  */
 UI.calculateStyles();
-
+UI.setBG();
 /**
  * Bookmarks
  */
@@ -210,5 +220,12 @@ Bookmarks.init();
 
 NewTab.init();
 
-window.addEventListener('load', () => UI.setBG(), );
+
 window.addEventListener('resize', () => UI.calculateStyles());
+window.addEventListener('online', networkStatus);
+window.addEventListener('offline', networkStatus);
+window.addEventListener('load', () => {
+  if (!navigator.onLine) Helpers.trigger('offline', window);
+});
+
+
