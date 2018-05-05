@@ -97,14 +97,14 @@ p {
   margin: 0 0 15px;
 }
 
-.disable-hover {
+/* .disable-hover {
   pointer-events: none;
 }
 .img-fluid {
   display: inline-block;
   max-width: 100%;
   height: auto;
-}
+} */
 .fixed {
   position: fixed;
   left: 0;
@@ -166,7 +166,8 @@ p {
   left: 0;
   color: #999;
 }
-.search-wrap input:focus + .search-label {
+.search-wrap input:focus + .search-label,
+.search-wrap input:focus ~ .search-reset-btn {
   color: var(--color-primary-dark);
 }
 
@@ -196,19 +197,23 @@ p {
   cursor: pointer;
 }
 .search-reset-btn.show {
-  opacity: .5;
+  opacity: .8;
   visibility: visible;
 }
 .search-reset-btn.show:hover {
   opacity: 1;
 }
 
+.stealth-header .header select:not(:focus) {
+  background-image: url(data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjZmZmIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gICAgPHBhdGggZD0iTTcgMTBsNSA1IDUtNXoiLz4gICAgPHBhdGggZD0iTTAgMGgyNHYyNEgweiIgZmlsbD0ibm9uZSIvPjwvc3ZnPg==);
+}
 .stealth-header .header .form-control:not(:focus) {
   color: rgba(255,255,255,.7);
   border-color: transparent;
   background-color: rgba(255,255,255,.25);
 }
-.stealth-header .search-label {
+.stealth-header .search-label,
+.stealth-header .search-reset-btn {
   color: rgba(255,255,255,.8);
 }
 .stealth-header .header .form-control:not(:focus)::placeholder {
@@ -709,9 +714,11 @@ select {
   padding-right: 28px;
   margin-bottom: 10px;
   width: auto;
-  background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeD0iMTJweCIgeT0iMHB4IiB3aWR0aD0iMjRweCIgaGVpZ2h0PSIzcHgiIHZpZXdCb3g9IjAgMCA2IDMiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDYgMyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PHBvbHlnb24gcG9pbnRzPSI1Ljk5MiwwIDIuOTkyLDMgLTAuMDA4LDAgIi8+PC9zdmc+);
+  /* background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeD0iMTJweCIgeT0iMHB4IiB3aWR0aD0iMjRweCIgaGVpZ2h0PSIzcHgiIHZpZXdCb3g9IjAgMCA2IDMiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDYgMyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PHBvbHlnb24gcG9pbnRzPSI1Ljk5MiwwIDIuOTkyLDMgLTAuMDA4LDAgIi8+PC9zdmc+); */
+  background-image: url(data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjMDAwMDAwIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gICAgPHBhdGggZD0iTTcgMTBsNSA1IDUtNXoiLz4gICAgPHBhdGggZD0iTTAgMGgyNHYyNEgweiIgZmlsbD0ibm9uZSIvPjwvc3ZnPg==);
+  background-size: 16px;
   background-repeat: no-repeat;
-  background-position: 100% center;
+  background-position: calc(100% - 5px) center;
   appearance: none !important;
 }
 /* Custom checkbox */
