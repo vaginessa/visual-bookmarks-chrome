@@ -1,4 +1,4 @@
-import css from '../css/bookmark.css';
+import '../css/bookmark.css';
 
 import Ripple from '@k-ivan/md-ripple';
 
@@ -18,11 +18,10 @@ const NewTab = (() => {
     modalHead    = document.getElementById('modalHead'),
     titleField   = document.getElementById('title'),
     urlField     = document.getElementById('url'),
-    customScreen = document.getElementById('customScreen'),
-    main         = document.getElementById('main');
+    customScreen = document.getElementById('customScreen');
   let modalApi;
 
-  function init () {
+  function init() {
     modalApi = new Modal(modal);
 
     container.addEventListener('change', uploadScreen);
@@ -57,30 +56,26 @@ const NewTab = (() => {
     Bookmarks.uploadScreen(data);
   }
 
-  function controlsHandler (evt) {
+  function controlsHandler(evt) {
     if (evt.target.matches('.bookmark__del--bookmark')) {
       Bookmarks.removeBookmark(evt);
-    }
-    else if (evt.target.closest('.bookmark__del--folder')) {
+    } else if (evt.target.closest('.bookmark__del--folder')) {
       Bookmarks.removeFolder(evt);
-    }
-    else if (evt.target.closest('.bookmark__edit')) {
-      modalApi.show(evt.target.closest('.bookmark__edit'))
-    }
-    else if (evt.target.matches('.bookmark__screen')) {
+    } else if (evt.target.closest('.bookmark__edit')) {
+      modalApi.show(evt.target.closest('.bookmark__edit'));
+    } else if (evt.target.matches('.bookmark__screen')) {
       evt.preventDefault();
       const bookmark = evt.target.closest('.bookmark');
       const idBookmark = bookmark.getAttribute('data-sort');
       const captureUrl = bookmark.querySelector('.bookmark__link').href;
 
       Bookmarks.createScreen(bookmark, idBookmark, captureUrl);
-    }
-    else if (evt.target.matches('#add')) {
+    } else if (evt.target.matches('#add')) {
       modalApi.show(evt.target);
     }
   }
 
-  function submitForm (evt) {
+  function submitForm(evt) {
     evt.preventDefault();
 
     const id = this.getAttribute('data-action');
@@ -90,15 +85,14 @@ const NewTab = (() => {
       if (Bookmarks.updateBookmark(id, title, url)) {
         modalApi.hide();
       }
-    }
-    else {
+    } else {
       if (Bookmarks.createBookmark(title, url)) {
         modalApi.hide();
       }
     }
   }
 
-  function resetThumb (evt) {
+  function resetThumb(evt) {
     evt.preventDefault();
 
     if (!confirm(chrome.i18n.getMessage('confirm_delete_image'))) return;
@@ -106,7 +100,7 @@ const NewTab = (() => {
     const target = evt.target;
     // const data = JSON.parse(target.getAttribute('data-bookmark'));
     const id = target.getAttribute('data-bookmark');
-    Bookmarks.rmCustomScreen(id, function () {
+    Bookmarks.rmCustomScreen(id, function() {
       const bookmark = container.querySelector('[data-sort="' + id + '"]');
       bookmark.querySelector('.bookmark__img').style.backgroundImage = '';
       bookmark.querySelector('.bookmark__img').classList.remove('bookmark__img--contain');
@@ -118,7 +112,7 @@ const NewTab = (() => {
     });
   }
 
-  function show (e) {
+  function show(e) {
     if (e.detail.target) {
 
       const target = e.detail.target;
@@ -126,8 +120,6 @@ const NewTab = (() => {
 
       if (action !== 'New') {
 
-
-        const id = action;
         const title = target.dataset.title;
         const url = target.dataset.url;
         const screen = target.dataset.screen;
@@ -147,14 +139,12 @@ const NewTab = (() => {
         if (url) {
           urlField.style.display = '';
           urlField.value = url;
-        }
-        else {
+        } else {
           urlField.style.display = 'none';
         }
 
         titleField.addEventListener('input', changeTitle);
-      }
-      else {
+      } else {
         setTimeout(() => {
           titleField.focus();
         }, 150);
@@ -167,7 +157,7 @@ const NewTab = (() => {
       form.setAttribute('data-action', action);
     }
   }
-  function hide () {
+  function hide() {
     titleField.removeEventListener('input', changeTitle);
     customScreen.style.display = '';
     form.reset();
@@ -175,16 +165,15 @@ const NewTab = (() => {
 
   return {
     init
-  }
+  };
 
 })();
 
-function networkStatus (evt) {
+function networkStatus(evt) {
   if (evt.type === 'online') {
     location.reload();
     Helpers.notifications(chrome.i18n.getMessage('notice_online'), 'idConnection');
-  }
-  else {
+  } else {
     Helpers.notifications(chrome.i18n.getMessage('notice_offline'), 'idConnection');
   }
 }
@@ -220,12 +209,9 @@ Bookmarks.init();
 
 NewTab.init();
 
-
 window.addEventListener('resize', () => UI.calculateStyles());
 window.addEventListener('online', networkStatus);
 window.addEventListener('offline', networkStatus);
 window.addEventListener('load', () => {
   if (!navigator.onLine) Helpers.trigger('offline', window);
 });
-
-

@@ -17,7 +17,7 @@ export default {
   debounce(func, wait, immediate) {
     let timeout = null;
 
-    return function () {
+    return function() {
       const context = this,
         args = arguments;
 
@@ -27,7 +27,7 @@ export default {
         if (!immediate) {
           func.apply(context, args);
         }
-      }
+      };
 
       const callNow = immediate && !timeout;
 
@@ -38,7 +38,7 @@ export default {
       if (callNow) {
         func.apply(context, args);
       }
-    }
+    };
   },
 
   trigger(evt, el, flags = {}) {
@@ -50,7 +50,7 @@ export default {
   },
 
   templater(tpl, data) {
-    return tpl.replace(/\%(.*?)\%/g, function (str, a) {
+    return tpl.replace(/\%(.*?)\%/g, function(str, a) {
       return data[a] || '';
     });
   },
@@ -70,13 +70,13 @@ export default {
       title: 'Visual bookmarks',
       message: message
       // requireInteraction: true
-    }, function () {
+    }, function() {
       // For requireInteraction
       // window.timerNotice = setTimeout(() => {
       //   chrome.notifications.clear(id);
       //   window.timerNotice = null;
       // }, delay)
-    })
+    });
 
   },
 
@@ -86,10 +86,10 @@ export default {
 
     image.onload = () => {
       cbObj.done && cbObj.done(img);
-    }
+    };
     image.onerror = () => {
-      cbObj.fail && cbObj.fail(img)
-    }
+      cbObj.fail && cbObj.fail(img);
+    };
 
     image.src = img;
     // }
@@ -104,17 +104,17 @@ export default {
     let byteString = atob(dataURI.split(',')[1]);
 
     // separate out the mime component
-    let mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+    // let mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
 
     // write the bytes of the string to an ArrayBuffer
     let ab = new ArrayBuffer(byteString.length);
     let ia = new Uint8Array(ab);
-    for (var i = 0; i < byteString.length; i++) {
+    for (let i = 0; i < byteString.length; i++) {
       ia[i] = byteString.charCodeAt(i);
     }
 
     // write the ArrayBuffer to a blob, and you're done
-    var bb = new Blob([ab], { type: contentType });
+    let bb = new Blob([ab], { type: contentType });
     if (callback) return callback(bb);
     return bb;
   },
@@ -122,7 +122,7 @@ export default {
   resizeScreen(image, callback) {
     let img = new Image();
     let maxHeight = 300;
-    img.onload = function () {
+    img.onload = function() {
       if (maxHeight < img.height) {
         img.width *= maxHeight / img.height;
         img.height = maxHeight;
@@ -132,8 +132,8 @@ export default {
       canvas.width = img.width;
       canvas.height = img.height;
       ctx.drawImage(img, 0, 0, img.width, img.height);
-      callback(canvas.toDataURL('image/jpg'))
-    }
+      callback(canvas.toDataURL('image/jpg'));
+    };
     img.src = image;
   },
 
@@ -147,4 +147,4 @@ export default {
     return url.replace(/https?:\/\/(www.)?/i, '').replace(/\/.*/i, '');
   }
 
-}
+};

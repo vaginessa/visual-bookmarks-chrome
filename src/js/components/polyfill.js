@@ -1,8 +1,8 @@
 Element.prototype.matches = Element.prototype.matches || function matches(selector) {
 
-  var element = this;
-  var elements = (element.document || element.ownerDocument).querySelectorAll(selector);
-  var index = 0;
+  let element = this;
+  let elements = (element.document || element.ownerDocument).querySelectorAll(selector);
+  let index = 0;
 
   while (elements[index] && elements[index] !== element) {
     ++index;
@@ -11,7 +11,7 @@ Element.prototype.matches = Element.prototype.matches || function matches(select
   return !!elements[index];
 };
 Element.prototype.closest = Element.prototype.closest || function closest(selector) {
-  var node = this;
+  let node = this;
 
   while (node) {
     if (node.matches(selector)) return node;

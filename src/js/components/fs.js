@@ -24,24 +24,26 @@ const FS = (() => {
       default:
         msg = 'Unknown Error';
         break;
-    };
+    }
     console.error(msg);
   }
 
   return {
     init(size = 500, callback) {
-      navigator.webkitPersistentStorage.requestQuota(1024 * 1024 * size, function (grantedBytes) {
+      navigator.webkitPersistentStorage.requestQuota(1024 * 1024 * size, function(grantedBytes) {
 
-        window.webkitRequestFileSystem(window.PERSISTENT, grantedBytes, function (filesystem) {
+        window.webkitRequestFileSystem(window.PERSISTENT, grantedBytes, function(filesystem) {
           fs = filesystem;
-          if(callback) callback();
+          if (callback) callback();
         }, onError);
 
       }, onError);
     },
     usedAndRemaining(callback) {
-      navigator.webkitPersistentStorage.queryUsageAndQuota(function (used, remaining) {
-        if (callback) { callback(used, remaining); }
+      navigator.webkitPersistentStorage.queryUsageAndQuota(function(used, remaining) {
+        if (callback) {
+          callback(used, remaining);
+        }
       });
     },
     createDir(path, callback) {
@@ -50,26 +52,25 @@ const FS = (() => {
       }, onError);
     },
     getDir(path, callback) {
-      fs.root.getDirectory(path, {}, function (dirEntry) {
+      fs.root.getDirectory(path, {}, function(dirEntry) {
         if (callback) callback(dirEntry);
       }, onError);
     },
     deleteDir(path, flags, callback) {
-      var flags = flags || {};
+      flags = flags || {};
       if (flags.recursive === undefined) flags.recursive = false;
 
-      var rootDir = fs.root;
+      let rootDir = fs.root;
 
-      rootDir.getDirectory(path, {}, function (dirEntry) {
+      rootDir.getDirectory(path, {}, function(dirEntry) {
         if (flags.recursive) {
-          dirEntry.removeRecursively(function () {
-            //call callback function if specified
+          dirEntry.removeRecursively(function() {
+            // call callback function if specified
             if (callback) callback();
           }, onError);
-        }
-        else {
-          dirEntry.remove(function () {
-            //call callback function if specified
+        } else {
+          dirEntry.remove(function() {
+            // call callback function if specified
             if (callback) callback();
           }, onError);
         }
@@ -79,32 +80,32 @@ const FS = (() => {
       fs.root.getFile(path, { create: true }, function(fileEntry) {
         fileEntry.createWriter(function(fileWriter) {
           fileWriter.onwriteend = function() {
-            if(callback) callback(fileEntry);
-          }
+            if (callback) callback(fileEntry);
+          };
           fileWriter.onerror = function(e) {
             console.log(e);
-          }
-          var blob = new Blob([data.file], { type: data.fileType });
+          };
+          let blob = new Blob([data.file], { type: data.fileType });
           fileWriter.write(blob);
         });
       });
     },
     deleteFile(path, callback) {
-      fs.root.getFile(path, { create: false }, function (fileEntry) {
-        fileEntry.remove(function () {
-          if(callback) callback();
+      fs.root.getFile(path, { create: false }, function(fileEntry) {
+        fileEntry.remove(function() {
+          if (callback) callback();
         }, onError);
       }, onError);
     },
 
     purge() {
-      var dirReader = fs.root.createReader();
-      dirReader.readEntries(function (entries) {
-        for (var i = 0, entry; entry = entries[i]; ++i) {
+      let dirReader = fs.root.createReader();
+      dirReader.readEntries(function(entries) {
+        for (let i = 0, entry; entry = entries[i]; ++i) { // eslint-disable-line no-cond-assign
           if (entry.isDirectory) {
-            entry.removeRecursively(function () { }, onError);
+            entry.removeRecursively(function() { /* empty */ }, onError);
           } else {
-            entry.remove(function () { }, onError);
+            entry.remove(function() { /* empty */ }, onError);
           }
         }
         console.info('Local storage emptied.');

@@ -42,7 +42,10 @@ const UI = (() => {
       if (columns >= 8 && window.innerWidth < 1200) {
         const colWidth = Math.floor(1170 / columns);
         const colHeight = colWidth / ratio;
-        styles.innerHTML = `.bookmarks {justify-content: center} .column, .column--nosort {width: ${colWidth}px; height: ${colHeight}px}`;
+        styles.innerHTML = `
+          .bookmarks {justify-content: center}
+          .column, .column--nosort {width: ${colWidth}px; height: ${colHeight}px}
+        `;
         return;
       }
 
@@ -53,7 +56,7 @@ const UI = (() => {
       const colHeight = colWidth / ratio;
       styles.innerHTML = `.column, .column--nosort {width: ${colWidth}px; height: ${colHeight}px}`;
     }
-  }
+  };
 })();
 
 export default UI;

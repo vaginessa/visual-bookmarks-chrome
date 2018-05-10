@@ -20,7 +20,7 @@ export default class Modal {
       SHOW       : 'show',
       FADE       : 'fade',
       FIXED      : 'fixed'
-    }
+    };
 
     this.wrapElem = document.querySelector('main');
     this.duration = 150;
@@ -28,11 +28,11 @@ export default class Modal {
     this.init();
   }
 
-  init () {
+  init() {
     this.modal.setAttribute('tabIndex', -1);
 
     this.focusableEls = Array.prototype.slice.call(
-      this.modal.querySelectorAll('a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"]')
+      this.modal.querySelectorAll('a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"]') // eslint-disable-line max-len
     );
 
     this.focusableElFirst = this.focusableEls[0];
@@ -43,31 +43,31 @@ export default class Modal {
     this.modal.addEventListener('keydown', this.handleKeyDown.bind(this));
   }
 
-  handleKeyDown (e) {
+  handleKeyDown(e) {
     const ESC = 27;
     const TAB = 9;
     const focusPrev = () => {
       if (document.activeElement === this.focusableElFirst) {
-        e.preventDefault()
-        this.focusableElLast.focus()
+        e.preventDefault();
+        this.focusableElLast.focus();
       }
-    }
+    };
     const focusNext = () => {
       if (document.activeElement === this.focusableElLast) {
-        e.preventDefault()
-        this.focusableElFirst.focus()
+        e.preventDefault();
+        this.focusableElFirst.focus();
       }
-    }
-    switch(e.which) {
+    };
+    switch (e.which) {
       case TAB:
         if (this.focusableEls.length === 1) {
           e.preventDefault();
-          break
+          break;
         }
         if (e.shiftKey) {
-          focusPrev()
+          focusPrev();
         } else {
-          focusNext()
+          focusNext();
         }
         break;
       case ESC:
@@ -77,7 +77,7 @@ export default class Modal {
     }
   }
 
-  customEvent (event, target = null) {
+  customEvent(event, target = null) {
     const e = new CustomEvent(`modal.${event}`, {
       detail: {
         target: target
@@ -86,7 +86,7 @@ export default class Modal {
     return e;
   }
 
-  createBackdrop () {
+  createBackdrop() {
     if (this.backdrop) return;
     this.backdrop = document.createElement('div');
     this.backdrop.className = 'modal-overlay';
@@ -99,19 +99,19 @@ export default class Modal {
     this.backdrop = null;
   }
 
-  fixWrapper () {
+  fixWrapper() {
     this.pageY = window.pageYOffset;
     this.wrapElem.classList.add(this.classNames.FIXED);
     this.wrapElem.style.top = `-${this.pageY}px`;
   }
 
-  unfixWrapper () {
+  unfixWrapper() {
     this.wrapElem.style.top = '';
     this.wrapElem.classList.remove(this.classNames.FIXED);
     window.scrollTo(0, this.pageY);
   }
 
-  show (target) {
+  show(target) {
     if (this.active) return;
 
     this.fixWrapper();
@@ -120,7 +120,7 @@ export default class Modal {
     this.modal.dispatchEvent(event);
 
     this.createBackdrop();
-    this.backdrop.classList.add(this.classNames.SHOW)
+    this.backdrop.classList.add(this.classNames.SHOW);
     this.modal.classList.add(this.classNames.SHOW);
     this.body.classList.add(this.classNames.OPEN);
 
@@ -137,7 +137,7 @@ export default class Modal {
     }, 10);
   }
 
-  hide () {
+  hide() {
     if (!this.active) return;
 
     this.modal.classList.remove(this.classNames.FADE);

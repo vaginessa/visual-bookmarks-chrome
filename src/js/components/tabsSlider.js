@@ -17,8 +17,8 @@ export default class TasbSlider {
   index(el) {
     const children = el.parentNode.children;
     let i = 0;
-    for(; i < children.length; i++) {
-      if(children[i] === el) {
+    for (; i < children.length; i++) {
+      if (children[i] === el) {
         break;
       }
     }
@@ -48,7 +48,7 @@ export default class TasbSlider {
 
   selectTab(e) {
     const target = e.target.closest('.tabs__controls');
-    if(!target) return;
+    if (!target) return;
     this.currentId = this.index(target);
 
     this.dimmensions();
@@ -67,7 +67,7 @@ export default class TasbSlider {
   init(selector) {
     this.tabs = document.querySelector(selector);
 
-    if(!this.tabs || this.tabs.activated) return;
+    if (!this.tabs || this.tabs.activated) return;
 
     this.tabs.activated = true;
     this.currentId = 0;

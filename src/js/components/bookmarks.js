@@ -25,7 +25,7 @@ const Bookmarks = (() => {
     }
 
     FS.init(500);
-    FS.usedAndRemaining(function (used) {
+    FS.usedAndRemaining(function(used) {
       if (used === 0) {
         localStorage.setItem('custom_dials', '{}');
         localStorage.setItem('background_local', '');
@@ -53,7 +53,7 @@ const Bookmarks = (() => {
     } else {
       const searchReset = document.getElementById('searchReset');
       generateFolderList();
-      const searchDebounce = Helpers.debounce(function (evt) {
+      const searchDebounce = Helpers.debounce(function(evt) {
         const value = evt.target.value;
 
         (value.length > 0)
@@ -65,7 +65,7 @@ const Bookmarks = (() => {
       const fieldEl = document.getElementById('bookmarkSearch');
       fieldEl.addEventListener('input', searchDebounce, false);
       // Form input reset handler
-      searchReset.addEventListener('click', function () {
+      searchReset.addEventListener('click', function() {
         fieldEl.value = '';
         // Helpers.trigger('input', fieldEl);
         createSpeedDial(startFolder());
@@ -79,7 +79,7 @@ const Bookmarks = (() => {
     }
 
     // Change the current dial if the page hash changes
-    window.addEventListener('hashchange', function (evt) {
+    window.addEventListener('hashchange', function() {
       createSpeedDial(startFolder());
       (localStorage.getItem('show_toolbar') === 'true') && generateFolderList();
     }, false);
@@ -93,13 +93,13 @@ const Bookmarks = (() => {
         ghostClass: 'column--ghost',
         chosenClass: 'column--chosen',
         preventOnFilter: false,
-        onUpdate: function () {
-          Array.prototype.slice.call(container.querySelectorAll('.bookmark')).forEach(function (item, index) {
+        onUpdate: function() {
+          Array.prototype.slice.call(container.querySelectorAll('.bookmark')).forEach(function(item, index) {
             bk.move(item.getAttribute('data-sort'), {
               'parentId': container.getAttribute('data-folder'),
               'index': index
-            })
-          })
+            });
+          });
         }
       });
     }
@@ -118,7 +118,7 @@ const Bookmarks = (() => {
     const select = document.getElementById('selectFolder');
     select.innerHTML = '';
     select.removeEventListener('change', changeFolder, false);
-    bk.getTree(function (rootNode) {
+    bk.getTree(function(rootNode) {
       let folderList = [], openList = [], node, child;
       // Never more than 2 root nodes, push both Bookmarks Bar & Other Bookmarks into array
       openList.push(rootNode[0].children[0]);
@@ -139,12 +139,12 @@ const Bookmarks = (() => {
           folderList.push(node);
         }
       }
-      folderList.sort(function (a, b) {
+      folderList.sort(function(a, b) {
         return a.path.localeCompare(b.path);
       });
 
       let arr = [];
-      folderList.forEach(function (item) {
+      folderList.forEach(function(item) {
         arr.push(`<option${item.id === startFolder() ? ' selected' : ''} value="${item.id}">${item.path}</option>`);
       });
       select.innerHTML = arr.join('');
@@ -164,7 +164,10 @@ const Bookmarks = (() => {
       ?
       `<div class="bookmark__img" style="background-image: url('${screen}');"></div>`
       :
-      `<div class="bookmark__img bookmark__img--external" data-fail-thumb="/img/broken-image.svg" data-external-thumb="%thumbnailing_service%"></div>`;
+      `<div class="bookmark__img bookmark__img--external"
+            data-fail-thumb="/img/broken-image.svg"
+            data-external-thumb="%thumbnailing_service%">
+      </div>`;
 
     const tpl =
       `<div class="column">
@@ -173,12 +176,19 @@ const Bookmarks = (() => {
           <div class="bookmark__control bookmark__control--left">
             <div class="bookmark__more">
               <div class="bookmark__control-wrap">
-                <button class="bookmark__edit" data-bookmark="bookmark" data-title="%title%" data-url="%url%" data-id="%id%" data-screen="%screen%"></button>
+                <button class="bookmark__edit"
+                        data-bookmark="bookmark"
+                        data-title="%title%"
+                        data-url="%url%"
+                        data-id="%id%"
+                        data-screen="%screen%">
+                </button>
                 <div class="bookmark__divider"></div>
                 <button class="bookmark__screen" data-id="%id%"></button>
                 <div class="bookmark__divider"></div>
                 <div class="bookmark__image-upload">
-                  <input type="file" name="" id="upload-%id%" class="c-upload__input" data-id='{"id": %id%, "site": "%site%"}'>
+                  <input type="file" name="" id="upload-%id%" class="c-upload__input"
+                         data-id='{"id": %id%, "site": "%site%"}'>
                   <label for="upload-%id%" class="c-upload__label"></label>
                 </div>
               </div>
@@ -200,7 +210,8 @@ const Bookmarks = (() => {
       url: bookmark.url,
       site: Helpers.getDomain(bookmark.url),
       screen: screen,
-      // thumbnailing_service: localStorage.getItem('thumbnailing_service').replace('[URL]', encodeURIComponent(bookmark.url)),
+      // localStorage.getItem('thumbnailing_service').replace('[URL]', encodeURIComponent(bookmark.url)),
+      // eslint-disable-next-line max-len
       thumbnailing_service: localStorage.getItem('thumbnailing_service').replace('[URL]', Helpers.getDomain(bookmark.url)),
       title: bookmark.title,
     });
@@ -223,7 +234,11 @@ const Bookmarks = (() => {
           <div class="bookmark__control bookmark__control--left">
             <div class="bookmark__more">
               <div class="bookmark__control-wrap">
-                <button class="bookmark__edit" data-bookmark="folder" data-title="%title%" data-id="%id%" data-screen="%screen%"></button>
+                <button class="bookmark__edit" data-bookmark="folder"
+                        data-title="%title%"
+                        data-id="%id%"
+                        data-screen="%screen%">
+                </button>
                 <div class="bookmark__divider"></div>
                 <div class="bookmark__image-upload">
                   <input type="file" name="" id="upload-%id%" class="c-upload__input" data-id='{"id": %id%}'>
@@ -255,7 +270,7 @@ const Bookmarks = (() => {
 
     // container.innerHTML = `<div class="dial-loading">${SVGLoading}</div>`;
     // let storage = JSON.parse(localStorage.getItem('custom_dials'));
-    _array.forEach(function (bookmark) {
+    _array.forEach(function(bookmark) {
       if (bookmark.url !== undefined) {
         arr.push(genBookmark(bookmark));
       }
@@ -267,15 +282,15 @@ const Bookmarks = (() => {
     container.innerHTML =
       `${arr.join('')}
       ${isCreate
-        ?
-        `<div class="column--nosort">
+    ?
+    `<div class="column--nosort">
           <div class="bookmark--create md-ripple">
             <div class="bookmark__img--add"></div>
             <a class="bookmark__link--create" id="add"></a>
           </div>
         </div>`
-        : ``
-      }
+    : ''
+  }
     `;
 
     // loaded external images
@@ -305,17 +320,16 @@ const Bookmarks = (() => {
 
   function createSpeedDial(id) {
 
-    const hasCreate = (localStorage.getItem('show_create_column') === "true");
+    const hasCreate = (localStorage.getItem('show_create_column') === 'true');
 
-    bk.getSubTree(id, function (item) {
+    bk.getSubTree(id, function(item) {
       if (item !== undefined) {
         render(item[0].children, hasCreate);
         container.setAttribute('data-folder', id);
-      }
-      else {
+      } else {
         Helpers.notifications(chrome.i18n.getMessage('notice_cant_find_id'), 15000);
       }
-    })
+    });
   }
 
   // function folderScreen(target, id) {
@@ -326,21 +340,20 @@ const Bookmarks = (() => {
     const file = target.files[0];
     if (!file) return;
 
-    if (! /image\/(jpe?g|png)$/.test(file.type)) {
+    if (!/image\/(jpe?g|png)$/.test(file.type)) {
       return alert(chrome.i18n.getMessage('alert_file_type_fail'));
     }
     target.value = '';
 
     const bookmark = target.closest('.bookmark');
-    let overlay;
     bookmark.innerHTML += `<div id="overlay_id_${id}" class="bookmark__overlay">${SVGLoading}</div>`;
 
     const reader = new FileReader();
     reader.readAsDataURL(file);
 
-    reader.onload = function () {
+    reader.onload = function() {
 
-      Helpers.resizeScreen(reader.result, function (image) {
+      Helpers.resizeScreen(reader.result, function(image) {
         const blob = Helpers.base64ToBlob(image, 'image/jpg');
 
         let name;
@@ -350,8 +363,8 @@ const Bookmarks = (() => {
           name = `folder-${id}.jpg`;
         }
 
-        FS.createDir('images', function (dirEntry) {
-          FS.createFile(`/images/${name}`, { file: blob, fileType: 'jpg' }, function (fileEntry) {
+        FS.createDir('images', function() {
+          FS.createFile(`/images/${name}`, { file: blob, fileType: 'jpg' }, function(fileEntry) {
 
             const obj = JSON.parse(localStorage.getItem('custom_dials'));
             obj[id] = fileEntry.toURL();
@@ -370,7 +383,9 @@ const Bookmarks = (() => {
             edit.setAttribute('data-screen', fileEntry.toURL());
             imgEl.style.backgroundImage = `url('${fileEntry.toURL()}?refresh=${Date.now()}')`;
 
-            if (overlay = document.getElementById('overlay_id_' + id)) {
+            let overlay = document.getElementById('overlay_id_' + id);
+
+            if (overlay) {
               bookmark.removeChild(overlay);
             }
             Helpers.notifications(
@@ -382,27 +397,26 @@ const Bookmarks = (() => {
 
       });
 
-    }
+    };
 
-    reader.onerror = function () {
+    reader.onerror = function() {
       console.warn('Image upload failed');
-    }
+    };
 
   }
 
   function createScreen(bookmark, idBookmark, captureUrl) {
-
-    let overlay;
-
     bookmark.innerHTML += `<div id="overlay_id_${idBookmark}" class="bookmark__overlay">${SVGLoading}</div>`;
 
     const image = bookmark.querySelector('.bookmark__img');
 
     chrome.runtime.sendMessage({ captureUrl: captureUrl, id: idBookmark }, (response) => {
 
+      let overlay = document.getElementById('overlay_id_' + idBookmark);
+
       if (response.warning) {
-        console.warn(response.warning)
-        if (overlay = document.getElementById('overlay_id_' + idBookmark)) {
+        console.warn(response.warning);
+        if (overlay) {
           bookmark.removeChild(overlay);
         }
         return false;
@@ -410,7 +424,7 @@ const Bookmarks = (() => {
 
       image.classList.remove('bookmark__img--external');
       image.style.backgroundImage = `url('${response}?refresh=${Date.now()}')`;
-      if (overlay = document.getElementById('overlay_id_' + idBookmark)) {
+      if (overlay) {
         bookmark.removeChild(overlay);
       }
     });
@@ -418,24 +432,22 @@ const Bookmarks = (() => {
 
   function search(evt) {
     const value = evt.target.value.trim().toLowerCase();
-    let arr = [];
-    bk.search(value, function (match) {
+    bk.search(value, function(match) {
       if (match.length > 0) {
         if (localStorage.getItem('drag_and_drop') === 'true') {
           sort.option('disabled', true);
         }
         render(match);
-      }
-      else {
+      } else {
         if (localStorage.getItem('drag_and_drop') === 'true') {
           sort.option('disabled', false);
         }
         createSpeedDial(startFolder());
       }
-    })
+    });
   }
 
-  function changeFolder(evt) {
+  function changeFolder() {
     const id = this.value;
     window.location.hash = '#' + id;
     createSpeedDial(id);
@@ -447,13 +459,13 @@ const Bookmarks = (() => {
     const bookmark = target.closest('.column');
     if (confirm(chrome.i18n.getMessage('confirm_delete_bookmark'), '')) {
       const id = target.getAttribute('data-id');
-      bk.remove(id, function () {
+      bk.remove(id, function() {
         container.removeChild(bookmark);
         rmCustomScreen(id);
         Helpers.notifications(
           chrome.i18n.getMessage('notice_bookmark_removed')
         );
-      })
+      });
     }
   }
 
@@ -463,7 +475,7 @@ const Bookmarks = (() => {
     const bookmark = target.closest('.column');
     if (confirm(chrome.i18n.getMessage('confirm_delete_folder'), '')) {
       const id = target.getAttribute('data-id');
-      bk.removeTree(id, function () {
+      bk.removeTree(id, function() {
         container.removeChild(bookmark);
         rmCustomScreen(id);
         generateFolderList();
@@ -474,21 +486,21 @@ const Bookmarks = (() => {
     }
   }
 
-  function rmCustomScreen(id, cb = function () { }) {
+  function rmCustomScreen(id, cb) {
     const screen = getCustomDial(id);
     if (!screen) return;
 
     const name = screen.split('/').pop();
-    FS.deleteFile(`/images/${name}`, function () {
+    FS.deleteFile(`/images/${name}`, function() {
       const storage = JSON.parse(localStorage.getItem('custom_dials'));
       delete storage[id];
       localStorage.setItem('custom_dials', JSON.stringify(storage));
-      cb();
+      cb && cb();
     });
   }
 
   function isValidUrl(url) {
-    //The regex used in AngularJS to validate a URL + chrome internal pages & extension url & on-disk files
+    // The regex used in AngularJS to validate a URL + chrome internal pages & extension url & on-disk files
     const URL_REGEXP = /^(http|https|ftp|file|chrome|chrome-extension):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/;
     if (URL_REGEXP.test(url)) {
       return true;
@@ -502,17 +514,17 @@ const Bookmarks = (() => {
     }
     // Chrome won't create bookmarks without HTTP
     if (!isValidUrl(url) && url.length !== 0) {
-      url = "http://" + url;
+      url = 'http://' + url;
     }
 
-    return { "title": title, "url": url };
+    return { 'title': title, 'url': url };
   }
 
   function createBookmark(title, url) {
     let hash = buildBookmarkHash(title, url);
     if (hash !== undefined) {
       hash.parentId = container.getAttribute('data-folder');
-      bk.create(hash, function (result) {
+      bk.create(hash, function(result) {
         let html;
         if (result.url) {
           html = genBookmark(result);
@@ -535,7 +547,7 @@ const Bookmarks = (() => {
               fail() {
                 image.style.backgroundImage = image.dataset.failThumb;
               }
-            })
+            });
           }
         }
       });
@@ -549,14 +561,14 @@ const Bookmarks = (() => {
     let hash = buildBookmarkHash(title, url);
     const bookmark = container.querySelector('[data-sort="' + id + '"]');
     const editBtn = bookmark.querySelector('.bookmark__edit');
-    //Actually make sure the URL being modified is valid instead of always
-    //prepending http:// to it creating new valid+invalid bookmark
+    // Actually make sure the URL being modified is valid instead of always
+    // prepending http:// to it creating new valid+invalid bookmark
     if (url.length !== 0 && !isValidUrl(url)) {
       hash = undefined;
     }
     if (hash !== undefined) {
 
-      bk.update(id, hash, function (result) {
+      bk.update(id, hash, function(result) {
         bookmark.querySelector('.bookmark__link').href = (result.url) ? result.url : '#' + result.id;
         bookmark.querySelector('.bookmark__title').textContent = result.title;
         bookmark.querySelector('.bookmark__link').title = result.title;
@@ -571,7 +583,7 @@ const Bookmarks = (() => {
       });
       return true;
     }
-    alert(chrome.i18n.getMessage('alert_update_fail_bookmark'))
+    alert(chrome.i18n.getMessage('alert_update_fail_bookmark'));
     return false;
   }
 
