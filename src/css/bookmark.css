@@ -157,6 +157,7 @@ p {
 .search-label {
   left: 0;
   color: #999;
+  pointer-events: none;
 }
 .search-wrap input:focus + .search-label,
 .search-wrap input:focus ~ .search-reset-btn {
@@ -261,6 +262,7 @@ p {
 }
 
 .bookmark:hover .bookmark__control {
+  transition-delay: .3s;
   opacity: 1;
 }
 
@@ -1068,7 +1070,7 @@ select {
   box-shadow: 1px 3px 15px 1px rgba(0,0,0,.15);
   opacity: 0;
   transform-origin: bottom;
-  transform: scale(.98) translateY(10px);
+  transform: scale(.98) translateY(15px);
   transition-property: all;
   transition-duration: 150ms;
   transition-timing-function: cubic-bezier(0.4, 0.0, 1, 1);
@@ -1165,6 +1167,7 @@ select {
 .ripple {
   position: absolute;
   border-radius: 50%;
+  will-change: transform, opacity;
   transform: scale(0.01);
   transition-property: transform, opacity;
   transition-duration: 700ms;
