@@ -144,7 +144,10 @@ export default {
   },
 
   getDomain(url) {
-    return url.replace(/https?:\/\/(www.)?/i, '').replace(/\/.*/i, '');
+    // return url.replace(/https?:\/\/(www.)?/i, '').replace(/\/.*/i, '');
+    return url
+      .replace(/(https?|ftps?|chrome|chrome-extension|file):\/\/\/?(www.)?/i, '')
+      .replace(/:?\/.*/i, '');
   }
 
 };
