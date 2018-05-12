@@ -35,6 +35,20 @@ const NewTab = (() => {
     document.getElementById('closeModal').addEventListener('click', function() {
       modalApi.hide();
     });
+
+    // if support Page Visibility API
+    // if the tab is open but not active, then when you change bookmarks from other places,
+    // we will do a reload of the bookmarks page to display the latest changes
+    if ('hidden' in document) {
+      chrome.bookmarks.onCreated.addListener(pageVisibility);
+      chrome.bookmarks.onChanged.addListener(pageVisibility);
+      chrome.bookmarks.onRemoved.addListener(pageVisibility);
+      chrome.bookmarks.onMoved.addListener(pageVisibility);
+    }
+  }
+
+  function pageVisibility() {
+    if (document.hidden) window.location.reload();
   }
 
   function changeTitle(e) {
