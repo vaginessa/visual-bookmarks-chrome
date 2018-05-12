@@ -215,7 +215,7 @@ const Bookmarks = (() => {
       // localStorage.getItem('thumbnailing_service').replace('[URL]', encodeURIComponent(bookmark.url)),
       // eslint-disable-next-line max-len
       thumbnailing_service: localStorage.getItem('thumbnailing_service').replace('[URL]', Helpers.getDomain(bookmark.url)),
-      title: bookmark.title,
+      title: Helpers.escapeHtml(bookmark.title)
     });
   }
 
@@ -265,7 +265,7 @@ const Bookmarks = (() => {
     return Helpers.templater(tpl, {
       id: bookmark.id,
       url: bookmark.id,
-      title: bookmark.title,
+      title: Helpers.escapeHtml(bookmark.title),
       screen: screen
     });
   }

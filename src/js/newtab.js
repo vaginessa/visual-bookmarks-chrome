@@ -134,7 +134,7 @@ const NewTab = (() => {
 
       if (action !== 'New') {
 
-        const title = target.dataset.title;
+        const title = Helpers.escapeHtml(target.dataset.title);
         const url = target.dataset.url;
         const screen = target.dataset.screen;
 
