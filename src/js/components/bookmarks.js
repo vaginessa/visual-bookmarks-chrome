@@ -187,8 +187,10 @@ const Bookmarks = (() => {
                 <button class="bookmark__screen" data-id="%id%"></button>
                 <div class="bookmark__divider"></div>
                 <div class="bookmark__image-upload">
-                  <input type="file" name="" id="upload-%id%" class="c-upload__input"
-                         data-id='{"id": %id%, "site": "%site%"}'>
+                  <input type="file" name="" class="c-upload__input"
+                         id="upload-%id%"
+                         data-id='{"id": %id%, "site": "%site%"}'
+                         accept=".jpg, .jpeg, .png">
                   <label for="upload-%id%" class="c-upload__label"></label>
                 </div>
               </div>
@@ -241,7 +243,10 @@ const Bookmarks = (() => {
                 </button>
                 <div class="bookmark__divider"></div>
                 <div class="bookmark__image-upload">
-                  <input type="file" name="" id="upload-%id%" class="c-upload__input" data-id='{"id": %id%}'>
+                  <input type="file" name="" class="c-upload__input"
+                         id="upload-%id%"
+                         data-id='{"id": %id%}'
+                         accept=".jpg, .jpeg, .png">
                   <label for="upload-%id%" class="c-upload__label"></label>
                 </div>
               </div>
