@@ -9,7 +9,8 @@ import Ripple from '@k-ivan/md-ripple';
 import Helpers from './components/helpers';
 
 // Set lang attr
-document.documentElement.setAttribute('lang', chrome.i18n.getMessage('@@ui_locale'));
+// Replacement underscore on the dash because underscore is not a valid language subtag
+document.documentElement.setAttribute('lang', chrome.i18n.getMessage('@@ui_locale').replace('_', '-'));
 
 Localization();
 

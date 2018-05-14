@@ -194,7 +194,8 @@ function networkStatus(evt) {
 
 
 // Set lang attr
-document.documentElement.setAttribute('lang', chrome.i18n.getMessage('@@ui_locale'));
+// Replacement underscore on the dash because underscore is not a valid language subtag
+document.documentElement.setAttribute('lang', chrome.i18n.getMessage('@@ui_locale').replace('_', '-'));
 
 /**
  * Localization
