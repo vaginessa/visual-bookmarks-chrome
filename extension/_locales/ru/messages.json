@@ -122,6 +122,9 @@
   "advanced_setting": {
     "message": "Расширенные"
   },
+  "dial_width": {
+    "message": "Ширина панели"
+  },
   "number_of_columns": {
     "message": "Кол-во колонок в ряду"
   },

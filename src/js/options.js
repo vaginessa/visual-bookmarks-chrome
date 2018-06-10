@@ -46,6 +46,7 @@ const Options = (() => {
     generateFolderList();
 
     document.getElementById('dial_columns').value = localStorage.getItem('dial_columns');
+    document.getElementById('dial_width').value = localStorage.getItem('dial_width');
     document.getElementById('vertical_center').checked = localStorage.getItem('vertical_center') === 'true';
     document.getElementById('background_color').value = localStorage.getItem('background_color');
 
@@ -78,6 +79,7 @@ const Options = (() => {
     external = (external !== '') ? checkUrl(external) : '';
 
     localStorage.setItem('dial_columns', document.getElementById('dial_columns').value);
+    localStorage.setItem('dial_width', document.getElementById('dial_width').value);
     localStorage.setItem('vertical_center', document.getElementById('vertical_center').checked);
     localStorage.setItem('default_folder_id', document.getElementById('selectFolder').value);
     localStorage.setItem('background_color', document.getElementById('background_color').value);

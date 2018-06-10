@@ -34,27 +34,35 @@ const UI = (() => {
     },
     calculateStyles() {
       // if (window.innerWidth < 768) { return (document.getElementById('generateStyles').innerHTML = ''); }
-      const columns = parseInt(localStorage.getItem('dial_columns'));
       const styles = document.getElementById('generateStyles');
-      const ratio = 4 / 3;
 
-      // if there are 8 or more columns and a small resolution
-      if (columns >= 8 && window.innerWidth < 1200) {
-        const colWidth = Math.floor(1170 / columns);
-        const colHeight = colWidth / ratio;
-        styles.innerHTML = `
-          .bookmarks {justify-content: center}
-          .column, .column--nosort {width: ${colWidth}px; height: ${colHeight}px}
-        `;
+      // If window width < 992 clear calculate styles
+      if (window.innerWidth < 992) {
+        styles.innerHTML = '';
         return;
       }
 
-      if (window.innerWidth < 768) return;
+      const container = document.getElementById('includeThree');
+      const columns = parseInt(localStorage.getItem('dial_columns'));
+      const ratio = 4 / 3;
 
-      const container = Math.floor(document.getElementById('includeThree').offsetWidth);
-      const colWidth = Math.floor(container / columns);
-      const colHeight = colWidth / ratio;
-      styles.innerHTML = `.column, .column--nosort {width: ${colWidth}px; height: ${colHeight}px}`;
+      // Calculate and set container width
+      const lsWidth = parseInt(localStorage.getItem('dial_width'));
+      const containerWidth = Math.ceil(window.innerWidth * (lsWidth / 100));
+      styles.innerHTML = `.container {width: ${containerWidth}px}`;
+
+      // Calculate column dimensions
+      const colWidth = Math.floor(container.offsetWidth / columns);
+      const colHeight = Math.floor(colWidth / ratio);
+
+      // if column width less than 110px do not update styles
+      if (colWidth < 110) return;
+
+      // otherwise apply computed styles
+      styles.innerHTML += `
+        .bookmarks .column, .bookmarks .column--nosort {
+          width: ${colWidth}px; height: ${colHeight}px
+        }`;
     }
   };
 })();

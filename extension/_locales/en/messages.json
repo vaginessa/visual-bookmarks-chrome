@@ -122,6 +122,9 @@
   "advanced_setting": {
     "message": "Advanced"
   },
+  "dial_width": {
+    "message": "Panel width"
+  },
   "number_of_columns": {
     "message": "Number of Columns"
   },

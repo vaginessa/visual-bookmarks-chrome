@@ -105,11 +105,11 @@ p {
 
 /* Grid */
 .container {
-  width: 100%;
+  /* width: 100%; */
   margin: 0 auto;
   padding: 0 15px;
 }
-@media (min-width: 1200px) {
+/* @media (min-width: 1200px) {
   .container {
     width: 1180px;
   }
@@ -118,7 +118,7 @@ p {
   .container {
     width: 1350px;
   }
-}
+} */
 .content {
   padding: 20px 0;
 }
@@ -225,15 +225,14 @@ p {
 .column--nosort {
   padding: var(--column-padding);
 }
-@media (max-width: 768px) {
-  .bookmarks {
-    justify-content: center;
-  }
-  .column,
-  .column--nosort {
-    width: 155px;
-    height: 115px;
-  }
+.bookmarks {
+  justify-content: center;
+}
+
+.column,
+.column--nosort {
+  width: 120px;
+  height: 90px;
 }
 .column--ghost {
   opacity: 0;

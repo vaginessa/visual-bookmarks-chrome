@@ -6,6 +6,7 @@ const Settings = (() => {
     background_external: '',
     default_folder_id: 1,
     dial_columns: 5,
+    dial_width: 70, // value in percent (60,70,80,90)
     vertical_center: 'false',
     drag_and_drop: 'true',
     auto_generate_thumbnail: 'true',
