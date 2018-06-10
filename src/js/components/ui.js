@@ -48,18 +48,19 @@ const UI = (() => {
 
       // Calculate and set container width
       const lsWidth = parseInt(localStorage.getItem('dial_width'));
-      const containerWidth = Math.ceil(window.innerWidth * (lsWidth / 100));
+      const containerWidth = Math.floor(window.innerWidth * (lsWidth / 100));
       styles.innerHTML = `.container {width: ${containerWidth}px}`;
 
       // Calculate column dimensions
       const colWidth = Math.floor(container.offsetWidth / columns);
       const colHeight = Math.floor(colWidth / ratio);
 
-      // if column width less than 110px do not update styles
-      if (colWidth < 110) return;
+      // if column width less than 120px do not update styles
+      if (colWidth < 120) return;
 
       // otherwise apply computed styles
       styles.innerHTML += `
+      .content .bookmarks { justify-content: flex-start; }
         .bookmarks .column, .bookmarks .column--nosort {
           width: ${colWidth}px; height: ${colHeight}px
         }`;
