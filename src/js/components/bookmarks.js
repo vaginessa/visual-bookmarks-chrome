@@ -93,7 +93,13 @@ const Bookmarks = (() => {
         ghostClass: 'column--ghost',
         chosenClass: 'column--chosen',
         preventOnFilter: false,
-        onUpdate: function() {
+        onMove(evt) {
+          // do not sort create column
+          if (evt.related.classList.contains('column--nosort')) {
+            return false;
+          }
+        },
+        onUpdate() {
           Array.prototype.slice.call(container.querySelectorAll('.bookmark')).forEach(function(item, index) {
             bk.move(item.getAttribute('data-sort'), {
               'parentId': container.getAttribute('data-folder'),
