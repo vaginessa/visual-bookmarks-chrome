@@ -20,11 +20,8 @@
   "btn_close": {
     "message": "Cancel"
   },
-  "btn_save": {
-    "message": "Save"
-  },
   "btn_back": {
-    "message": "To bookmarks"
+    "message": "Done"
   },
   "btn_apply": {
     "message": "Apply"

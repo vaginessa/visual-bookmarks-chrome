@@ -25,9 +25,7 @@ const Options = (() => {
     FS.init(500);
     Settings.init();
 
-    document.getElementById('option_bg').addEventListener('change', selectBg, false);
-    document.getElementById('bgFile').addEventListener('change', uploadFile, false);
-    document.getElementById('background_local').addEventListener('click', removeFile, false);
+    document.getElementById('background_image').addEventListener('change', selectBg, false);
 
     getOptions();
 
@@ -35,7 +33,13 @@ const Options = (() => {
     document.getElementById('ext_name').textContent = manifest.name;
     document.getElementById('ext_version').textContent = `${chrome.i18n.getMessage('version')} ${manifest.version}`;
 
-    document.getElementById('save').addEventListener('click', setOptions, false);
+    // Delegate change settings
+    document.querySelector('.tabs').addEventListener('change', setOptions);
+
+    // actions with a local picture
+    document.getElementById('bgFile').addEventListener('change', uploadFile, false);
+    document.getElementById('background_local').addEventListener('click', removeFile, false);
+
     document.getElementById('restore_local').addEventListener('click', restoreLocalOptions, false);
     document.getElementById('restore_sync').addEventListener('click', clearSyncData, false);
     document.getElementById('enable_sync').addEventListener('change', checkEnableSync, false);
@@ -45,12 +49,7 @@ const Options = (() => {
   function getOptions() {
     generateFolderList();
 
-    document.getElementById('dial_columns').value = localStorage.getItem('dial_columns');
-    document.getElementById('dial_width').value = localStorage.getItem('dial_width');
-    document.getElementById('vertical_center').checked = localStorage.getItem('vertical_center') === 'true';
-    document.getElementById('background_color').value = localStorage.getItem('background_color');
-
-    const optionBg = document.getElementById('option_bg');
+    const optionBg = document.getElementById('background_image');
     const options = Array.prototype.slice.call(optionBg.querySelectorAll('option'));
 
     options.forEach(function(item) {
@@ -61,51 +60,37 @@ const Options = (() => {
       }
     });
 
-    document.getElementById('background_external').value = localStorage.getItem('background_external');
-    document.getElementById('thumbnailing_service').value = localStorage.getItem('thumbnailing_service');
-    document.getElementById('drag_and_drop').checked = localStorage.getItem('drag_and_drop') === 'true';
-    // eslint-disable-next-line
-    document.getElementById('auto_generate_thumbnail').checked = localStorage.getItem('auto_generate_thumbnail') === 'true';
-    document.getElementById('show_toolbar').checked = localStorage.getItem('show_toolbar') === 'true';
-    document.getElementById('show_settings_icon').checked = localStorage.getItem('show_settings_icon') === 'true';
-    document.getElementById('show_create_column').checked = localStorage.getItem('show_create_column') === 'true';
-    document.getElementById('show_favicon').checked = localStorage.getItem('show_favicon') === 'true';
-    document.getElementById('enable_sync').checked = localStorage.getItem('enable_sync') === 'true';
+    for (let id of Object.keys(localStorage)) {
+      const elOption = document.getElementById(id);
+
+      // goto next if element not type
+      if (!elOption || !elOption.type) continue;
+
+      if (/checkbox|radio/.test(elOption.type)) {
+        elOption.checked = localStorage.getItem(id) === 'true';
+      } else {
+        elOption.value = localStorage.getItem(id);
+      }
+    }
+
   }
 
-  function setOptions() {
+  function setOptions(e) {
+    const target = e.target.closest('.js-change');
+    if (!target) return;
 
-    let external = document.getElementById('background_external').value.trim();
-    external = (external !== '') ? checkUrl(external) : '';
+    const id = target.id;
 
-    localStorage.setItem('dial_columns', document.getElementById('dial_columns').value);
-    localStorage.setItem('dial_width', document.getElementById('dial_width').value);
-    localStorage.setItem('vertical_center', document.getElementById('vertical_center').checked);
-    localStorage.setItem('default_folder_id', document.getElementById('selectFolder').value);
-    localStorage.setItem('background_color', document.getElementById('background_color').value);
-    localStorage.setItem('background_external', external);
-    localStorage.setItem('thumbnailing_service', document.getElementById('thumbnailing_service').value);
-    localStorage.setItem('drag_and_drop', document.getElementById('drag_and_drop').checked);
-    localStorage.setItem('auto_generate_thumbnail', document.getElementById('auto_generate_thumbnail').checked);
-    localStorage.setItem('show_toolbar', document.getElementById('show_toolbar').checked);
-    localStorage.setItem('show_settings_icon', document.getElementById('show_settings_icon').checked);
-    localStorage.setItem('show_create_column', document.getElementById('show_create_column').checked);
-    localStorage.setItem('show_favicon', document.getElementById('show_favicon').checked);
-    localStorage.setItem('enable_sync', document.getElementById('enable_sync').checked);
-    if (localStorage.getItem('enable_sync') === 'true') {
+    if (/checkbox|radio/.test(target.type)) {
+      localStorage.setItem(id, target.checked);
+    } else {
+      localStorage.setItem(id, target.value);
+    }
+
+
+    if (localStorage.getItem('enable_sync') === 'true' && id !== 'enable_sync') {
       Settings.syncToStorage();
     }
-    Helpers.notifications(
-      chrome.i18n.getMessage('notice_save_settings_success')
-    );
-    getOptions();
-  }
-
-  function checkUrl(url) {
-    if (!/^(f|ht)tps?:\/\//i.test(url)) {
-      url = `http://${url}`;
-    }
-    return url;
   }
 
   function uploadFile() {
@@ -182,7 +167,7 @@ const Options = (() => {
       }
     }
 
-    localStorage.setItem('background_image', this.value);
+    // localStorage.setItem('background_image', this.value);
     document.getElementById(this.value).style.display = 'block';
     tabs.recalc();
   }
@@ -200,6 +185,7 @@ const Options = (() => {
   function restoreLocalOptions() {
     if (confirm(chrome.i18n.getMessage('confirm_restore_default_settings'), '')) {
       // localStorage.clear();
+
       Object.keys(localStorage).forEach(function(property) {
         if (property === 'background_local' || property === 'custom_dials') {
           return;
@@ -215,27 +201,37 @@ const Options = (() => {
   }
   function clearSyncData() {
     if (confirm(chrome.i18n.getMessage('confirm_clear_sync_settings'), '')) {
-      chrome.storage.sync.clear(
+      chrome.storage.sync.clear(() => {
         Helpers.notifications(
           chrome.i18n.getMessage('notice_sync_settings_cleared')
-        )
-      );
+        );
+        // after cleaning, if synch is enabled, force to synch the current settings
+        if (localStorage.getItem('enable_sync') === 'true') {
+          Settings.syncToStorage();
+        }
+      });
     }
   }
   function checkEnableSync() {
     if (this.checked) {
-      chrome.storage.sync.getBytesInUse(null, function(bytes) {
+      chrome.storage.sync.getBytesInUse(null, bytes => {
         if (bytes > 0) {
           if (confirm(chrome.i18n.getMessage('confirm_sync_remote_settings'), '')) {
             Settings.restoreFromSync(getOptions);
+            // window.location.reload();
+          } else {
+            this.checked = false;
+            localStorage.setItem('enable_sync', 'false');
           }
+        } else {
+          Settings.syncToStorage();
         }
       });
     }
   }
 
   function generateFolderList() {
-    const select = document.getElementById('selectFolder');
+    const select = document.getElementById('default_folder_id');
     select.innerHTML = '';
     chrome.bookmarks.getTree(function(rootNode) {
       let folderList = [], openList = [], node, child;

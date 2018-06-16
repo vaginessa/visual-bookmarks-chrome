@@ -35,12 +35,13 @@ const Settings = (() => {
       localStorage.setItem('thumbnailing_service', default_values['thumbnailing_service']);
     }
 
-    if (localStorage.getItem('enable_sync') === 'true') {
-      chrome.storage.onChanged.addListener(function() {
-        Settings.restoreFromSync();
-        window.location.reload();
-      });
-    }
+    // if (localStorage.getItem('enable_sync') === 'true') {
+    //   chrome.storage.onChanged.addListener(function(e) {
+    //     console.log(e);
+    //     // Settings.restoreFromSync();
+    //     // window.location.reload();
+    //   });
+    // }
   }
 
   function restoreFromSync(cb) {

@@ -20,11 +20,8 @@
   "btn_close": {
     "message": "Отмена"
   },
-  "btn_save": {
-    "message": "Сохранить"
-  },
   "btn_back": {
-    "message": "К закладкам"
+    "message": "Готово"
   },
   "btn_apply": {
     "message": "Применить"
