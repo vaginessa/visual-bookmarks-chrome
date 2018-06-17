@@ -51,7 +51,6 @@ const Options = (() => {
 
     const optionBg = document.getElementById('background_image');
     const options = Array.prototype.slice.call(optionBg.querySelectorAll('option'));
-
     options.forEach(function(item) {
       if (item.value === localStorage.getItem('background_image')) {
         item.selected = true;
@@ -72,7 +71,6 @@ const Options = (() => {
         elOption.value = localStorage.getItem(id);
       }
     }
-
   }
 
   function setOptions(e) {
@@ -86,7 +84,6 @@ const Options = (() => {
     } else {
       localStorage.setItem(id, target.value);
     }
-
 
     if (localStorage.getItem('enable_sync') === 'true' && id !== 'enable_sync') {
       Settings.syncToStorage();
