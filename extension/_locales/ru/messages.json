@@ -20,6 +20,9 @@
   "btn_close": {
     "message": "Отмена"
   },
+  "btn_save": {
+    "message": "Сохранить"
+  },
   "btn_back": {
     "message": "Готово"
   },
