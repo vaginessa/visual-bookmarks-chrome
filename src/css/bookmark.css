@@ -249,6 +249,7 @@ p {
 
 .header .form-control {
   margin-bottom: 0;
+  transition: all 250ms ease;
 }
 
 /* Bookmark */
