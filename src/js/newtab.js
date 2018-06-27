@@ -18,6 +18,8 @@ const NewTab = (() => {
     modalHead    = document.getElementById('modalHead'),
     titleField   = document.getElementById('title'),
     urlField     = document.getElementById('url'),
+    urlWrap      = document.getElementById('urlWrap'),
+    modalDesc    = document.getElementById('desc'),
     customScreen = document.getElementById('customScreen');
   let modalApi;
 
@@ -32,8 +34,10 @@ const NewTab = (() => {
     modal.addEventListener('modal.show', show);
     modal.addEventListener('modal.hide', hide);
 
-    document.getElementById('closeModal').addEventListener('click', function() {
-      modalApi.hide();
+    Array.prototype.forEach.call(document.querySelectorAll('.js-close-modal'), el => {
+      el.addEventListener('click', function() {
+        modalApi.hide();
+      });
     });
 
     // if support Page Visibility API
@@ -54,9 +58,7 @@ const NewTab = (() => {
   function changeTitle(e) {
     const value = e.target.value.trim();
     const elem = document.getElementById('desc');
-    if (elem) {
-      elem.textContent = value;
-    }
+    elem.textContent = value;
   }
 
   function uploadScreen(evt) {
@@ -133,6 +135,7 @@ const NewTab = (() => {
       const action = target.dataset.id || 'New';
 
       if (action !== 'New') {
+        modal.classList.add('modal--edit');
 
         const title = Helpers.escapeHtml(target.dataset.title);
         const url = target.dataset.url;
@@ -144,27 +147,27 @@ const NewTab = (() => {
           customScreen.querySelector('#resetCustomImage').setAttribute('data-bookmark', action);
         }
 
-        modalHead.innerHTML = `
-          <h4 class="modal__title">${chrome.i18n.getMessage('edit_bookmark')}</h4>
-          <span id="desc">${title}</span>
-        `;
+        modalHead.textContent = chrome.i18n.getMessage('edit_bookmark');
+        modalDesc.textContent = title;
         titleField.value = title;
 
         if (url) {
-          urlField.style.display = '';
+          urlWrap.style.display = '';
           urlField.value = url;
         } else {
-          urlField.style.display = 'none';
+          urlWrap.style.display = 'none';
         }
 
         titleField.addEventListener('input', changeTitle);
       } else {
+        modal.classList.add('modal--add');
+
         setTimeout(() => {
           titleField.focus();
         }, 150);
 
-        modalHead.innerHTML = `<div class="modal__title">${chrome.i18n.getMessage('add_bookmark')}</div>`;
-        urlField.style.display = '';
+        modalHead.textContent = chrome.i18n.getMessage('add_bookmark');
+        urlWrap.style.display = '';
         titleField.value = '';
         urlField.value = '';
       }
@@ -172,8 +175,10 @@ const NewTab = (() => {
     }
   }
   function hide() {
+    modal.classList.remove('modal--edit', 'modal--add');
     titleField.removeEventListener('input', changeTitle);
     customScreen.style.display = '';
+    modalDesc.textContent = '';
     form.reset();
   }
 

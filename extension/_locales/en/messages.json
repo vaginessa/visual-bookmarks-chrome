@@ -14,7 +14,13 @@
   "placeholder_input_title": {
     "message": "Enter bookmark title"
   },
-  "placeholder_input_url": {
+  "label_title": {
+    "message": "Title"
+  },
+  "label_url": {
+    "message": "URL"
+  },
+  "url_field_tip": {
     "message": "Enter URL or leave it blank if you want to create the folder"
   },
   "btn_close": {

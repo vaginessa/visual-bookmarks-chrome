@@ -14,7 +14,13 @@
   "placeholder_input_title": {
     "message": "Введите название закладки"
   },
-  "placeholder_input_url": {
+  "label_title": {
+    "message": "Название"
+  },
+  "label_url": {
+    "message": "URL"
+  },
+  "url_field_tip": {
     "message": "Введите URL или оставьте поле пустым, если вы хотите создать папку"
   },
   "btn_close": {
