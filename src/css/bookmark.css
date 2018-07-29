@@ -201,6 +201,9 @@ p {
   opacity: 1;
 }
 
+.stealth-header .header select {
+  transition: none;
+}
 .stealth-header .header select:not(:focus) {
   background-image: url(data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjZmZmIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gICAgPHBhdGggZD0iTTcgMTBsNSA1IDUtNXoiLz4gICAgPHBhdGggZD0iTTAgMGgyNHYyNEgweiIgZmlsbD0ibm9uZSIvPjwvc3ZnPg==);
 }
@@ -208,6 +211,10 @@ p {
   color: rgba(255,255,255,.7);
   border-color: transparent;
   background-color: rgba(255,255,255,.25);
+}
+.stealth-header .header .form-control:focus {
+  border-color: transparent;
+  box-shadow: none;
 }
 .stealth-header .search-label,
 .stealth-header .search-reset-btn {
@@ -505,7 +512,7 @@ p {
   bottom: 0;
   right: 0;
   width: 50px;
-  background: linear-gradient(to left, #fff 20%, transparent 100%);
+  background: linear-gradient(to left, rgba(255,255,255,1) 20%, rgba(255,255,255,0) 100%);
   content: '';
 }
 .bookmark__overlay {
@@ -571,7 +578,7 @@ p {
 }
 .options {
   min-width: 480px;
-  background: #f7f7f7;
+  background: #f8f9fa;
   color: #646464;
 }
 .option-bg--hide {

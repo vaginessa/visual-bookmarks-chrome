@@ -1,7 +1,7 @@
 const Settings = (() => {
 
   let default_values = {
-    background_color: '#f7f7f7',
+    background_color: '#f8f9fa',
     background_image: 'background_color',
     background_external: '',
     default_folder_id: 1,
