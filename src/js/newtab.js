@@ -1,6 +1,6 @@
 import '../css/bookmark.css';
 
-import Ripple from '@k-ivan/md-ripple';
+// import Ripple from '@k-ivan/md-ripple';
 
 import './components/polyfill';
 import Helpers from './components/helpers';
@@ -9,6 +9,7 @@ import Bookmarks from './components/bookmarks';
 import Localization from './components/localization';
 import UI from './components/ui';
 import Modal from './components/modal';
+import Ripple from './components/ripple';
 
 const NewTab = (() => {
 

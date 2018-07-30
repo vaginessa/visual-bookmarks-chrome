@@ -1216,9 +1216,10 @@ select {
   position: absolute;
   border-radius: 50%;
   will-change: transform, opacity;
-  transform: scale(0.01);
+  transform: scale(0.5);
   transition-property: transform, opacity;
-  transition-duration: 700ms;
-  transition-timing-function: cubic-bezier(0.0, 0.0, 0.2, 1);
+  transition-duration: 550ms;
+  /* transition-timing-function: cubic-bezier(0.0, 0.0, 0.2, 1); */
+  transition-timing-function: ease-out;
   pointer-events: none;
 }
