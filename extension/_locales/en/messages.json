@@ -149,6 +149,9 @@
   "default_folder_show": {
     "message": "Default Folder to Show"
   },
+  "low_transparency_thumbs": {
+    "message": "Low transparency"
+  },
   "background": {
     "message": "Background"
   },

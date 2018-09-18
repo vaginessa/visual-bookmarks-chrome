@@ -37,6 +37,11 @@ const Bookmarks = (() => {
       document.getElementById('content').classList.add('flex-vertical-center');
     }
 
+    // TODO: experiment low transparency thumbs
+    if (localStorage.getItem('low_transparency') === 'true') {
+      container.classList.add('low-transparency');
+    }
+
     // Create speeddial
     createSpeedDial(startFolder());
 

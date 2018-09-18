@@ -276,6 +276,13 @@ p {
   opacity: 1;
 }
 
+.low-transparency .bookmark:not(.bookmark--create) {
+  opacity: 0.7;
+}
+.low-transparency .bookmark:not(.bookmark--create):hover {
+  opacity: 1;
+}
+
 .bookmark--create {
   cursor: pointer;
   opacity: .4;
