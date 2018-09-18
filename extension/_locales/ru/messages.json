@@ -20,6 +20,9 @@
   "label_url": {
     "message": "URL"
   },
+  "label_folder": {
+    "message": "Папка"
+  },
   "url_field_tip": {
     "message": "Введите URL или оставьте поле пустым, если вы хотите создать папку"
   },
@@ -109,6 +112,12 @@
   },
   "alert_file_type_fail": {
     "message": "Недопустимый тип файла\nДопустимый формат (jpg | jpeg | png)"
+  },
+  "not_found_text": {
+    "message": "Папка не найдена. Возможно, у вас нет синхронизированных закладок или папка удалена|перемещена."
+  },
+  "not_found_link_text": {
+    "message": "Панель закладок"
   },
   "add_bookmark": {
     "message": "Добавить в закладки"

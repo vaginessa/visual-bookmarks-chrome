@@ -20,6 +20,9 @@
   "label_url": {
     "message": "URL"
   },
+  "label_folder": {
+    "message": "Folder"
+  },
   "url_field_tip": {
     "message": "Enter URL or leave it blank if you want to create the folder"
   },
@@ -109,6 +112,12 @@
   },
   "alert_file_type_fail": {
     "message": "Bad file type\nValid file type (jpg | jpeg | png)"
+  },
+  "not_found_text": {
+    "message": "Can not find the folder by id. You may not have synchronized bookmarks, or you deleted | moved this folder."
+  },
+  "not_found_link_text": {
+    "message": "Bookmarks bar"
   },
   "add_bookmark": {
     "message": "Add to bookmarks"

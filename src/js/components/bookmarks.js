@@ -352,7 +352,17 @@ const Bookmarks = (() => {
         container.setAttribute('data-folder', id);
       } else {
         Helpers.notifications(chrome.i18n.getMessage('notice_cant_find_id'));
-        container.innerHTML = '';
+        container.innerHTML = `
+          <div class="not-found">
+            <div class="not-found__wrap">
+              <div class="not-found__icon"></div>
+              <div class="not-found__text">
+                ${chrome.i18n.getMessage('not_found_text')}
+              </div>
+              <a class="btn md-ripple" href="#1">${chrome.i18n.getMessage('not_found_link_text')}</a>
+            </div>
+          </div>
+        `;
       }
     });
   }
