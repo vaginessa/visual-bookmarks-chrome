@@ -171,11 +171,10 @@ const Bookmarks = (() => {
         return a.path.localeCompare(b.path);
       });
 
-      let arr = [];
-      folderList.forEach(function(item) {
-        arr.push(`<option${item.id === startFolder() ? ' selected' : ''} value="${item.id}">${item.path}</option>`);
-      });
-      select.innerHTML = arr.join('');
+      let optionsList = folderList.map(function(item) {
+        return `<option${item.id === startFolder() ? ' selected' : ''} value="${item.id}">${item.path}</option>`;
+      }).join('');
+      select.innerHTML = optionsList;
     });
   }
 
@@ -297,14 +296,12 @@ const Bookmarks = (() => {
   }
 
   function render(_array, isCreate = false) {
-    let arr = [];
-
-    _array.forEach(function(bookmark) {
+    let arr = _array.map(function(bookmark) {
       if (bookmark.url !== undefined) {
-        arr.push(genBookmark(bookmark));
+        return genBookmark(bookmark);
       }
       if (bookmark.children !== undefined) {
-        arr.push(genFolder(bookmark));
+        return genFolder(bookmark);
       }
     });
 
@@ -459,14 +456,15 @@ const Bookmarks = (() => {
 
   function search(evt) {
     const value = evt.target.value.trim().toLowerCase();
+    const isdnd = localStorage.getItem('drag_and_drop') === 'true';
     bk.search(value, function(match) {
       if (match.length > 0) {
-        if (localStorage.getItem('drag_and_drop') === 'true') {
+        if (isdnd) {
           sort.option('disabled', true);
         }
         render(match);
       } else {
-        if (localStorage.getItem('drag_and_drop') === 'true') {
+        if (isdnd) {
           sort.option('disabled', false);
         }
         createSpeedDial(startFolder());
