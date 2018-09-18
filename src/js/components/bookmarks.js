@@ -47,12 +47,16 @@ const Bookmarks = (() => {
     }
 
     // Search bookmarks if toolbar enable
+    let select;
     if (localStorage.getItem('show_toolbar') === 'false') {
       document.getElementById('header').remove();
       document.getElementById('main').classList.add('hidden-toolbar');
     } else {
       const searchReset = document.getElementById('searchReset');
-      generateFolderList();
+      select = document.getElementById('selectFolder');
+      generateFolderList(select);
+      select.addEventListener('change', changeFolder, false);
+
       const searchDebounce = Helpers.debounce(function(evt) {
         const value = evt.target.value;
 
@@ -81,8 +85,26 @@ const Bookmarks = (() => {
     // Change the current dial if the page hash changes
     window.addEventListener('hashchange', function() {
       createSpeedDial(startFolder());
-      (localStorage.getItem('show_toolbar') === 'true') && generateFolderList();
+
+      const id = window.location.hash.slice(1);
+      if (localStorage.getItem('show_toolbar') === 'true' && select) {
+        const option = select.querySelector(`#selectFolder [value="${id}"]`);
+        if (!option) return;
+        option.selected = true;
+      }
+      Helpers.customTrigger('changeFolder', container, {
+        detail: {
+          id: id
+        }
+      });
     }, false);
+
+    container.addEventListener('updateFolderList', function(e) {
+      if (!select) return;
+      if (e.detail && e.detail.isFolder) {
+        generateFolderList(select);
+      }
+    });
 
     // Dragging option
     if (localStorage.getItem('drag_and_drop') === 'true') {
@@ -120,10 +142,10 @@ const Bookmarks = (() => {
     return folderId;
   }
 
-  function generateFolderList() {
-    const select = document.getElementById('selectFolder');
-    select.innerHTML = '';
-    select.removeEventListener('change', changeFolder, false);
+  function generateFolderList(select) {
+    // If not select element
+    if (!(select instanceof HTMLSelectElement)) return;
+
     bk.getTree(function(rootNode) {
       let folderList = [], openList = [], node, child;
       // Never more than 2 root nodes, push both Bookmarks Bar & Other Bookmarks into array
@@ -154,8 +176,6 @@ const Bookmarks = (() => {
         arr.push(`<option${item.id === startFolder() ? ' selected' : ''} value="${item.id}">${item.path}</option>`);
       });
       select.innerHTML = arr.join('');
-
-      select.addEventListener('change', changeFolder, false);
     });
   }
 
@@ -279,8 +299,6 @@ const Bookmarks = (() => {
   function render(_array, isCreate = false) {
     let arr = [];
 
-    // container.innerHTML = `<div class="dial-loading">${SVGLoading}</div>`;
-    // let storage = JSON.parse(localStorage.getItem('custom_dials'));
     _array.forEach(function(bookmark) {
       if (bookmark.url !== undefined) {
         arr.push(genBookmark(bookmark));
@@ -289,17 +307,17 @@ const Bookmarks = (() => {
         arr.push(genFolder(bookmark));
       }
     });
-    // setTimeout(() => {
+
     container.innerHTML =
       `${arr.join('')}
       ${isCreate
     ?
     `<div class="column--nosort">
-          <div class="bookmark--create md-ripple">
-            <div class="bookmark__img--add"></div>
-            <a class="bookmark__link--create" id="add"></a>
-          </div>
-        </div>`
+        <div class="bookmark--create md-ripple">
+          <div class="bookmark__img--add"></div>
+          <a class="bookmark__link--create" id="add"></a>
+        </div>
+      </div>`
     : ''
   }
     `;
@@ -316,8 +334,6 @@ const Bookmarks = (() => {
         }
       });
     }
-
-    // }, 20);
   }
 
   function getCustomDial(id) {
@@ -338,12 +354,12 @@ const Bookmarks = (() => {
         render(item[0].children, hasCreate);
         container.setAttribute('data-folder', id);
       } else {
-        Helpers.notifications(chrome.i18n.getMessage('notice_cant_find_id'), 15000);
+        Helpers.notifications(chrome.i18n.getMessage('notice_cant_find_id'));
+        container.innerHTML = '';
       }
     });
   }
 
-  // function folderScreen(target, id) {
   function uploadScreen(data) {
     // const file = target.files[0];
     const { target, id, site } = data;
@@ -461,7 +477,6 @@ const Bookmarks = (() => {
   function changeFolder() {
     const id = this.value;
     window.location.hash = '#' + id;
-    createSpeedDial(id);
   }
 
   function removeBookmark(evt) {
@@ -489,7 +504,11 @@ const Bookmarks = (() => {
       bk.removeTree(id, function() {
         container.removeChild(bookmark);
         rmCustomScreen(id);
-        generateFolderList();
+        Helpers.customTrigger('updateFolderList', container, {
+          detail: {
+            isFolder: true
+          }
+        });
         Helpers.notifications(
           chrome.i18n.getMessage('notice_folder_removed')
         );
@@ -560,15 +579,23 @@ const Bookmarks = (() => {
               }
             });
           }
+        } else {
+          Helpers.customTrigger('updateFolderList', container, {
+            detail: {
+              isFolder: true
+            }
+          });
         }
       });
+
+
       return true;
     }
     alert(chrome.i18n.getMessage('alert_create_fail_bookmark'));
     return false;
   }
 
-  function updateBookmark(id, title, url) {
+  function updateBookmark(id, title, url, move) {
     let hash = buildBookmarkHash(title, url);
     const bookmark = container.querySelector('[data-sort="' + id + '"]');
     const editBtn = bookmark.querySelector('.bookmark__edit');
@@ -580,15 +607,42 @@ const Bookmarks = (() => {
     if (hash !== undefined) {
 
       bk.update(id, hash, function(result) {
-        bookmark.querySelector('.bookmark__link').href = (result.url) ? result.url : '#' + result.id;
-        bookmark.querySelector('.bookmark__title').textContent = result.title;
-        bookmark.querySelector('.bookmark__link').title = result.title;
+        // if the bookmark is moved to another folder
+        if (move !== id && move !== result.parentId) {
+          const destination = {parentId: move};
+          const bookmarkColumn = bookmark.closest('.column');
+          chrome.bookmarks.move(id, destination, function() {
+            container.removeChild(bookmarkColumn);
 
-        // If not folder
-        if (result.url) {
-          editBtn.setAttribute('data-url', result.url);
+            // if it is a folder update folderList
+            if (!result.url) {
+              Helpers.customTrigger('updateFolderList', container, {
+                detail: {
+                  isFolder: true
+                }
+              });
+            }
+          });
+        } else {
+          // else update bookmark view
+          bookmark.querySelector('.bookmark__link').href = (result.url) ? result.url : '#' + result.id;
+          bookmark.querySelector('.bookmark__title').textContent = result.title;
+          bookmark.querySelector('.bookmark__link').title = result.title;
+
+          // If not folder
+          if (result.url) {
+            editBtn.setAttribute('data-url', result.url);
+          }
+          editBtn.setAttribute('data-title', result.title);
+          // if it is a folder update folderList
+          if (!result.url) {
+            Helpers.customTrigger('updateFolderList', container, {
+              detail: {
+                isFolder: true
+              }
+            });
+          }
         }
-        editBtn.setAttribute('data-title', result.title);
 
         Helpers.notifications(chrome.i18n.getMessage('notice_bookmark_updated'));
       });
@@ -604,6 +658,7 @@ const Bookmarks = (() => {
     updateBookmark,
     removeBookmark,
     removeFolder,
+    generateFolderList,
     createScreen,
     uploadScreen,
     rmCustomScreen

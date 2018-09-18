@@ -43,10 +43,16 @@ export default {
 
   trigger(evt, el, flags = {}) {
     const event = new Event(evt, {
-      ...{ bubbles: false, cancelable: false },
       ...flags
     });
     el.dispatchEvent(event);
+  },
+
+  customTrigger(event, el, params = {}) {
+    const e = new CustomEvent(event, {
+      ...params
+    });
+    el.dispatchEvent(e);
   },
 
   templater(tpl, data) {

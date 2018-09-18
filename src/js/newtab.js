@@ -13,15 +13,16 @@ import Ripple from './components/ripple';
 
 const NewTab = (() => {
 
-  const modal    = document.getElementById('modal'),
-    container    = document.getElementById('includeThree'),
-    form         = document.getElementById('formBookmark'),
-    modalHead    = document.getElementById('modalHead'),
-    titleField   = document.getElementById('title'),
-    urlField     = document.getElementById('url'),
-    urlWrap      = document.getElementById('urlWrap'),
-    modalDesc    = document.getElementById('desc'),
-    customScreen = document.getElementById('customScreen');
+  const container = document.getElementById('includeThree'),
+    modal         = document.getElementById('modal'),
+    form          = document.getElementById('formBookmark'),
+    modalHead     = document.getElementById('modalHead'),
+    foldersList   = document.getElementById('folderList'),
+    titleField    = document.getElementById('title'),
+    urlField      = document.getElementById('url'),
+    urlWrap       = document.getElementById('urlWrap'),
+    modalDesc     = document.getElementById('desc'),
+    customScreen  = document.getElementById('customScreen');
   let modalApi;
 
   function init() {
@@ -41,6 +42,18 @@ const NewTab = (() => {
       });
     });
 
+    Bookmarks.generateFolderList(foldersList);
+
+    container.addEventListener('changeFolder', function(e) {
+      if (!e.detail || !e.detail.id) return;
+      Bookmarks.generateFolderList(foldersList);
+    });
+    container.addEventListener('updateFolderList', function(e) {
+      if (e.detail && e.detail.isFolder) {
+        Bookmarks.generateFolderList(foldersList);
+      }
+    });
+
     // if support Page Visibility API
     // if the tab is open but not active, then when you change bookmarks from other places,
     // we will do a reload of the bookmarks page to display the latest changes
@@ -52,8 +65,15 @@ const NewTab = (() => {
     }
   }
 
-  function pageVisibility() {
-    if (document.hidden) window.location.reload();
+  function pageVisibility(id) {
+    if (document.hidden) {
+      const hash = location.hash.slice(1);
+
+      if (hash && hash === id) {
+        location.hash = '1';
+      }
+      window.location.reload();
+    }
   }
 
   function changeTitle(e) {
@@ -99,7 +119,8 @@ const NewTab = (() => {
     const title = document.getElementById('title').value;
     const url = document.getElementById('url').value;
     if (id !== 'New') {
-      if (Bookmarks.updateBookmark(id, title, url)) {
+      const newLocation = foldersList.value;
+      if (Bookmarks.updateBookmark(id, title, url, newLocation)) {
         modalApi.hide();
       }
     } else {
@@ -107,6 +128,7 @@ const NewTab = (() => {
         modalApi.hide();
       }
     }
+
   }
 
   function resetThumb(evt) {

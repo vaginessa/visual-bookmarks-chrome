@@ -1,6 +1,6 @@
-var webpack = require('webpack');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+let webpack = require('webpack');
+let ExtractTextPlugin = require('extract-text-webpack-plugin');
+let HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -60,7 +60,7 @@ module.exports = {
                       },
                       browsers: ['last 30 Chrome versions']
                     })
-                  ]
+                  ];
                 }
               }
             }

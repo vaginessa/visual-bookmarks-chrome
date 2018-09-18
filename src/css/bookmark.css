@@ -536,10 +536,10 @@ p {
   position: absolute;
   left: 50%;
   top: 50%;
-  margin-left: -15px;
-  margin-top: -15px;
-  width: 30px;
-  height: 30px;
+  margin-left: -20px;
+  margin-top: -20px;
+  width: 40px;
+  height: 40px;
   animation: rotator 1.5s linear infinite;
   transform-origin: center;
 }
@@ -965,7 +965,7 @@ select {
 .icon-cog {
   display: none;
 }
-@media (min-width: 1260px) {
+@media (min-width: 992px) {
   .icon-cog {
     display: block;
     position: fixed;
@@ -1129,18 +1129,25 @@ select {
 .modal__footer {
   padding: 15px;
 }
-.modal .group + .group {
-  margin-bottom: 0;
-}
 .modal__tip {
   display: none;
-  position: absolute;
-  top: 1px;
-  right: 0;
   font-size: .75rem;
   color: #999;
 }
+@media (min-width: 380px) {
+  .modal__tip {
+    position: absolute;
+    top: 1px;
+    right: 0;
+  }
+}
 .modal--add .modal__tip {
+  display: block;
+}
+.modal__select {
+  display: none;
+}
+.modal--edit .modal__select {
   display: block;
 }
 .modal__desc:empty {
