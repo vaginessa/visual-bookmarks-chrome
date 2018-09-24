@@ -1,2 +1,6 @@
 test/
 node_modules/
+extension/img/
+extension/css/
+extension/js/
+extension/*.html
