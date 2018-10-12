@@ -234,8 +234,12 @@ const Options = (() => {
     chrome.bookmarks.getTree(function(rootNode) {
       let folderList = [], openList = [], node, child;
       // Never more than 2 root nodes, push both Bookmarks Bar & Other Bookmarks into array
-      openList.push(rootNode[0].children[0]);
-      openList.push(rootNode[0].children[1]);
+      // openList.push(rootNode[0].children[0]);
+      // openList.push(rootNode[0].children[1]);
+      // root folders
+      openList = rootNode[0].children.map(item => {
+        return item;
+      });
 
       while ((node = openList.pop()) !== undefined) {
         if (node.children !== undefined) {
