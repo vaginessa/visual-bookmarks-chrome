@@ -356,7 +356,8 @@ const Bookmarks = (() => {
     const hasCreate = (localStorage.getItem('show_create_column') === 'true');
 
     bk.getSubTree(id, function(item) {
-      if (item !== undefined) {
+      // if the folder by id exists
+      if (item !== undefined && item[0] !== undefined && item[0].children !== undefined) {
         render(item[0].children, hasCreate);
         container.setAttribute('data-folder', id);
       } else {
