@@ -56,7 +56,8 @@ module.exports = {
                   return [
                     require('postcss-cssnext')({
                       features: {
-                        filter: false
+                        filter: false,
+                        customProperties: false
                       },
                       browsers: ['last 30 Chrome versions']
                     })

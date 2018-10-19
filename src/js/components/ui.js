@@ -33,37 +33,33 @@ const UI = (() => {
       }
     },
     calculateStyles() {
-      // if (window.innerWidth < 768) { return (document.getElementById('generateStyles').innerHTML = ''); }
-      const styles = document.getElementById('generateStyles');
-
-      // If window width < 992 clear calculate styles
-      if (window.innerWidth < 992) {
-        styles.innerHTML = '';
-        return;
-      }
-
-      const container = document.getElementById('includeThree');
+      const doc = document.documentElement;
+      const grid = document.getElementById('bookmarks');
+      const gap = parseInt(window.getComputedStyle(doc).getPropertyValue('--grid-gap'), 10);
       const columns = parseInt(localStorage.getItem('dial_columns'));
       const ratio = 4 / 3;
 
       // Calculate and set container width
-      const lsWidth = parseInt(localStorage.getItem('dial_width'));
-      const containerWidth = Math.floor(window.innerWidth * (lsWidth / 100));
-      styles.innerHTML = `.container {width: ${containerWidth}px}`;
+      const lsGridWidth = parseInt(localStorage.getItem('dial_width'));
+      const gridWidth = Math.floor(window.innerWidth * (lsGridWidth / 100));
+
+      doc.style.setProperty('--container-width', `${gridWidth}px`);
 
       // Calculate column dimensions
-      const colWidth = Math.floor(container.offsetWidth / columns);
+      const colWidth = Math.floor((grid.offsetWidth - ((columns - 1) * gap)) / columns);
       const colHeight = Math.floor(colWidth / ratio);
 
       // if column width less than 120px do not update styles
-      if (colWidth < 120) return;
+      if (colWidth < 120) {
+        doc.style.setProperty('--grid-column-width', '');
+        doc.style.setProperty('--grid-row-height', '');
+        doc.style.setProperty('--grid-columns', '');
+        return;
+      }
 
-      // otherwise apply computed styles
-      styles.innerHTML += `
-      .content .bookmarks { justify-content: flex-start; }
-        .bookmarks .column, .bookmarks .column--nosort {
-          width: ${colWidth}px; height: ${colHeight}px
-        }`;
+      doc.style.setProperty('--grid-column-width', `${colWidth}px`);
+      doc.style.setProperty('--grid-row-height', `${colHeight}px`);
+      doc.style.setProperty('--grid-columns', columns);
     }
   };
 })();

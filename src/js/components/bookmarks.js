@@ -14,7 +14,7 @@ const Bookmarks = (() => {
     </svg>
   `;
 
-  const container = document.getElementById('includeThree');
+  const container = document.getElementById('bookmarks');
   let sort = null;
 
   function init() {
@@ -34,7 +34,7 @@ const Bookmarks = (() => {
 
     // Vertical center
     if (localStorage.getItem('vertical_center') === 'true') {
-      document.getElementById('content').classList.add('flex-vertical-center');
+      container.classList.add('grid--vcenter');
     }
 
     // TODO: experiment low transparency thumbs

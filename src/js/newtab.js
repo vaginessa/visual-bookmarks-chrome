@@ -13,7 +13,7 @@ import Ripple from './components/ripple';
 
 const NewTab = (() => {
 
-  const container = document.getElementById('includeThree'),
+  const container = document.getElementById('bookmarks'),
     modal         = document.getElementById('modal'),
     form          = document.getElementById('formBookmark'),
     modalHead     = document.getElementById('modalHead'),
