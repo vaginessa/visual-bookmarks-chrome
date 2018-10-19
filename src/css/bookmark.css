@@ -1002,14 +1002,14 @@ select {
 .icon-cog {
   display: none;
 }
-@media (min-width: 992px) {
+@media (min-width: 768px) {
   .icon-cog {
     display: block;
     position: fixed;
-    top: 10px;
+    top: 12px;
     left: 10px;
-    width: 38px;
-    height: 38px;
+    width: 30px;
+    height: 30px;
     background: rgba(0,0,0,.15);
     border-radius: 50%;
     opacity: .25;
@@ -1030,12 +1030,11 @@ select {
     width: inherit;
     height: inherit;
     text-decoration: none;
+    cursor: pointer;
+    background-image: url(../img/cog.svg);
     background-position: center;
     background-repeat: no-repeat;
-    cursor: pointer;
-  }
-  .icon-cog__link {
-    background-image: url(../img/cog.svg);
+    background-size: 20px;
     transition: transform .3s ease;
   }
   .icon-cog__link:hover {
