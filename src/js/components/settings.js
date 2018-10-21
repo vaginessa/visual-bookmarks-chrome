@@ -1,8 +1,8 @@
 const Settings = (() => {
 
   let default_values = {
-    background_color: '#f8f9fa',
-    background_image: 'background_color',
+    dark_theme: 'true',
+    background_image: 'background_noimage',
     background_external: '',
     default_folder_id: 1,
     dial_columns: 5,

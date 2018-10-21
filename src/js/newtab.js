@@ -94,20 +94,23 @@ const NewTab = (() => {
   }
 
   function controlsHandler(evt) {
-    if (evt.target.matches('.bookmark__del--bookmark')) {
+    if (evt.target.closest('.bookmark__del--bookmark')) {
+      evt.preventDefault();
       Bookmarks.removeBookmark(evt);
     } else if (evt.target.closest('.bookmark__del--folder')) {
+      evt.preventDefault();
       Bookmarks.removeFolder(evt);
     } else if (evt.target.closest('.bookmark__edit')) {
+      evt.preventDefault();
       modalApi.show(evt.target.closest('.bookmark__edit'));
-    } else if (evt.target.matches('.bookmark__screen')) {
+    } else if (evt.target.closest('.bookmark__screen')) {
       evt.preventDefault();
       const bookmark = evt.target.closest('.bookmark');
       const idBookmark = bookmark.getAttribute('data-sort');
       const captureUrl = bookmark.querySelector('.bookmark__link').href;
 
       Bookmarks.createScreen(bookmark, idBookmark, captureUrl);
-    } else if (evt.target.matches('#add')) {
+    } else if (evt.target.closest('#add')) {
       modalApi.show(evt.target);
     }
   }
@@ -243,6 +246,7 @@ Settings.init();
 /**
  * UI
  */
+UI.toggleTheme();
 UI.calculateStyles();
 UI.setBG();
 /**

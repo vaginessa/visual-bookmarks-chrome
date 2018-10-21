@@ -3,6 +3,7 @@ import '../css/bookmark.css';
 import './components/polyfill';
 import FS from './components/fs';
 import Settings from './components/settings';
+import UI from './components/ui';
 import Localization from './components/localization';
 import TabsSlider from './components/tabsSlider';
 // import Ripple from '@k-ivan/md-ripple';
@@ -12,6 +13,8 @@ import Helpers from './components/helpers';
 // Set lang attr
 // Replacement underscore on the dash because underscore is not a valid language subtag
 document.documentElement.setAttribute('lang', chrome.i18n.getMessage('@@ui_locale').replace('_', '-'));
+
+UI.toggleTheme();
 
 Localization();
 
@@ -84,6 +87,11 @@ const Options = (() => {
       localStorage.setItem(id, target.checked);
     } else {
       localStorage.setItem(id, target.value);
+    }
+
+    // dark theme
+    if (target.id === 'dark_theme') {
+      UI.toggleTheme();
     }
 
     if (localStorage.getItem('enable_sync') === 'true' && id !== 'enable_sync') {

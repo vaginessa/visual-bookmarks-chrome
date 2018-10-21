@@ -1,4 +1,4 @@
-import '../../img/broken-image.svg';
+// import '../img/broken-image.svg';
 import Sortable from 'sortablejs';
 import FS from './fs';
 import Helpers from './helpers';
@@ -116,13 +116,13 @@ const Bookmarks = (() => {
       sort = Sortable.create(container, {
         animation: 200,
         filter: '.bookmark__control',
-        draggable: '.column',
-        ghostClass: 'column--ghost',
-        chosenClass: 'column--chosen',
+        draggable: '.bookmark',
+        ghostClass: 'bookmark--ghost',
+        chosenClass: 'bookmark--chosen',
         preventOnFilter: false,
         onMove(evt) {
           // do not sort create column
-          if (evt.related.classList.contains('column--nosort')) {
+          if (evt.related.classList.contains('bookmark--nosort')) {
             return false;
           }
         },
@@ -204,42 +204,44 @@ const Bookmarks = (() => {
       </div>`;
 
     const tpl =
-      `<div class="column">
+      `
         <div class="bookmark" data-sort="%id%">
-          ${thumbContainer}
-          <div class="bookmark__control bookmark__control--left">
-            <div class="bookmark__more">
-              <div class="bookmark__control-wrap">
-                <button class="bookmark__edit"
-                        data-bookmark="bookmark"
-                        data-title="%title%"
-                        data-url="%url%"
-                        data-id="%id%"
-                        data-screen="%screen%">
-                </button>
-                <div class="bookmark__divider"></div>
-                <button class="bookmark__screen" data-id="%id%"></button>
-                <div class="bookmark__divider"></div>
-                <div class="bookmark__image-upload">
-                  <input type="file" name="" class="c-upload__input"
-                         id="upload-%id%"
-                         data-id='{"id": %id%, "site": "%site%"}'
-                         accept=".jpg, .jpeg, .png">
-                  <label for="upload-%id%" class="c-upload__label"></label>
+          <div class="bookmark__wrap">
+            ${thumbContainer}
+            <div class="bookmark__control bookmark__control--left">
+              <div class="bookmark__more">
+                <div class="bookmark__control-wrap">
+                  <button class="bookmark__edit"
+                          data-bookmark="bookmark"
+                          data-title="%title%"
+                          data-url="%url%"
+                          data-id="%id%"
+                          data-screen="%screen%">
+                  </button>
+                  <div class="bookmark__divider"></div>
+                  <button class="bookmark__screen" data-id="%id%"></button>
+                  <div class="bookmark__divider"></div>
+                  <div class="bookmark__image-upload">
+                    <input type="file" name="" class="c-upload__input"
+                          id="upload-%id%"
+                          data-id='{"id": %id%, "site": "%site%"}'
+                          accept=".jpg, .jpeg, .png">
+                    <label for="upload-%id%" class="c-upload__label"></label>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="bookmark__control bookmark__control--right">
-            <button class="bookmark__del--bookmark" data-id="%id%"></button>
-          </div>
-          <div class="bookmark__caption">
-            ${hasFavicon}
-            <div class="bookmark__title">%title%</div>
+            <div class="bookmark__control bookmark__control--right">
+              <button class="bookmark__del--bookmark" data-id="%id%"></button>
+            </div>
+            <div class="bookmark__caption">
+              ${hasFavicon}
+              <div class="bookmark__title">%title%</div>
+            </div>
           </div>
           <a class="bookmark__link" href="%url%" title="%title%"></a>
         </div>
-      </div>`;
+      `;
 
     return Helpers.templater(tpl, {
       id: bookmark.id,
@@ -264,38 +266,40 @@ const Bookmarks = (() => {
     }
 
     const tpl =
-      `<div class="column">
+      `
         <div class="bookmark" data-sort="%id%">
-          ${imgLayout}
-          <div class="bookmark__control bookmark__control--left">
-            <div class="bookmark__more">
-              <div class="bookmark__control-wrap">
-                <button class="bookmark__edit" data-bookmark="folder"
-                        data-title="%title%"
-                        data-id="%id%"
-                        data-screen="%screen%">
-                </button>
-                <div class="bookmark__divider"></div>
-                <div class="bookmark__image-upload">
-                  <input type="file" name="" class="c-upload__input"
-                         id="upload-%id%"
-                         data-id='{"id": %id%}'
-                         accept=".jpg, .jpeg, .png">
-                  <label for="upload-%id%" class="c-upload__label"></label>
+          <div class="bookmark__wrap">
+            ${imgLayout}
+            <div class="bookmark__control bookmark__control--left">
+              <div class="bookmark__more">
+                <div class="bookmark__control-wrap">
+                  <button class="bookmark__edit" data-bookmark="folder"
+                          data-title="%title%"
+                          data-id="%id%"
+                          data-screen="%screen%">
+                  </button>
+                  <div class="bookmark__divider"></div>
+                  <div class="bookmark__image-upload">
+                    <input type="file" name="" class="c-upload__input"
+                          id="upload-%id%"
+                          data-id='{"id": %id%}'
+                          accept=".jpg, .jpeg, .png">
+                    <label for="upload-%id%" class="c-upload__label"></label>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="bookmark__control bookmark__control--right">
-            <button class="bookmark__del--folder" data-id="%id%"></button>
-          </div>
-          <div class="bookmark__caption">
-            <img src="/img/folder.svg" class="bookmark__favicon" width="16" height="16" alt="">
-            <div class="bookmark__title">%title%</div>
+            <div class="bookmark__control bookmark__control--right">
+              <button class="bookmark__del--folder" data-id="%id%"></button>
+            </div>
+            <div class="bookmark__caption">
+              <img src="/img/folder.svg" class="bookmark__favicon" width="16" height="16" alt="">
+              <div class="bookmark__title">%title%</div>
+            </div>
           </div>
           <a class="bookmark__link" href="#%url%" title="%title%"></a>
         </div>
-      </div>`;
+      `;
     return Helpers.templater(tpl, {
       id: bookmark.id,
       url: bookmark.id,
@@ -318,12 +322,12 @@ const Bookmarks = (() => {
       `${arr.join('')}
       ${isCreate
     ?
-    `<div class="column--nosort">
-        <div class="bookmark--create md-ripple">
-          <div class="bookmark__img--add"></div>
-          <a class="bookmark__link--create" id="add"></a>
-        </div>
-      </div>`
+    `
+      <div class="bookmark--create bookmark--nosort md-ripple">
+        <div class="bookmark__img--add"></div>
+        <a class="bookmark__link--create" id="add"></a>
+      </div>
+    `
     : ''
   }
     `;
@@ -336,6 +340,8 @@ const Bookmarks = (() => {
           img.style.backgroundImage = `url(${data})`;
         },
         fail() {
+          img.classList.remove('bookmark__img--external');
+          img.classList.add('bookmark__img--broken');
           img.style.backgroundImage = `url(${img.dataset.failThumb})`;
         }
       });
@@ -358,10 +364,15 @@ const Bookmarks = (() => {
     bk.getSubTree(id, function(item) {
       // if the folder by id exists
       if (item !== undefined && item[0] !== undefined && item[0].children !== undefined) {
+        if (!container.classList.contains('grid')) {
+          container.classList.add('grid');
+        }
         render(item[0].children, hasCreate);
         container.setAttribute('data-folder', id);
       } else {
         Helpers.notifications(chrome.i18n.getMessage('notice_cant_find_id'));
+        // remove grid class
+        container.classList.remove('grid');
         container.innerHTML = `
           <div class="not-found">
             <div class="not-found__wrap">
@@ -390,7 +401,7 @@ const Bookmarks = (() => {
     target.value = '';
 
     const bookmark = target.closest('.bookmark');
-    bookmark.innerHTML += `<div id="overlay_id_${id}" class="bookmark__overlay">${SVGLoading}</div>`;
+    bookmark.innerHTML += `<div class="bookmark__overlay">${SVGLoading}</div>`;
 
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -418,7 +429,7 @@ const Bookmarks = (() => {
             const edit = bookmark.querySelector('.bookmark__edit');
 
             if (data.site) {
-              imgEl.classList.remove('bookmark__img--external');
+              imgEl.classList.remove('bookmark__img--external', 'bookmark__img--broken');
             } else {
               imgEl.classList.remove('bookmark__img--folder');
               imgEl.classList.add('bookmark__img--contain');
@@ -427,10 +438,11 @@ const Bookmarks = (() => {
             edit.setAttribute('data-screen', fileEntry.toURL());
             imgEl.style.backgroundImage = `url('${fileEntry.toURL()}?refresh=${Date.now()}')`;
 
-            let overlay = document.getElementById('overlay_id_' + id);
+            // let overlay = document.getElementById('overlay_id_' + id);
+            let overlay = bookmark.querySelector('.bookmark__overlay');
 
             if (overlay) {
-              bookmark.removeChild(overlay);
+              overlay.remove();
             }
             Helpers.notifications(
               chrome.i18n.getMessage('notice_thumb_image_updated')
@@ -450,26 +462,27 @@ const Bookmarks = (() => {
   }
 
   function createScreen(bookmark, idBookmark, captureUrl) {
-    bookmark.innerHTML += `<div id="overlay_id_${idBookmark}" class="bookmark__overlay">${SVGLoading}</div>`;
+    bookmark.innerHTML += `<div class="bookmark__overlay">${SVGLoading}</div>`;
 
     const image = bookmark.querySelector('.bookmark__img');
 
     chrome.runtime.sendMessage({ captureUrl: captureUrl, id: idBookmark }, (response) => {
 
-      let overlay = document.getElementById('overlay_id_' + idBookmark);
+      // let overlay = document.getElementById('overlay_id_' + idBookmark);
+      let overlay = bookmark.querySelector('.bookmark__overlay');
 
       if (response.warning) {
         console.warn(response.warning);
         if (overlay) {
-          bookmark.removeChild(overlay);
+          overlay.remove();
         }
         return false;
       }
 
-      image.classList.remove('bookmark__img--external');
+      image.classList.remove('bookmark__img--external', 'bookmark__img--broken');
       image.style.backgroundImage = `url('${response}?refresh=${Date.now()}')`;
       if (overlay) {
-        bookmark.removeChild(overlay);
+        overlay.remove();
       }
     });
   }
@@ -500,11 +513,13 @@ const Bookmarks = (() => {
   function removeBookmark(evt) {
     evt.preventDefault();
     const target = evt.target;
-    const bookmark = target.closest('.column');
+    // const bookmark = target.closest('.column');
+    const bookmark = target.closest('.bookmark');
     if (confirm(chrome.i18n.getMessage('confirm_delete_bookmark'), '')) {
       const id = target.getAttribute('data-id');
       bk.remove(id, function() {
-        container.removeChild(bookmark);
+        // container.removeChild(bookmark);
+        bookmark.remove();
         rmCustomScreen(id);
         Helpers.notifications(
           chrome.i18n.getMessage('notice_bookmark_removed')
@@ -516,11 +531,11 @@ const Bookmarks = (() => {
   function removeFolder(evt) {
     evt.preventDefault();
     const target = evt.target;
-    const bookmark = target.closest('.column');
+    const bookmark = target.closest('.bookmark');
     if (confirm(chrome.i18n.getMessage('confirm_delete_folder'), '')) {
       const id = target.getAttribute('data-id');
       bk.removeTree(id, function() {
-        container.removeChild(bookmark);
+        bookmark.remove();
         rmCustomScreen(id);
         Helpers.customTrigger('updateFolderList', container, {
           detail: {
@@ -579,7 +594,7 @@ const Bookmarks = (() => {
         } else {
           html = genFolder(result);
         }
-        container.querySelector('.column--nosort').insertAdjacentHTML('beforeBegin', html);
+        container.querySelector('.bookmark--nosort').insertAdjacentHTML('beforeBegin', html);
         const bookmark = container.querySelector('[data-sort="' + result.id + '"]');
 
         if (result.url) {
@@ -628,9 +643,9 @@ const Bookmarks = (() => {
         // if the bookmark is moved to another folder
         if (move !== id && move !== result.parentId) {
           const destination = {parentId: move};
-          const bookmarkColumn = bookmark.closest('.column');
+          // const bookmarkColumn = bookmark.closest('.column');
           chrome.bookmarks.move(id, destination, function() {
-            container.removeChild(bookmarkColumn);
+            bookmark.remove();
 
             // if it is a folder update folderList
             if (!result.url) {

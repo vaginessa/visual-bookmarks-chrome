@@ -1,6 +1,8 @@
-let webpack = require('webpack');
-let ExtractTextPlugin = require('extract-text-webpack-plugin');
-let HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -25,18 +27,16 @@ module.exports = {
           options: { presets: ['env'] }
         }]
       },
-      {
-        test: /\.(png|jpe?g|svg)/i,
-        use: [{
-          loader: 'file-loader',
-          options: {
-            name: 'img/[name].[ext]',
-            publicPath: '/'
-          }
-        }]
-        // loader: 'file-loader?name=[name].[ext]&publicPath=../img/&outputPath=img/'
-        // loader: 'file-loader?name=[name].[ext]&publicPath=/&outputPath=img/'
-      },
+      // {
+      //   test: /\.(png|jpe?g|svg)/i,
+      //   use: [{
+      //     loader: 'file-loader',
+      //     options: {
+      //       name: 'img/[name].[ext]',
+      //       publicPath: '/'
+      //     }
+      //   }]
+      // },
       {
         test: /\.css$/,
         exclude: [/node_modules/],
@@ -72,6 +72,10 @@ module.exports = {
     ]
   },
   plugins: [
+    new CleanWebpackPlugin('extension/*'),
+    new CopyWebpackPlugin([
+      { from: 'static' }
+    ]),
     new webpack.optimize.UglifyJsPlugin({}),
     new ExtractTextPlugin('./css/bookmark.css'),
     new HtmlWebpackPlugin({

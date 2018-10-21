@@ -2,21 +2,23 @@ import Helpers from './helpers';
 
 const UI = (() => {
   return {
+    toggleTheme() {
+      const hasDark = (localStorage.getItem('dark_theme') === 'true');
+
+      if (hasDark) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    },
     setBG() {
       const bgEl = document.getElementById('bg');
       const bgState = localStorage.getItem('background_image');
 
-      if (bgState === 'background_color') {
-        bgEl.style.backgroundColor = localStorage.getItem('background_color');
-        setTimeout(() => {
-          bgEl.style.opacity = 1;
-        }, 20);
+      if (!['background_local', 'background_external'].includes(bgState)) {
         return;
       }
-
-      const resource = (bgState === 'background_local')
-        ? localStorage.getItem('background_local')
-        : localStorage.getItem('background_external');
+      const resource = localStorage.getItem(bgState);
 
       if (resource && resource !== '') {
         Helpers.imageLoaded(resource, {

@@ -51,6 +51,17 @@
               </div>
             </div>
             <div class="tbl">
+              <div class="tbl__setting">
+                <div data-locale-message="dark_theme">Dark theme</div>
+              </div>
+              <div class="tbl__value">
+                <div class="switch">
+                  <input type="checkbox" class="switch__input js-change" name="" id="dark_theme">
+                  <label class="switch__label" for="dark_theme"></label>
+                </div>
+              </div>
+            </div>
+            <div class="tbl">
               <div class="tbl__setting" data-locale-message="vertical_center"></div>
               <div class="tbl__value">
                 <!-- <div class="checkbox">
@@ -78,13 +89,12 @@
             <div class="tbl">
               <div class="tbl__setting" data-locale-message="background">Background</div>
               <div class="tbl__value">
-                <select name="" id="background_image" class="form-control js-change">
-                <!-- <select name="" id="background_image" class="form-control js-change"> -->
-                  <option value="background_color" data-locale-message="color">Color</option>
+                <select name="bg" id="background_image" class="form-control js-change">
+                  <option value="background_noimage" data-locale-message="no_image">Без картинки</option>
                   <option value="background_external" data-locale-message="url_image">Image from URL</option>
                   <option value="background_local" data-locale-message="local_image">Image from Computer</option>
                 </select>
-                <input type="color" id="background_color" class="tbl__option js-change">
+                <div id="background_noimage" class="tbl__option js-change text-muted" data-locale-message="no_image_text">Тема без фона</div>
                 <div id="background_local" class="tbl__option">
                   <div class="c-upload">
                     <form action="#0" method="post">
