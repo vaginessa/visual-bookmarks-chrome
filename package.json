@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Visual bookmarks",
   "scripts": {
-    "eslint": "eslint",
+    "eslint": "eslint src/js/**",
+    "stylelint": "stylelint src/css/**;  exit 0",
     "watch": "webpack -w --hide-modules",
     "build": "webpack -p --hide-modules"
   },
@@ -28,6 +29,8 @@
     "postcss-cssnext": "^3.1.0",
     "postcss-loader": "^2.1.4",
     "style-loader": "^0.19.1",
+    "stylelint": "^9.6.0",
+    "stylelint-config-standard": "^18.2.0",
     "webpack": "^3.11.0"
   },
   "dependencies": {
