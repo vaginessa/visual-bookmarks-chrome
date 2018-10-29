@@ -3,8 +3,10 @@
   --theme-bg: #f8f9fa;
   --theme-bg-200: var(--theme-bg);
   --theme-bg-300: var(--theme-bg);
-  --theme-bg-300-transparent: rgba(255,255,255, 0);
+  --theme-bg-300-transparent: rgba(255, 255, 255, 0);
   --theme-text-color: #000;
+
+  /* Colors */
   --color-primary: hsl(217, 89%, 61%);
   --color-primary-dark: hsl(217, 69%, 50%);
   --color-muted: hsl(0, 0%, 66%);
@@ -14,19 +16,19 @@
   --font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-size-base: 14px;
   --line-height: 1.5;
+  --base-radius: 4px;
 
   /* Spiner */
   --spinner-size: 12px;
   --spinner-color: var(--color-primary);
 
   /* Bookmark */
-  --column-padding: 5px;
-  --bookmark-radius: 5px;
-  --bookmark-bg: hsla(0, 4%, 92%, .9);
-  --bookmark-overlay-bg: rgba(255,255,255, 0.95);
+  --bookmark-radius: var(--base-radius);
+  --bookmark-bg: hsla(0, 4%, 92%, 0.9);
+  --bookmark-overlay-bg: rgba(255, 255, 255, 0.95);
   --bookmark-caption-height: 30px;
-  --bookmark-caption-bg: rgba(255,255,255, 1);
-  --bookmark-caption-after-transparent: rgba(255,255,255, 0);
+  --bookmark-caption-bg: rgba(255, 255, 255, 1);
+  --bookmark-caption-after-transparent: rgba(255, 255, 255, 0);
   --bookmark-caption-color: #333;
   --bookmark-outline-color: hsla(217, 89%, 61%, 0.2);
   --bookmark-image-fill: none;
@@ -38,7 +40,6 @@
   /* Forms */
   --header-input-color-controls: var(--color-primary-dark);
   --search-reset-btn-color: #000;
-
   --input-border: 1px solid #ddd;
   --input-padding: 7px 10px;
   --input-shadow-color: hsla(217, 89%, 61%, 0.2);
@@ -48,13 +49,14 @@
   --input-bg: #fff;
   --input-text-color: inherit;
   --select-icon: url(/img/select-arrow.svg);
+  --input-radius: var(--base-radius);
 
   /* Buttons */
   --btn: var(--color-primary);
   --btn-active: var(--color-primary-dark);
   --btn-color: #fff;
   --btn-padding: 9px 15px;
-  --btn-radius: 2px;
+  --btn-radius: var(--base-radius);
 
   /* Scrollbar */
   --scrollbar-width: 12px;
@@ -78,16 +80,19 @@
   --grid-gap: 10px;
   --grid-columns: auto-fit;
 
+  /* Modal */
   --modal-header-border-color: #ddd;
   --modal-close-fill: #000;
 
+  /* options */
   --options-bg: #f8f9fa;
   --options-footer-bg: #f9f9f9;
   --option-controls: #f9f9f9;
   --tabs-bar-bg: #f9f9f9;
   --tabs-content-bg: #fff;
 
-  --notfound-bg: hsla(0,0%,100%,.75);
+  /* not found */
+  --notfound-bg: hsla(0, 0%, 100%, 0.75);
   --notfound-color: var(--theme-text-color);
   --notfound-icon-filter: none;
 }
@@ -98,35 +103,40 @@
   --theme-bg-300: hsl(0, 0%, 25%);
   --theme-text-color: #fff;
 
+  /* Scrollbar dark theme */
   --scrollbar-color: hsla(0, 0%, 28%, 1);
   --scrollbar-hover-color: hsla(0, 0%, 28%, 1);
 
+  /* bookmark  dark theme */
   --bookmark-bg: hsla(0, 0%, 25%, 0.9);
   --bookmark-overlay-bg: var(--theme-bg-300);
   --bookmark-caption-bg: rgba(48, 48, 48, 0.95);
   --bookmark-caption-after-transparent: rgba(48, 48, 48, 0);
-  --bookmark-caption-color: rgba(255,255,255, 0.8);
+  --bookmark-caption-color: rgba(255, 255, 255, 0.8);
   --bookmark-image-fill: invert(1);
 
+  /* Forms  dark theme */
   --header-input-color-controls: #fff;
   --search-reset-btn-color: #fff;
-
   --input-bg: var(--theme-bg-200);
-  --input-text-color: rgba(255,255,255, 0.8);
+  --input-text-color: rgba(255, 255, 255, 0.8);
   --input-placeholder-color: hsl(0, 0%, 50%);
   --input-placeholder-focus-color: hsla(0, 0%, 50%, 0.7);
   --input-border: 1px solid transparent;
   --select-icon: url(/img/select-arrow-light.svg);
 
+  /* Options  dark theme */
   --options-bg: var(--theme-bg);
   --options-footer-bg: var(--theme-bg-200);
   --option-controls: var(--theme-bg-200);
   --tabs-bar-bg: var(--theme-bg-200);
   --tabs-content-bg: var(--theme-bg-300);
 
+  /* Modal dark theme */
   --modal-header-border-color: rgb(220, 220, 220, 0.1);
   --modal-close-fill: #fff;
 
+  /* notfound dark theme */
   --notfound-bg: hsla(0, 0%, 13%, 0.95);
   --notfound-color: var(--theme-text-color);
   --notfound-icon-filter: invert(1);
@@ -163,6 +173,7 @@ input[type="text"]:focus::placeholder {
 ::-webkit-scrollbar-thumb:hover {
   background-color: var(--scrollbar-hover-color);
 }
+
 /* .modal-open::-webkit-scrollbar-thumb {
   background-color: var(--light-scrollbar-color);
 }
@@ -355,7 +366,7 @@ p {
   position: relative;
   width: 100%;
   height: 100%;
-  box-shadow: 0 1px 4px 0 rgba(0,0,0,.2);
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.2);
   background-color: var(--bookmark-bg);
   border-radius: var(--bookmark-radius);
   overflow: hidden;
@@ -431,6 +442,7 @@ p {
 .bookmark__img--folder {
   filter: var(--bookmark-image-fill);
 }
+
 /**  Image icon placeholder
   .image-icon {
     position: absolute;
@@ -501,8 +513,8 @@ p {
 }
 
 .bookmark__link:focus {
-  outline: 3px solid var(--bookmark-outline-color);
   /* box-shadow: inset 0 0 3px var(--bookmark-outline-color); */
+  outline: 3px solid var(--bookmark-outline-color);
 }
 
 .bookmark__more,
@@ -565,6 +577,7 @@ p {
   rgba(255, 255, 255, 0.4) 50%,
   rgba(255, 255, 255, 0) 100%
   );
+  /* stylelint-enable */
 }
 
 .bookmark__del--bookmark,
@@ -717,6 +730,7 @@ p {
 .hidden-toolbar .not-found {
   min-height: calc(100vh - 40px);
 }
+
 .not-found__wrap {
   position: relative;
   padding: 15px;
@@ -772,11 +786,12 @@ p {
   max-width: 600px;
   margin: 0 auto;
   margin-bottom: 10px;
-  background: #fff;
+  background: var(--theme-bg-200);
   height: 50px;
   line-height: 50px;
   padding: 0 15px;
   box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);
+  border-radius: var(--base-radius);
 }
 
 .footer__pull--left {
@@ -788,7 +803,7 @@ p {
 }
 
 .options-controls {
-  background-color: #f9f9f9;
+  background-color: var(--theme-bg-200);
 }
 
 .tbl {
@@ -825,6 +840,7 @@ p {
   margin: auto;
   margin-bottom: 20px;
   overflow: hidden;
+  border-radius: var(--base-radius);
   box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);
 }
 
@@ -833,7 +849,6 @@ p {
   display: flex;
   justify-content: space-between;
   background-color: var(--tabs-bar-bg);
-  border-radius: 3px 3px 0 0;
   overflow: hidden;
   box-shadow: inset 0 -5px 5px -3px rgba(0, 0, 0, 0.05);
 }
@@ -872,56 +887,13 @@ p {
   width: calc(var(--df-width) * 3);
   overflow: hidden;
   background-color: var(--tabs-content-bg);
-  transition: transform var(--transition), height .3s ease;
+  transition: transform var(--transition), height 0.3s ease;
 }
 
 .tabs__section {
   padding: 30px;
   float: left;
   width: var(--df-width);
-}
-.options-controls {
-  background-color: var(--option-controls);
-}
-.tbl {
-  display: table;
-  width: 100%;
-}
-.tbl__option,
-.tbl__value .form-control.tbl__option {
-  display: none;
-  margin-top: 10px;
-}
-.tbl__setting,
-.tbl__value {
-  display: table-cell;
-  vertical-align: middle;
-  padding: 10px;
-}
-.tbl__setting {
-  width: 50%;
-  text-align: right;
-  font-weight: 600;
-}
-.tbl__value {
-  width: 50%;
-}
-.footer {
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
-  margin-bottom: 10px;
-  background: var(--options-footer-bg);
-  height: 50px;
-  line-height: 50px;
-  padding: 0 15px;
-  box-shadow: 0 1px 4px 0 rgba(0,0,0,0.14);
-}
-.footer__pull--left {
-  float: left;
-}
-.footer__pull--right {
-  float: right;
 }
 
 /* Forms */
@@ -936,10 +908,9 @@ p {
   padding: var(--input-padding);
   font-family: inherit;
   font-size: inherit;
-
   color: var(--input-text-color);
   border: var(--input-border);
-  border-radius: 2px;
+  border-radius: var(--input-radius);
   background-color: var(--input-bg);
   outline: 0;
   transition: box-shadow 0.15s ease;
@@ -953,7 +924,6 @@ p {
 select {
   padding-right: 28px;
   width: auto;
-  /* background-image: url(data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjMDAwMDAwIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gICAgPHBhdGggZD0iTTcgMTBsNSA1IDUtNXoiLz4gICAgPHBhdGggZD0iTTAgMGgyNHYyNEgweiIgZmlsbD0ibm9uZSIvPjwvc3ZnPg==); */
   background-image: var(--select-icon);
   background-size: 18px;
   background-repeat: no-repeat;
@@ -1129,7 +1099,7 @@ select {
 }
 
 .btn--clear:hover {
-  background-color: rgba(0,0,0, 0.07);
+  background-color: rgba(0, 0, 0, 0.07);
 }
 
 .btn--clear:active,
@@ -1139,8 +1109,8 @@ select {
 
 /* Upload component */
 .c-upload__input {
-  width: 0.1px;
-  height: 0.1px;
+  width: 1px;
+  height: 1px;
   opacity: 0;
   overflow: hidden;
   position: absolute;
@@ -1186,6 +1156,8 @@ select {
 
 .c-upload__preview {
   position: relative;
+  overflow: hidden;
+  border-radius: var(--base-radius);
 }
 
 .c-upload__preview-image {
@@ -1205,12 +1177,13 @@ select {
 }
 
 .c-upload__remove > button {
+  display: block;
   width: 20px;
   height: 20px;
   padding: 15px 18px;
   border: 0;
   background-color: rgba(51, 51, 51, 0.25);
-  background-image: url(../img/close.svg);
+  background-image: url(/img/close.svg);
   background-size: 20px;
   background-repeat: no-repeat;
   background-position: center;
@@ -1356,7 +1329,7 @@ select {
   max-width: 550px;
   margin: 0 auto;
   background-color: var(--theme-bg-300);
-  border-radius: 2px;
+  border-radius: var(--base-radius);
   box-shadow: 1px 3px 15px 1px rgba(0, 0, 0, 0.15);
   opacity: 0;
   transform-origin: bottom;
