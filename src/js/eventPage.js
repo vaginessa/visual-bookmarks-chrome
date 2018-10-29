@@ -158,6 +158,15 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         return false;
       }
 
+      // If cannot access contents of url
+      if (data && data.capture === undefined) {
+        try {
+          sendResponse({ warning: 'Cannot access contents of url' });
+        } catch (e) {}
+        console.warn(`Cannot access contents of url: ${request.captureUrl}`);
+        return false;
+      }
+
       Helpers.resizeScreen(data.capture, function(image) {
 
         const blob = Helpers.base64ToBlob(image, 'image/jpg');
