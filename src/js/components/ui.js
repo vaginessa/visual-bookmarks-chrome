@@ -23,7 +23,7 @@ const UI = (() => {
       if (resource && resource !== '') {
         Helpers.imageLoaded(resource, {
           done(data) {
-            document.body.classList.add('stealth-header');
+            document.body.classList.add('has-image');
             bgEl.style.backgroundImage = `url('${data}')`;
             bgEl.style.opacity = 1;
           },
