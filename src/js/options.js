@@ -1,11 +1,11 @@
 import '../css/bookmark.css';
 
+import TabsSlider from 'tabs-slider';
 import './components/polyfill';
 import FS from './components/fs';
 import Settings from './components/settings';
 import UI from './components/ui';
 import Localization from './components/localization';
-import TabsSlider from './components/tabsSlider';
 // import Ripple from '@k-ivan/md-ripple';
 import Ripple from './components/ripple';
 import Helpers from './components/helpers';
@@ -20,7 +20,9 @@ Localization();
 
 Ripple.init('.md-ripple');
 
-let tabs = new TabsSlider('.tabs');
+let tabs = new TabsSlider('.tabs', {
+  draggable: false
+});
 
 const Options = (() => {
 
@@ -122,7 +124,7 @@ const Options = (() => {
         Helpers.notifications(
           chrome.i18n.getMessage('notice_bg_image_updated')
         );
-        tabs.recalc();
+        tabs.recalcStyles();
       });
     });
 
@@ -150,7 +152,7 @@ const Options = (() => {
       localStorage.removeItem('background_local');
       preview.innerHTML = '';
       previewParent.style.display = 'none';
-      tabs.recalc();
+      tabs.recalcStyles();
     });
   }
 
@@ -175,7 +177,7 @@ const Options = (() => {
 
     // localStorage.setItem('background_image', this.value);
     document.getElementById(this.value).style.display = 'block';
-    tabs.recalc();
+    tabs.recalcStyles();
   }
 
   function deleteImages(evt) {

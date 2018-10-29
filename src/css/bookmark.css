@@ -855,9 +855,13 @@ p {
 
 .tabs__line {
   position: absolute;
+  left: 0;
+  right: 0;
   bottom: 0;
   height: 3px;
   background-color: var(--color-primary);
+  will-change: transform;
+  transform-origin: left;
   transition: transform var(--transition);
 }
 
