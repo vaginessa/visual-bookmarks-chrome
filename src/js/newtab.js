@@ -214,16 +214,6 @@ const NewTab = (() => {
 
 })();
 
-function networkStatus(evt) {
-  if (evt.type === 'online') {
-    location.reload();
-    Helpers.notifications(chrome.i18n.getMessage('notice_online'), 'idConnection');
-  } else {
-    Helpers.notifications(chrome.i18n.getMessage('notice_offline'), 'idConnection');
-  }
-}
-
-
 // Set lang attr
 // Replacement underscore on the dash because underscore is not a valid language subtag
 document.documentElement.setAttribute('lang', chrome.i18n.getMessage('@@ui_locale').replace('_', '-'));
@@ -257,8 +247,3 @@ Bookmarks.init();
 NewTab.init();
 
 window.addEventListener('resize', () => UI.calculateStyles());
-window.addEventListener('online', networkStatus);
-window.addEventListener('offline', networkStatus);
-window.addEventListener('load', () => {
-  if (!navigator.onLine) Helpers.trigger('offline', window);
-});
