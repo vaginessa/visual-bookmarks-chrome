@@ -519,10 +519,7 @@ p {
 }
 
 .bookmark__more,
-.bookmark__del--bookmark,
-.bookmark__del--folder,
-.bookmark__edit,
-.bookmark__screen,
+.bookmark__btn,
 .bookmark__image-upload {
   position: relative;
   display: inline-block;
@@ -581,16 +578,16 @@ p {
   /* stylelint-enable */
 }
 
-.bookmark__del--bookmark,
-.bookmark__del--folder {
+.bookmark__btn--del-bookmark,
+.bookmark__btn--del-folder {
   background-image: url(/img/close.svg);
 }
 
-.bookmark__edit {
+.bookmark__btn--edit {
   background-image: url(/img/edit.svg);
 }
 
-.bookmark__screen {
+.bookmark__btn--screen {
   background-image: url(/img/camera.svg);
 }
 
@@ -598,18 +595,12 @@ p {
   background-image: url(/img/upload.svg);
 }
 
-.bookmark__del--bookmark:hover,
-.bookmark__del--folder:hover,
-.bookmark__edit:hover,
-.bookmark__screen:hover,
+.bookmark__btn:hover,
 .bookmark__image-upload:hover {
   opacity: 1;
 }
 
-.bookmark__del--bookmark:active,
-.bookmark__del--folder:active,
-.bookmark__edit:active,
-.bookmark__screen:active,
+.bookmark__btn:active,
 .bookmark__image-upload:active {
   top: 1px;
 }

@@ -211,7 +211,7 @@ const Bookmarks = (() => {
             <div class="bookmark__control bookmark__control--left">
               <div class="bookmark__more">
                 <div class="bookmark__control-wrap">
-                  <button class="bookmark__edit"
+                  <button class="bookmark__btn bookmark__btn--edit"
                           data-bookmark="bookmark"
                           data-title="%title%"
                           data-url="%url%"
@@ -219,7 +219,7 @@ const Bookmarks = (() => {
                           data-screen="%screen%">
                   </button>
                   <div class="bookmark__divider"></div>
-                  <button class="bookmark__screen" data-id="%id%"></button>
+                  <button class="bookmark__btn bookmark__btn--screen" data-id="%id%"></button>
                   <div class="bookmark__divider"></div>
                   <div class="bookmark__image-upload">
                     <input type="file" name="" class="c-upload__input"
@@ -232,7 +232,7 @@ const Bookmarks = (() => {
               </div>
             </div>
             <div class="bookmark__control bookmark__control--right">
-              <button class="bookmark__del--bookmark" data-id="%id%"></button>
+              <button class="bookmark__btn bookmark__btn--del-bookmark" data-id="%id%"></button>
             </div>
             <div class="bookmark__caption">
               ${hasFavicon}
@@ -273,7 +273,7 @@ const Bookmarks = (() => {
             <div class="bookmark__control bookmark__control--left">
               <div class="bookmark__more">
                 <div class="bookmark__control-wrap">
-                  <button class="bookmark__edit" data-bookmark="folder"
+                  <button class="bookmark__btn bookmark__btn--edit" data-bookmark="folder"
                           data-title="%title%"
                           data-id="%id%"
                           data-screen="%screen%">
@@ -290,7 +290,7 @@ const Bookmarks = (() => {
               </div>
             </div>
             <div class="bookmark__control bookmark__control--right">
-              <button class="bookmark__del--folder" data-id="%id%"></button>
+              <button class="bookmark__btn bookmark__btn--del-folder" data-id="%id%"></button>
             </div>
             <div class="bookmark__caption">
               <img src="/img/folder.svg" class="bookmark__favicon" width="16" height="16" alt="">
@@ -426,7 +426,7 @@ const Bookmarks = (() => {
             localStorage.setItem('custom_dials', JSON.stringify(obj));
 
             const imgEl = bookmark.querySelector('.bookmark__img');
-            const edit = bookmark.querySelector('.bookmark__edit');
+            const edit = bookmark.querySelector('.bookmark__btn--edit');
 
             if (data.site) {
               imgEl.classList.remove('bookmark__img--external', 'bookmark__img--broken');
@@ -507,7 +507,7 @@ const Bookmarks = (() => {
 
   function changeFolder() {
     const id = this.value;
-    window.location.hash = '#' + id;
+    window.location.hash = `#${id}`;
   }
 
   function removeBookmark(evt) {
@@ -595,7 +595,7 @@ const Bookmarks = (() => {
           html = genFolder(result);
         }
         container.querySelector('.bookmark--nosort').insertAdjacentHTML('beforeBegin', html);
-        const bookmark = container.querySelector('[data-sort="' + result.id + '"]');
+        const bookmark = container.querySelector(`[data-sort="${result.id}"]`);
 
         if (result.url) {
           if (localStorage.getItem('auto_generate_thumbnail') === 'true') {
@@ -631,7 +631,7 @@ const Bookmarks = (() => {
   function updateBookmark(id, title, url, move) {
     let hash = buildBookmarkHash(title, url);
     const bookmark = container.querySelector('[data-sort="' + id + '"]');
-    const editBtn = bookmark.querySelector('.bookmark__edit');
+    const editBtn = bookmark.querySelector('.bookmark__btn--edit');
     // Actually make sure the URL being modified is valid instead of always
     // prepending http:// to it creating new valid+invalid bookmark
     if (url.length !== 0 && !isValidUrl(url)) {

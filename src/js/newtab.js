@@ -94,16 +94,16 @@ const NewTab = (() => {
   }
 
   function controlsHandler(evt) {
-    if (evt.target.closest('.bookmark__del--bookmark')) {
+    if (evt.target.closest('.bookmark__btn--del-bookmark')) {
       evt.preventDefault();
       Bookmarks.removeBookmark(evt);
-    } else if (evt.target.closest('.bookmark__del--folder')) {
+    } else if (evt.target.closest('.bookmark__btn--del-folder')) {
       evt.preventDefault();
       Bookmarks.removeFolder(evt);
-    } else if (evt.target.closest('.bookmark__edit')) {
+    } else if (evt.target.closest('.bookmark__btn--edit')) {
       evt.preventDefault();
-      modalApi.show(evt.target.closest('.bookmark__edit'));
-    } else if (evt.target.closest('.bookmark__screen')) {
+      modalApi.show(evt.target.closest('.bookmark__btn--edit'));
+    } else if (evt.target.closest('.bookmark__btn--screen')) {
       evt.preventDefault();
       const bookmark = evt.target.closest('.bookmark');
       const idBookmark = bookmark.getAttribute('data-sort');
@@ -147,7 +147,7 @@ const NewTab = (() => {
       bookmark.querySelector('.bookmark__img').style.backgroundImage = '';
       bookmark.querySelector('.bookmark__img').classList.remove('bookmark__img--contain');
       bookmark.querySelector('.bookmark__img').classList.add('bookmark__img--folder');
-      bookmark.querySelector('.bookmark__edit').removeAttribute('data-screen');
+      bookmark.querySelector('.bookmark__btn--edit').removeAttribute('data-screen');
 
       target.closest('#customScreen').style.display = '';
       Helpers.notifications(chrome.i18n.getMessage('notice_image_removed'));
@@ -190,7 +190,7 @@ const NewTab = (() => {
 
         setTimeout(() => {
           titleField.focus();
-        }, 150);
+        }, 250);
 
         modalHead.textContent = chrome.i18n.getMessage('add_bookmark');
         urlWrap.style.display = '';
