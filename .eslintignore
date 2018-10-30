@@ -1,2 +1,2 @@
 extension/*
-src/*.html
+*.config.js
