@@ -34,11 +34,11 @@
             </div>
           </div>
           <div class="header__items header__items--select">
-            <select name="" id="selectFolder" class="form-control"></select>
+            <select name="folder" id="selectFolder" class="form-control"></select>
           </div>
         </div>
       </header>
-      <section class="content" id="content">
+      <div class="content" id="content">
         <div class="grid" id="bookmarks">
           <div class="dial-loading">
             <svg class="loading" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -52,7 +52,7 @@
             </div>
           </div>-->
         </div>
-      </section>
+      </div>
     </div>
   </main>
   <div class="bg" id="bg"></div>
@@ -60,7 +60,7 @@
     <div class="modal__dialog">
       <form class="modal__form" id="formBookmark">
         <div class="modal__header">
-          <h4 class="modal__title" id="modalHead"></h4>
+          <div class="modal__title" id="modalHead"></div>
           <button type="button" class="modal__close md-ripple js-close-modal" data-ripple-center>
             <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24" fill="#000">
               <path d="M18.984 6.422l-5.578 5.578 5.578 5.578-1.406 1.406-5.578-5.578-5.578 5.578-1.406-1.406 5.578-5.578-5.578-5.578 1.406-1.406 5.578 5.578 5.578-5.578z"></path>
@@ -81,13 +81,13 @@
               <span class="modal__tip" id="createTip" data-locale-message="url_field_tip">Enter URL or leave it blank if you want to create the folder</span>
             </div>
             <div class="group modal__select" id="selFolder">
-              <label class="label" for="folder" data-locale-message="label_folder" data-locale-message="label_folder"></label>
+              <label class="label" for="folderList" data-locale-message="label_folder"></label>
               <select class="form-control" name="folder" id="folderList"></select>
             </div>
           </div>
           <div class="modal__custom-image" id="customScreen">
             <div class="modal__custom-wrap">
-              <img alt="">
+              <img alt="" src="">
               <div class="modal__custom-reset">
                 <button type="button" class="md-ripple" id="resetCustomImage" data-ripple-center data-ripple-color="rgba(255,255,255,.55)"></button>
               </div>
