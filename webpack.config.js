@@ -1,8 +1,9 @@
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -24,51 +25,29 @@ module.exports = {
         exclude: [/node_modules/],
         use: [{
           loader: 'babel-loader',
-          options: { presets: ['env'] }
+          options: { presets: ['@babel/env'] }
         }]
       },
-      // {
-      //   test: /\.(png|jpe?g|svg)/i,
-      //   use: [{
-      //     loader: 'file-loader',
-      //     options: {
-      //       name: 'img/[name].[ext]',
-      //       publicPath: '/'
-      //     }
-      //   }]
-      // },
       {
         test: /\.css$/,
         exclude: [/node_modules/],
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [
-            {
-              loader: 'css-loader',
-              options: {
-                minimize: true
-              }
-            },
-            {
-              loader: 'postcss-loader',
-              options: {
-                plugins: function() {
-                  return [
-                    require('postcss-cssnext')({
-                      features: {
-                        filter: false,
-                        customProperties: false
-                      },
-                      browsers: ['last 30 Chrome versions']
-                    })
-                  ];
-                }
-              }
-            }
-          ],
-          publicPath: 'extension'
-        })
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'postcss-loader',
+        ]
       }
+    ]
+  },
+  optimization: {
+    minimizer: [
+      new UglifyJsPlugin({
+        uglifyOptions: {
+          output: {
+            comments: false
+          }
+        }
+      })
     ]
   },
   plugins: [
@@ -76,8 +55,9 @@ module.exports = {
     new CopyWebpackPlugin([
       { from: 'static' }
     ]),
-    new webpack.optimize.UglifyJsPlugin({}),
-    new ExtractTextPlugin('./css/bookmark.css'),
+    new MiniCssExtractPlugin({
+      filename: 'css/bookmark.css'
+    }),
     new HtmlWebpackPlugin({
       template: './src/newtab.html',
       filename: 'newtab.html',

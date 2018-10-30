@@ -3,37 +3,42 @@
   "version": "1.0.0",
   "description": "Visual bookmarks",
   "scripts": {
-    "eslint": "eslint src/js/**",
-    "stylelint": "stylelint src/css/**;  exit 0",
-    "watch": "webpack -w --hide-modules",
-    "build": "webpack -p --hide-modules"
+    "lint:es": "eslint src/js/**",
+    "lint:css": "stylelint src/css/**;  exit 0",
+    "lint:html": "htmlhint src/*.html; exit 0",
+    "lint": "npm run lint:es && npm run lint:css && npm run lint:html",
+    "start": "webpack --mode production --watch --hide-modules",
+    "build": "webpack --mode production --hide-modules"
   },
   "repository": {
     "type": "git",
     "url": "git@github.com:k-ivan/visual-bookmarks-chrome.git"
   },
+  "browserslist": [
+    "last 15 Chrome versions"
+  ],
   "author": "ivan_k",
   "license": "ISC",
   "homepage": "https://github.com/k-ivan/visual-bookmarks-chrome#readme",
   "devDependencies": {
-    "autoprefixer": "^7.2.6",
-    "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.4",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
+    "@babel/core": "^7.1.2",
+    "@babel/plugin-transform-object-assign": "^7.0.0",
+    "@babel/preset-env": "^7.1.0",
+    "autoprefixer": "^9.3.1",
+    "babel-loader": "^8.0.4",
     "clean-webpack-plugin": "^0.1.19",
     "copy-webpack-plugin": "^4.5.4",
-    "css-loader": "^0.28.11",
-    "eslint": "^4.19.1",
-    "extract-text-webpack-plugin": "^3.0.2",
-    "file-loader": "^1.1.11",
-    "html-webpack-plugin": "^2.30.1",
-    "postcss-cssnext": "^3.1.0",
-    "postcss-loader": "^2.1.4",
-    "style-loader": "^0.19.1",
-    "stylelint": "^9.6.0",
+    "css-loader": "^1.0.1",
+    "eslint": "^5.8.0",
+    "html-webpack-plugin": "^3.2.0",
+    "htmlhint": "^0.10.1",
+    "mini-css-extract-plugin": "^0.4.4",
+    "postcss-csso": "^3.0.0",
+    "postcss-loader": "^3.0.0",
+    "stylelint": "^9.7.0",
     "stylelint-config-standard": "^18.2.0",
-    "webpack": "^3.11.0"
+    "webpack": "^4.23.1",
+    "webpack-cli": "^3.1.2"
   },
   "dependencies": {
     "sortablejs": "^1.7.0",
