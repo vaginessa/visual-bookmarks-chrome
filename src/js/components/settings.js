@@ -1,7 +1,7 @@
 const Settings = (() => {
 
   let default_values = {
-    dark_theme: 'true',
+    dark_theme: 'false',
     background_image: 'background_noimage',
     background_external: '',
     default_folder_id: 1,
