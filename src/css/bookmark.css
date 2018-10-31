@@ -11,6 +11,7 @@
   --color-primary-dark: hsl(217, 69%, 50%);
   --color-muted: hsl(0, 0%, 66%);
   --color-warning: #dd4b39;
+  --filter-invert-image: none;
 
   /* Base */
   --font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -31,7 +32,7 @@
   --bookmark-caption-after-transparent: rgba(255, 255, 255, 0);
   --bookmark-caption-color: #333;
   --bookmark-outline-color: hsla(217, 89%, 61%, 0.2);
-  --bookmark-image-fill: none;
+  --bookmark-image-fill: var(--filter-invert-image);
 
   /* Options */
   --df-width: 600px;
@@ -83,6 +84,7 @@
   /* Modal */
   --modal-header-border-color: #ddd;
   --modal-close-fill: #000;
+  --modal-custom-image-filter: invert(1);
 
   /* options */
   --options-bg: #f8f9fa;
@@ -94,7 +96,7 @@
   /* not found */
   --notfound-bg: hsla(0, 0%, 100%, 0.75);
   --notfound-color: var(--theme-text-color);
-  --notfound-icon-filter: none;
+  --notfound-icon-filter: var(--filter-invert-image);
 }
 
 .dark {
@@ -102,6 +104,9 @@
   --theme-bg-200: hsl(0, 0%, 19%);
   --theme-bg-300: hsl(0, 0%, 25%);
   --theme-text-color: #fff;
+
+  /* Colors */
+  --filter-invert-image: invert(1);
 
   /* Scrollbar dark theme */
   --scrollbar-color: hsla(0, 0%, 28%, 1);
@@ -113,7 +118,7 @@
   --bookmark-caption-bg: rgba(48, 48, 48, 0.95);
   --bookmark-caption-after-transparent: rgba(48, 48, 48, 0);
   --bookmark-caption-color: rgba(255, 255, 255, 0.8);
-  --bookmark-image-fill: invert(1);
+  --bookmark-image-fill: var(--filter-invert-image);
 
   /* Forms  dark theme */
   --header-input-color-controls: #fff;
@@ -135,11 +140,13 @@
   /* Modal dark theme */
   --modal-header-border-color: rgb(220, 220, 220, 0.1);
   --modal-close-fill: #fff;
+  --modal-custom-image-bg: var(--theme-bg-200);
+  --modal-custom-image-filter: none;
 
   /* notfound dark theme */
   --notfound-bg: hsla(0, 0%, 13%, 0.95);
   --notfound-color: var(--theme-text-color);
-  --notfound-icon-filter: invert(1);
+  --notfound-icon-filter: var(--filter-invert-image);
 }
 
 /* Base */
@@ -1304,6 +1311,10 @@ select {
   z-index: 5500;
 }
 
+.modal.show {
+  display: block;
+}
+
 .modal-overlay {
   /* stock for scrollbar width */
   right: -20px;
@@ -1311,8 +1322,13 @@ select {
   opacity: 0;
   visibility: hidden;
   transition-property: opacity, visibility;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-timing-function: ease;
   transition-duration: 0.25s;
+}
+
+.modal-overlay.fade {
+  opacity: 1;
+  visibility: visible;
 }
 
 .modal__dialog {
@@ -1329,14 +1345,18 @@ select {
   margin: 0 auto;
   background-color: var(--theme-bg-300);
   border-radius: var(--base-radius);
-  box-shadow: 1px 3px 15px 1px rgba(0, 0, 0, 0.15);
   opacity: 0;
-  transform-origin: bottom;
   will-change: transform, opacity;
-  transform: scale(0.98) translateY(15px);
+  transform: scale(0.9);
   transition-property: opacity, transform;
   transition-duration: 150ms;
   transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
+}
+
+.modal.fade .modal__form {
+  opacity: 1;
+  transform: scale(1);
+  transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
 }
 
 .modal__header {
@@ -1431,8 +1451,9 @@ select {
   display: block;
   padding: 10px;
   margin-bottom: 15px;
-  background-color: #313131;
-  box-shadow: 1px 3px 10px rgba(0, 0, 0, 0.3);
+  background-color: var(--modal-custom-image-bg);
+  border-radius: var(--base-radius);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
 }
 
 .modal__custom-wrap img {
@@ -1445,11 +1466,12 @@ select {
   position: absolute;
   top: 7px;
   right: 7px;
-  opacity: 0.5;
+  opacity: 0.3;
   transition: opacity 0.3s ease;
 }
 
 .modal__custom-reset > button {
+  display: block;
   width: 30px;
   height: 30px;
   padding: 0;
@@ -1462,29 +1484,15 @@ select {
   background-position: 50%;
   cursor: pointer;
   outline: 0;
+  filter: var(--modal-custom-image-filter);
 }
 
 .modal__custom-wrap:hover .modal__custom-reset {
-  opacity: 1;
+  opacity: 0.5;
 }
 
 .modal__footer button + button {
   margin-left: 10px;
-}
-
-.modal-overlay.fade {
-  opacity: 1;
-  visibility: visible;
-}
-
-.modal.show {
-  display: block;
-}
-
-.modal.fade .modal__form {
-  opacity: 1;
-  transform: scale(1) translateY(0);
-  transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
 }
 
 /* Ripple */
