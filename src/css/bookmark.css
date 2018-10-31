@@ -352,7 +352,6 @@ p {
 .header .form-control {
   transition-property: color, border-color, background-color;
   transition-duration: 0.25s;
-  border-radius: 2rem;
 }
 
 /* Bookmark */
