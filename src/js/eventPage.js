@@ -43,7 +43,7 @@ function captureScreen(link, callback) {
       chrome.windows.remove(w.id);
       callback({ error: 'long_load', url: tab.url });
       stop = true;
-    }, 15000);
+    }, 25000);
 
     chrome.windows.update(w.id, {
       width: 1170,
