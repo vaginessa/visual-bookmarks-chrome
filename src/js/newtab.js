@@ -1,8 +1,5 @@
 import '../css/bookmark.css';
 
-// import Ripple from '@k-ivan/md-ripple';
-
-import './components/polyfill';
 import Helpers from './components/helpers';
 import Settings from './components/settings';
 import Bookmarks from './components/bookmarks';

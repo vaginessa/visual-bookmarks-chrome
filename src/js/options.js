@@ -1,12 +1,10 @@
 import '../css/bookmark.css';
 
 import TabsSlider from 'tabs-slider';
-import './components/polyfill';
 import FS from './components/fs';
 import Settings from './components/settings';
 import UI from './components/ui';
 import Localization from './components/localization';
-// import Ripple from '@k-ivan/md-ripple';
 import Ripple from './components/ripple';
 import Helpers from './components/helpers';
 
