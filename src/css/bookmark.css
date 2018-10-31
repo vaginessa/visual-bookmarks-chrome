@@ -1346,7 +1346,7 @@ select {
   border-radius: var(--base-radius);
   opacity: 0;
   will-change: transform, opacity;
-  transform: scale(0.9);
+  transform: scale(0.95);
   transition-property: opacity, transform;
   transition-duration: 150ms;
   transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
