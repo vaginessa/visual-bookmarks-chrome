@@ -13,6 +13,7 @@ const Settings = (() => {
     enable_sync: 'false',
     show_toolbar: 'true',
     low_transparency: 'false',
+    show_contextmenu_item: 'true',
     show_settings_icon: 'true',
     show_create_column: 'true',
     show_favicon: 'true',

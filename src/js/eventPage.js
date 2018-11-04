@@ -1,8 +1,10 @@
-// import Settings from './components/settings';
+/* eslint-disable no-console */
+import Settings from './components/settings';
 import FS from './components/fs';
 import Helpers from './components/helpers';
 
 FS.init(500);
+Settings.init();
 
 function captureScreen(link, callback) {
   let windowParam = {
@@ -129,14 +131,53 @@ function handlerCreateBookmark(data) {
   });
 }
 
+// experiments with the context menu as an option with the persistent option false
+const ContextMenu = {
+  init() {
+    const isShow = localStorage.getItem('show_contextmenu_item') === 'true';
+    if (!isShow) return;
+
+    chrome.contextMenus.removeAll(() => {
+      if (chrome.runtime.lastError) {
+        console.warn(chrome.runtime.lastError);
+      }
+      this.create();
+    });
+  },
+  create() {
+    const props = {
+      id: 'create-bookmarks',
+      title: chrome.i18n.getMessage('add_bookmark'),
+      contexts: ['page']
+    };
+
+    chrome.contextMenus.create(props, () => {
+      if (chrome.runtime.lastError) {
+        console.warn(chrome.runtime.lastError);
+      }
+    });
+  },
+  toggle() {
+    const isShow = localStorage.getItem('show_contextmenu_item') === 'true';
+
+    if (isShow) {
+      this.create();
+    } else {
+      chrome.contextMenus.removeAll(() => {
+        if (chrome.runtime.lastError) return;
+      });
+    }
+  }
+};
+
 // In future
 chrome.runtime.onInstalled.addListener(function() {
-  // if (callback.reason === 'update' && callback.previousVersion === 'x.x.x') {}
-  chrome.contextMenus.create({
-    id: 'create-bookmarks',
-    title: chrome.i18n.getMessage('add_bookmark'),
-    contexts: ['page']
-  });
+  // if (callback.reason === 'update') {}
+  ContextMenu.init();
+});
+
+chrome.runtime.onStartup.addListener(() => {
+  ContextMenu.init();
 });
 
 chrome.contextMenus.onClicked.addListener(function(data) {
@@ -191,7 +232,11 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     // send a response asynchronously (return true)
     // this will keep the message channel open to the other end until sendResponse is called
     return true;
+  }
 
+  // Toggle contextmenu item
+  if (request.showContextMenuItem) {
+    ContextMenu.toggle();
   }
 });
 

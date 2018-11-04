@@ -188,6 +188,9 @@
   "show_favicon": {
     "message": "Показывать иконки сайтов рядом с названием"
   },
+  "show_contextmenu_item": {
+    "message": "Показывать в контекстном меню"
+  },
   "drag_and_drop": {
     "message": "Включить перетаскивание"
   },

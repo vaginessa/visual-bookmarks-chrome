@@ -188,6 +188,9 @@
   "show_favicon": {
     "message": "Show the Favicon next to the title"
   },
+  "show_contextmenu_item": {
+    "message": "Show in context menu"
+  },
   "drag_and_drop": {
     "message": "Enable Drag & Drop"
   },

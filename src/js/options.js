@@ -94,6 +94,11 @@ const Options = (() => {
       UI.toggleTheme();
     }
 
+    if (target.id === 'show_contextmenu_item') {
+      const state = target.checked.toString();
+      chrome.runtime.sendMessage({ showContextMenuItem: state });
+    }
+
     if (localStorage.getItem('enable_sync') === 'true' && id !== 'enable_sync') {
       Settings.syncToStorage();
     }
