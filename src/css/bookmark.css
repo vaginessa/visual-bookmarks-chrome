@@ -1049,6 +1049,10 @@ select {
   box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.6), 0 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+.switch__input:active:checked + .switch__label::after {
+  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.6), 0 0 0 10px rgba(33, 150, 243, 0.3);
+}
+
 .switch__input:checked + .switch__label::before {
   background-color: var(--switch-active-bar);
 }
