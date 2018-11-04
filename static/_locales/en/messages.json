@@ -62,12 +62,6 @@
   "confirm_sync_remote_settings": {
     "message": "You have previously synchronized data!!\nDo you want to overwrite your current local settings with your previously saved remote settings?"
   },
-  "notice_online": {
-    "message": "✔ You are online 😃😃😃"
-  },
-  "notice_offline": {
-    "message": "😢😢😢 You are offline. The extension can work with errors"
-  },
   "notice_image_removed": {
     "message": "This image has been removed"
   },
