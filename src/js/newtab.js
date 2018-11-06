@@ -5,6 +5,7 @@ import Settings from './components/settings';
 import Bookmarks from './components/bookmarks';
 import Localization from './components/localization';
 import UI from './components/ui';
+import ContextMenu from './components/contextmenu';
 import Modal from './components/modal';
 import Ripple from './components/ripple';
 
@@ -19,14 +20,26 @@ const NewTab = (() => {
     urlField      = document.getElementById('url'),
     urlWrap       = document.getElementById('urlWrap'),
     modalDesc     = document.getElementById('desc'),
-    customScreen  = document.getElementById('customScreen');
+    customScreen  = document.getElementById('customScreen'),
+    ctxMenuEl     = document.getElementById('context-menu'),
+    upload        = document.getElementById('upload'),
+    ctxActionCapture = ctxMenuEl.querySelector('[data-action="capture"]'),
+    ctxHiddenItems = [...document.querySelectorAll('.folder-hidden')];
   let modalApi;
+  let ctxMenu;
 
   function init() {
     modalApi = new Modal(modal);
+    ctxMenu = new ContextMenu(ctxMenuEl, {
+      delegateSelector: '.bookmark'
+    });
 
-    container.addEventListener('change', uploadScreen);
-    container.addEventListener('click', controlsHandler);
+    upload.addEventListener('change', uploadScreen);
+    container.addEventListener('click', delegateClick);
+
+    ctxMenuEl.addEventListener('contextMenuSelection', controlsHandler);
+    ctxMenuEl.addEventListener('contextMenuOpen', ctxMenuOpen);
+
     document.getElementById('formBookmark').addEventListener('submit', submitForm);
     document.getElementById('resetCustomImage').addEventListener('click', resetThumb);
 
@@ -80,35 +93,102 @@ const NewTab = (() => {
   }
 
   function uploadScreen(evt) {
-    if (!evt.target.closest('.c-upload__input')) return;
-
     evt.preventDefault();
 
-    let data = JSON.parse(evt.target.getAttribute('data-id'));
-    data.target = evt.target;
+    const el = evt.target;
+    const data = evt.target.dataset;
 
-    Bookmarks.uploadScreen(data);
+    Bookmarks.uploadScreen({
+      target: el,
+      id: data.id,
+      site: data.site
+    });
+  }
+
+  function ctxMenuOpen(evt) {
+    const bookmark = evt.detail.trigger;
+    const props = JSON.parse(bookmark.dataset.props);
+
+    if (props.isFolder) {
+      ctxActionCapture.classList.add('is-disabled');
+      ctxHiddenItems.forEach(item => {
+        item.style.display = 'none';
+        item.classList.add('is-disabled');
+      });
+    } else {
+      ctxActionCapture.classList.remove('is-disabled');
+      ctxHiddenItems.forEach(item => {
+        item.style.display = '';
+        item.classList.remove('is-disabled');
+      });
+    }
+
   }
 
   function controlsHandler(evt) {
-    if (evt.target.closest('.bookmark__btn--del-bookmark')) {
-      evt.preventDefault();
-      Bookmarks.removeBookmark(evt);
-    } else if (evt.target.closest('.bookmark__btn--del-folder')) {
-      evt.preventDefault();
-      Bookmarks.removeFolder(evt);
-    } else if (evt.target.closest('.bookmark__btn--edit')) {
-      evt.preventDefault();
-      modalApi.show(evt.target.closest('.bookmark__btn--edit'));
-    } else if (evt.target.closest('.bookmark__btn--screen')) {
-      evt.preventDefault();
-      const bookmark = evt.target.closest('.bookmark');
-      const idBookmark = bookmark.getAttribute('data-sort');
-      const captureUrl = bookmark.querySelector('.bookmark__link').href;
+    const target = evt.detail.trigger;
+    const action = evt.detail.selection;
+    const props = JSON.parse(target.dataset.props);
 
-      Bookmarks.createScreen(bookmark, idBookmark, captureUrl);
-    } else if (evt.target.closest('#add')) {
-      modalApi.show(evt.target);
+    switch (action) {
+      case 'new_window':
+      case 'new_window_incognito':
+        openWindow(props, action);
+        break;
+      case 'new_tab':
+        openTab(props);
+        break;
+      case 'edit':
+        modalApi.show(target);
+        break;
+      case 'capture': {
+        const idBookmark = target.getAttribute('data-sort');
+        const captureUrl = target.querySelector('.bookmark__link').href;
+        Bookmarks.createScreen(target, idBookmark, captureUrl);
+        break;
+      }
+      case 'upload': {
+        upload.dataset.id = props.id;
+        upload.dataset.site = (!props.isFolder) ? Helpers.getDomain(props.url) : '';
+        upload.click();
+        break;
+      }
+      case 'remove': {
+        (props.isFolder)
+          ? Bookmarks.removeFolder(target)
+          : Bookmarks.removeBookmark(target);
+        break;
+      }
+    }
+  }
+
+  function openWindow(props, action) {
+    try {
+      chrome.windows.create({
+        url: props.url,
+        state: 'maximized',
+        incognito: (action === 'new_window_incognito') ? true : false
+      });
+    } catch (e) {}
+  }
+
+  function openTab(props) {
+    try {
+      chrome.tabs.create({
+        url: props.url,
+        active: false
+      });
+    } catch (e) {}
+  }
+
+  function delegateClick(evt) {
+    if (evt.target.closest('#add')) {
+      evt.preventDefault();
+      modalApi.show(evt.target.closest('#add'));
+    } else if (evt.target.closest('.bookmark__action')) {
+      evt.preventDefault();
+      evt.stopPropagation();
+      ctxMenu.handlerTrigger(evt);
     }
   }
 
@@ -137,14 +217,18 @@ const NewTab = (() => {
     if (!confirm(chrome.i18n.getMessage('confirm_delete_image'))) return;
 
     const target = evt.target;
-    // const data = JSON.parse(target.getAttribute('data-bookmark'));
     const id = target.getAttribute('data-bookmark');
+
     Bookmarks.rmCustomScreen(id, function() {
       const bookmark = container.querySelector('[data-sort="' + id + '"]');
-      bookmark.querySelector('.bookmark__img').style.backgroundImage = '';
-      bookmark.querySelector('.bookmark__img').classList.remove('bookmark__img--contain');
-      bookmark.querySelector('.bookmark__img').classList.add('bookmark__img--folder');
-      bookmark.querySelector('.bookmark__btn--edit').removeAttribute('data-screen');
+      const bookmarkImg = bookmark.querySelector('.bookmark__img');
+      bookmarkImg.style.backgroundImage = '';
+      bookmarkImg.classList.remove('bookmark__img--contain');
+      bookmarkImg.classList.add('bookmark__img--folder');
+
+      const props = JSON.parse(bookmark.dataset.props);
+      props.screen = '';
+      bookmark.dataset.props = JSON.stringify(props);
 
       target.closest('#customScreen').style.display = '';
       Helpers.notifications(chrome.i18n.getMessage('notice_image_removed'));
@@ -153,21 +237,21 @@ const NewTab = (() => {
 
   function show(e) {
     if (e.detail.target) {
-
       const target = e.detail.target;
-      const action = target.dataset.id || 'New';
+      const newAction = target.dataset.create;
 
-      if (action !== 'New') {
+      if (!newAction) {
+        const props = JSON.parse(target.dataset.props);
         modal.classList.add('modal--edit');
 
-        const title = Helpers.escapeHtml(target.dataset.title);
-        const url = target.dataset.url;
-        const screen = target.dataset.screen;
+        const title = Helpers.escapeHtml(props.title);
+        const url = props.url;
+        const screen = props.screen;
 
         if (screen && !url) {
           customScreen.style.display = 'block';
           customScreen.querySelector('img').src = `${screen}?refresh=${Date.now()}`;
-          customScreen.querySelector('#resetCustomImage').setAttribute('data-bookmark', action);
+          customScreen.querySelector('#resetCustomImage').setAttribute('data-bookmark', props.id);
         }
 
         modalHead.textContent = chrome.i18n.getMessage('edit_bookmark');
@@ -182,6 +266,7 @@ const NewTab = (() => {
         }
 
         titleField.addEventListener('input', changeTitle);
+        form.setAttribute('data-action', props.id);
       } else {
         modal.classList.add('modal--add');
 
@@ -193,8 +278,8 @@ const NewTab = (() => {
         urlWrap.style.display = '';
         titleField.value = '';
         urlField.value = '';
+        form.setAttribute('data-action', newAction);
       }
-      form.setAttribute('data-action', action);
     }
   }
   function hide() {

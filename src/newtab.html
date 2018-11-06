@@ -9,9 +9,10 @@
 </head>
 
 <body>
-  <div class="icon-cog" id="settings_icon">
-    <a class="icon-cog__link" href="options.html"></a>
-  </div>
+  <!-- <div class="icon-cog" id="settings_icon">
+
+  </div> -->
+  <a class="settings-link" href="options.html" id="settings_icon"></a>
   <main id="main">
     <div class="container">
       <header class="header" id="header">
@@ -41,16 +42,10 @@
       <div class="content" id="content">
         <div class="grid" id="bookmarks">
           <div class="dial-loading">
-            <svg class="loading" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <svg class="loading" viewBox="0 0 100 100">
               <circle class="path" fill="none" stroke-width="8" stroke-linecap="round" cx="50" cy="50" r="40"></circle>
             </svg>
           </div>
-          <!-- placeholder -->
-          <!-- <div class="column">
-            <div class="bookmark">
-              <div class="image-icon"></div>
-            </div>
-          </div>-->
         </div>
       </div>
     </div>
@@ -62,7 +57,7 @@
         <div class="modal__header">
           <div class="modal__title" id="modalHead"></div>
           <button type="button" class="modal__close md-ripple js-close-modal" data-ripple-center>
-            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24" fill="#000">
+            <svg version="1.1" width="24" height="24" viewBox="0 0 24 24" fill="#000">
               <path d="M18.984 6.422l-5.578 5.578 5.578 5.578-1.406 1.406-5.578-5.578-5.578 5.578-1.406-1.406 5.578-5.578-5.578-5.578 1.406-1.406 5.578 5.578 5.578-5.578z"></path>
             </svg>
           </button>
@@ -86,12 +81,8 @@
             </div>
           </div>
           <div class="modal__custom-image" id="customScreen">
-            <div class="modal__custom-wrap">
-              <img alt="" src="">
-              <div class="modal__custom-reset">
-                <button type="button" class="md-ripple" id="resetCustomImage" data-ripple-center data-ripple-color="rgba(255,255,255,.55)"></button>
-              </div>
-            </div>
+            <img alt="" src="">
+            <button type="button" class="md-ripple modal__custom-reset" id="resetCustomImage" data-ripple-center data-ripple-color="rgba(255,255,255,.55)"></button>
           </div>
         </div>
         <div class="modal__footer text-right">
@@ -101,6 +92,81 @@
       </form>
     </div>
   </div>
+
+  <!-- begin context-menu -->
+  <div class="context-menu" id="context-menu">
+    <ul class="context-menu__list">
+      <li class="context-menu__item">
+        <a href="" class="context-menu__link folder-hidden" data-action="new_tab">
+          <span class="context-menu__icon"></span>
+          <span data-locale-message="contextmenu_tab">Открыть в новой вкладке</span>
+        </a>
+      </li>
+      <li class="context-menu__item">
+        <a href="" class="context-menu__link folder-hidden" data-action="new_window">
+          <span class="context-menu__icon"></span>
+          <span data-locale-message="contextmenu_window">Открыть в новом окне</span>
+        </a>
+      </li>
+      <li class="context-menu__item">
+        <a href="" class="context-menu__link folder-hidden" data-action="new_window_incognito">
+          <span class="context-menu__icon"></span>
+          <span data-locale-message="contextmenu_incognito">Открыть в инкогнито</span>
+        </a>
+      </li>
+      <li class="context-menu__item context-menu__item--divider folder-hidden"></li>
+      <li class="context-menu__item">
+        <a href="" class="context-menu__link" data-action="edit">
+          <span class="context-menu__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"/>
+              <polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon>
+            </svg>
+          </span>
+          <span data-locale-message="contextmenu_edit">Редактировать</span>
+        </a>
+      </li>
+      <li class="context-menu__item">
+        <a href="" class="context-menu__link" data-action="capture">
+          <span class="context-menu__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              ><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+              <circle cx="12" cy="13" r="4"></circle>
+            </svg>
+          </span>
+          <span data-locale-message="contextmenu_capture">Обновить миниатюру</span>
+        </a>
+      </li>
+      <li class="context-menu__item">
+        <a href="" class="context-menu__link" data-action="upload">
+          <span class="context-menu__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+          </span>
+          <span data-locale-message="contextmenu_upload">Загрузить с компьютера</span>
+        </a>
+      </li>
+      <li class="context-menu__item">
+        <a href="" class="context-menu__link" data-action="remove">
+          <span class="context-menu__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            </svg>
+          </span>
+          <span data-locale-message="contextmenu_remove">Удалить</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <!-- end context-menu -->
+
+  <!-- begin upload thumb input -->
+  <input type="file" name="upload" id="upload" data-id class="thumb-upload" accept=".jpg, .jpeg, .png">
+  <!-- end upload thumb input -->
 
 </body>
 

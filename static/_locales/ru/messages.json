@@ -41,6 +41,27 @@
   "btn_apply": {
     "message": "Применить"
   },
+  "contextmenu_tab": {
+    "message": "Открыть в новой вкладке"
+  },
+  "contextmenu_window": {
+    "message": "Открыть в новом окне"
+  },
+  "contextmenu_incognito": {
+    "message": "Открыть в режиме инкогнито"
+  },
+  "contextmenu_edit": {
+    "message": "Редактировать"
+  },
+  "contextmenu_capture": {
+    "message": "Обновить миниатюру"
+  },
+  "contextmenu_upload": {
+    "message": "Загрузить с компьютера"
+  },
+  "contextmenu_remove": {
+    "message": "Удалить"
+  },
   "confirm_delete_image": {
     "message": "Удалить изображение ?"
   },

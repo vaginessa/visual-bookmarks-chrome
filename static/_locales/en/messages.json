@@ -41,6 +41,27 @@
   "btn_apply": {
     "message": "Apply"
   },
+  "contextmenu_tab": {
+    "message": "Open in new tab"
+  },
+  "contextmenu_window": {
+    "message": "Open in new window"
+  },
+  "contextmenu_incognito": {
+    "message": "Open in incognito mode"
+  },
+  "contextmenu_edit": {
+    "message": "Edit"
+  },
+  "contextmenu_capture": {
+    "message": "Refresh thumb"
+  },
+  "contextmenu_upload": {
+    "message": "Upload from computer"
+  },
+  "contextmenu_remove": {
+    "message": "Remove"
+  },
   "confirm_delete_image": {
     "message": "Delete this image ?"
   },
