@@ -946,6 +946,10 @@ select {
   box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.6);
 }
 
+.switch__input:focus + .switch__label::after {
+  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.6), 0 0 0 10px rgba(33, 150, 243, 0.2);
+}
+
 .switch__input:active + .switch__label::after {
   box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.6), 0 0 0 10px rgba(0, 0, 0, 0.1);
 }
