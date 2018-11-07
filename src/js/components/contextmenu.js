@@ -190,6 +190,7 @@ class ContextMenu {
   }
 
   enter(e) {
+    if (!this.state) return;
     e.preventDefault();
     e.stopPropagation();
     this.select(this.items[this.currentIndex]);
