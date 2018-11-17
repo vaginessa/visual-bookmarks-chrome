@@ -50,6 +50,9 @@
   "contextmenu_incognito": {
     "message": "Open in incognito mode"
   },
+  "contextmenu_copy_link": {
+    "message": "Copy link address"
+  },
   "contextmenu_edit": {
     "message": "Edit"
   },

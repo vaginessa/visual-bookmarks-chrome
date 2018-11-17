@@ -141,6 +141,9 @@ const NewTab = (() => {
       case 'edit':
         modalApi.show(target);
         break;
+      case 'copy_link':
+        copyLink(props);
+        break;
       case 'capture': {
         const idBookmark = target.getAttribute('data-sort');
         const captureUrl = target.querySelector('.bookmark__link').href;
@@ -173,12 +176,18 @@ const NewTab = (() => {
   }
 
   function openTab(props) {
+    const url = getUrl(props);
     try {
       chrome.tabs.create({
-        url: props.url,
+        url: url,
         active: false
       });
     } catch (e) {}
+  }
+
+  function copyLink(props) {
+    const url = getUrl(props);
+    Helpers.copyStr(url);
   }
 
   function delegateClick(evt) {

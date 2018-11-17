@@ -163,6 +163,37 @@ export default {
     return url
       .replace(/(https?|ftps?|chrome|chrome-extension|file):\/\/\/?(www.)?/i, '')
       .replace(/:?\/.*/i, '');
-  }
+  },
 
+  // Copy String
+  copyStr(str) {
+    const el = document.createElement('textarea');
+    el.value = str;
+    el.setAttribute('readonly', '');
+    el.style.cssText = `
+      position: absolute;
+      left: -9999px;
+    `;
+
+    document.body.appendChild(el);
+
+    const selection = document.getSelection();
+    let originalRange = (selection.rangeCount > 0) ? selection.getRangeAt(0) : false;
+
+    el.select();
+
+    let success = false;
+    try {
+      success = document.execCommand('copy');
+    } catch (err) {}
+
+    document.body.removeChild(el);
+
+    if (originalRange) {
+      selection.removeAllRanges();
+      selection.addRange(originalRange);
+    }
+
+    return success;
+  }
 };

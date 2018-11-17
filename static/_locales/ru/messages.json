@@ -50,6 +50,9 @@
   "contextmenu_incognito": {
     "message": "Открыть в режиме инкогнито"
   },
+  "contextmenu_copy_link": {
+    "message": "Копировать адрес ссылки"
+  },
   "contextmenu_edit": {
     "message": "Редактировать"
   },
