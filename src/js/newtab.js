@@ -165,10 +165,18 @@ const NewTab = (() => {
     }
   }
 
+  function getUrl(props) {
+    if (props.isFolder) {
+      return chrome.runtime.getURL(`newtab.html#${props.id}`);
+    }
+    return props.url;
+  }
+
   function openWindow(props, action) {
+    const url = getUrl(props);
     try {
       chrome.windows.create({
-        url: props.url,
+        url: url,
         state: 'maximized',
         incognito: (action === 'new_window_incognito') ? true : false
       });

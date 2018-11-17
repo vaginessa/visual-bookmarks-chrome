@@ -1231,7 +1231,7 @@ select {
   display: flex;
   align-items: center;
   font-size: 0.9em;
-  padding: 7px 15px;
+  padding: 5px 15px;
   color: var(--context-menu-color);
   text-decoration: none;
   cursor: pointer;
