@@ -61,8 +61,8 @@
 
   /* Scrollbar */
   --scrollbar-width: 12px;
-  --scrollbar-color: hsla(0, 0%, 20%, 0.5);
-  --scrollbar-hover-color: hsla(0, 0%, 20%, 0.9);
+  --scrollbar-color: #666;
+  --scrollbar-hover-color: #999;
 
   /* Switch */
   --switch-width: 30px;
@@ -114,8 +114,8 @@
   --filter-invert-image: invert(1);
 
   /* Scrollbar dark theme */
-  --scrollbar-color: hsla(0, 0%, 28%, 1);
-  --scrollbar-hover-color: hsla(0, 0%, 28%, 1);
+  --scrollbar-color: #999;
+  --scrollbar-hover-color: #666;
 
   /* bookmark  dark theme */
   --bookmark-bg: hsla(0, 0%, 25%, 0.9);
@@ -190,14 +190,6 @@ input[type="text"]:focus::placeholder {
 ::-webkit-scrollbar-thumb:hover {
   background-color: var(--scrollbar-hover-color);
 }
-
-/* .modal-open::-webkit-scrollbar-thumb {
-  background-color: var(--light-scrollbar-color);
-}
-
-.modal-open::-webkit-scrollbar-thumb:hover {
-  background-color: var(--light-scrollbar-hover-color);
-} */
 
 body {
   margin: 0;
@@ -1263,75 +1255,123 @@ select {
 }
 
 /* Modal */
-.modal-overlay,
-.modal {
+body.modal-open {
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: auto;
+}
+
+.modal-backdrop {
   position: fixed;
-  top: 0;
   left: 0;
+  top: 0;
   right: 0;
   bottom: 0;
-  z-index: 5000;
+  z-index: 9998;
+  background: rgba(21, 21, 21, 0.75);
+}
+
+.modal-backdrop.has-animate {
+  transition: opacity 0.15s linear;
+  will-change: opacity;
+  opacity: 0;
+}
+
+.modal-backdrop.has-animate.is-show {
+  opacity: 1;
 }
 
 .modal {
-  position: absolute;
   display: none;
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
   outline: 0;
-  z-index: 5500;
 }
 
-.modal.show {
-  display: block;
+.modal-open .modal::-webkit-scrollbar-thumb {
+  background-color: #999;
 }
 
-.modal-overlay {
-  /* stock for scrollbar width */
-  right: -20px;
-  background: rgba(21, 21, 21, 0.75);
-  opacity: 0;
-  visibility: hidden;
-  transition-property: opacity, visibility;
-  transition-timing-function: ease;
-  transition-duration: 0.25s;
+.modal-open .modal::-webkit-scrollbar-thumb:hover {
+  background-color: #ccc;
 }
 
-.modal-overlay.fade {
-  opacity: 1;
-  visibility: visible;
-}
-
-.modal__dialog {
-  display: flex;
-  align-items: center;
-  min-height: calc(100vh - 80px);
-  margin-top: 30px;
-  margin-bottom: 50px;
-}
-
-.modal__form {
-  width: 100%;
-  max-width: 550px;
-  margin: 0 auto;
-  background-color: var(--theme-bg-300);
-  border-radius: var(--base-radius);
-  opacity: 0;
+.modal.has-animate .modal__dialog {
   will-change: transform, opacity;
+  opacity: 0;
   transform: scale(0.95);
   transition-property: opacity, transform;
   transition-duration: 150ms;
   transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
 }
 
-.modal.fade .modal__form {
+.modal.has-animate.is-show .modal__dialog {
   opacity: 1;
-  transform: scale(1);
+  transform: none;
   transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
 }
 
-.modal__header {
+@media (min-width: 480px) {
+  .modal__dialog {
+    position: relative;
+    max-width: 550px;
+    width: 100%;
+    margin: 30px auto;
+    min-height: auto;
+  }
+
+  .modal__dialog--lg {
+    max-width: 940px;
+  }
+
+  .modal__dialog.has-center {
+    display: flex;
+    align-items: center;
+    min-height: calc(100vh - 60px);
+  }
+
+  .modal__dialog.has-center::before {
+    content: "";
+    display: block;
+    height: calc(100vh - 60px);
+  }
+}
+
+.modal__content {
+  position: absolute;
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--theme-bg-300);
+  border-radius: var(--base-radius);
+}
+
+@media (min-width: 480px) {
+  .modal__content {
+    position: relative;
+    min-height: auto;
+    border-radius: 3px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  }
+}
+
+.modal__header,
+.modal__body,
+.modal__footer {
   position: relative;
   padding: 15px;
+}
+
+.modal__header {
   border-bottom: 1px solid var(--modal-header-border-color);
+}
+
+.modal__footer {
+  border-top: 1px solid var(--modal-header-border-color);
 }
 
 .modal__close {
@@ -1368,11 +1408,6 @@ select {
   font-weight: 500;
   font-size: 16px;
   letter-spacing: 0.03rem;
-}
-
-.modal__content,
-.modal__footer {
-  padding: 15px;
 }
 
 .modal__tip {

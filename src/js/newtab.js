@@ -1,12 +1,12 @@
 import '../css/bookmark.css';
 
+import Modal from 'glory-modal';
 import Helpers from './components/helpers';
 import Settings from './components/settings';
 import Bookmarks from './components/bookmarks';
 import Localization from './components/localization';
 import UI from './components/ui';
 import ContextMenu from './components/contextmenu';
-import Modal from './components/modal';
 import Ripple from './components/ripple';
 
 const NewTab = (() => {
@@ -29,7 +29,10 @@ const NewTab = (() => {
   let ctxMenu;
 
   function init() {
-    modalApi = new Modal(modal);
+    modalApi = new Modal(modal, {
+      stickySelectors: ['#bg'],
+      closeBackdrop: false
+    });
     ctxMenu = new ContextMenu(ctxMenuEl, {
       delegateSelector: '.bookmark'
     });
@@ -43,14 +46,7 @@ const NewTab = (() => {
     document.getElementById('formBookmark').addEventListener('submit', submitForm);
     document.getElementById('resetCustomImage').addEventListener('click', resetThumb);
 
-    modal.addEventListener('modal.show', show);
-    modal.addEventListener('modal.hide', hide);
-
-    Array.prototype.forEach.call(document.querySelectorAll('.js-close-modal'), el => {
-      el.addEventListener('click', function() {
-        modalApi.hide();
-      });
-    });
+    modal.addEventListener('modalClose', modalAfterClose);
 
     Bookmarks.generateFolderList(foldersList);
 
@@ -139,7 +135,8 @@ const NewTab = (() => {
         openTab(props);
         break;
       case 'edit':
-        modalApi.show(target);
+        modalBeforeOpen(props);
+        modalApi.open();
         break;
       case 'copy_link':
         copyLink(props);
@@ -201,7 +198,8 @@ const NewTab = (() => {
   function delegateClick(evt) {
     if (evt.target.closest('#add')) {
       evt.preventDefault();
-      modalApi.show(evt.target.closest('#add'));
+      modalBeforeOpen();
+      modalApi.open();
     } else if (evt.target.closest('.bookmark__action')) {
       evt.preventDefault();
       evt.stopPropagation();
@@ -218,11 +216,11 @@ const NewTab = (() => {
     if (id !== 'New') {
       const newLocation = foldersList.value;
       if (Bookmarks.updateBookmark(id, title, url, newLocation)) {
-        modalApi.hide();
+        modalApi.close();
       }
     } else {
       if (Bookmarks.createBookmark(title, url)) {
-        modalApi.hide();
+        modalApi.close();
       }
     }
 
@@ -252,54 +250,47 @@ const NewTab = (() => {
     });
   }
 
-  function show(e) {
-    if (e.detail.target) {
-      const target = e.detail.target;
-      const newAction = target.dataset.create;
+  function modalBeforeOpen(props) {
+    if (props) {
+      modal.classList.add('modal--edit');
+      const title = Helpers.escapeHtml(props.title);
+      const url = props.url;
+      const screen = props.screen;
 
-      if (!newAction) {
-        const props = JSON.parse(target.dataset.props);
-        modal.classList.add('modal--edit');
-
-        const title = Helpers.escapeHtml(props.title);
-        const url = props.url;
-        const screen = props.screen;
-
-        if (screen && !url) {
-          customScreen.style.display = 'block';
-          customScreen.querySelector('img').src = `${screen}?refresh=${Date.now()}`;
-          customScreen.querySelector('#resetCustomImage').setAttribute('data-bookmark', props.id);
-        }
-
-        modalHead.textContent = chrome.i18n.getMessage('edit_bookmark');
-        modalDesc.textContent = title;
-        titleField.value = title;
-
-        if (url) {
-          urlWrap.style.display = '';
-          urlField.value = url;
-        } else {
-          urlWrap.style.display = 'none';
-        }
-
-        titleField.addEventListener('input', changeTitle);
-        form.setAttribute('data-action', props.id);
-      } else {
-        modal.classList.add('modal--add');
-
-        setTimeout(() => {
-          titleField.focus();
-        }, 250);
-
-        modalHead.textContent = chrome.i18n.getMessage('add_bookmark');
-        urlWrap.style.display = '';
-        titleField.value = '';
-        urlField.value = '';
-        form.setAttribute('data-action', newAction);
+      if (screen && !url) {
+        customScreen.style.display = 'block';
+        customScreen.querySelector('img').src = `${screen}?refresh=${Date.now()}`;
+        customScreen.querySelector('#resetCustomImage').setAttribute('data-bookmark', props.id);
       }
+
+      modalHead.textContent = chrome.i18n.getMessage('edit_bookmark');
+      modalDesc.textContent = title;
+      titleField.value = title;
+
+      if (url) {
+        urlWrap.style.display = '';
+        urlField.value = url;
+      } else {
+        urlWrap.style.display = 'none';
+      }
+
+      titleField.addEventListener('input', changeTitle);
+      form.setAttribute('data-action', props.id);
+    } else {
+      modal.classList.add('modal--add');
+
+      setTimeout(() => {
+        titleField.focus();
+      }, 200);
+
+      modalHead.textContent = chrome.i18n.getMessage('add_bookmark');
+      urlWrap.style.display = '';
+      titleField.value = '';
+      urlField.value = '';
+      form.setAttribute('data-action', 'New');
     }
   }
-  function hide() {
+  function modalAfterClose() {
     modal.classList.remove('modal--edit', 'modal--add');
     titleField.removeEventListener('input', changeTitle);
     customScreen.style.display = '';
