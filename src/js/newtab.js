@@ -1,6 +1,6 @@
 import '../css/bookmark.css';
 
-import Modal from 'glory-modal';
+import Gmodal from 'glory-modal';
 import Helpers from './components/helpers';
 import Settings from './components/settings';
 import Bookmarks from './components/bookmarks';
@@ -29,7 +29,7 @@ const NewTab = (() => {
   let ctxMenu;
 
   function init() {
-    modalApi = new Modal(modal, {
+    modalApi = new Gmodal(modal, {
       stickySelectors: ['#bg'],
       closeBackdrop: false
     });
@@ -46,7 +46,7 @@ const NewTab = (() => {
     document.getElementById('formBookmark').addEventListener('submit', submitForm);
     document.getElementById('resetCustomImage').addEventListener('click', resetThumb);
 
-    modal.addEventListener('modalClose', modalAfterClose);
+    modal.addEventListener('gmodal:close', modalAfterClose);
 
     Bookmarks.generateFolderList(foldersList);
 
