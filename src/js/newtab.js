@@ -253,7 +253,7 @@ const NewTab = (() => {
   function modalBeforeOpen(props) {
     if (props) {
       modal.classList.add('modal--edit');
-      const title = Helpers.escapeHtml(props.title);
+      const title = Helpers.unescapeHtml(props.title);
       const url = props.url;
       const screen = props.screen;
 
