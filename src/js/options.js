@@ -18,8 +18,14 @@ Localization();
 
 Ripple.init('.md-ripple');
 
-let tabs = new TabsSlider('.tabs', {
-  draggable: false
+// Tabs
+const tabs = document.querySelector('.tabs');
+let tabsSlider = new TabsSlider(tabs, {
+  draggable: false,
+  slide: parseInt(localStorage['option_tab_slide']) || 0
+});
+tabs.addEventListener('tabChange', function(evt) {
+  localStorage['option_tab_slide'] = evt.detail.currentIndex;
 });
 
 const Options = (() => {
@@ -127,7 +133,7 @@ const Options = (() => {
         Helpers.notifications(
           chrome.i18n.getMessage('notice_bg_image_updated')
         );
-        tabs.recalcStyles();
+        tabsSlider.recalcStyles();
       });
     });
 
@@ -155,7 +161,7 @@ const Options = (() => {
       localStorage.removeItem('background_local');
       preview.innerHTML = '';
       previewParent.style.display = 'none';
-      tabs.recalcStyles();
+      tabsSlider.recalcStyles();
     });
   }
 
@@ -180,7 +186,7 @@ const Options = (() => {
 
     // localStorage.setItem('background_image', this.value);
     document.getElementById(this.value).style.display = 'block';
-    tabs.recalcStyles();
+    tabsSlider.recalcStyles();
   }
 
   function deleteImages(evt) {
