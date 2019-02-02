@@ -284,19 +284,14 @@ const Bookmarks = (() => {
       }
     });
 
-    container.innerHTML =
-        `${arr.join('')}
-        ${isCreate
-    ?
-    `
-        <div class="bookmark--create bookmark--nosort md-ripple">
-          <div class="bookmark__img--add"></div>
-          <a class="bookmark__link--create" id="add" data-create="New"></a>
-        </div>
-      `
-    : ''
-  }
-      `;
+    isCreate && arr.push(`
+      <div class="bookmark--create bookmark--nosort md-ripple">
+        <div class="bookmark__img--add"></div>
+        <a class="bookmark__link--create" id="add" data-create="New"></a>
+      </div>
+    `);
+
+    container.innerHTML = arr.join('');
 
     // loaded external images
     const thumbs = container.querySelectorAll('.bookmark__img--external');
