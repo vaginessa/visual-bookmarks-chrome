@@ -1424,7 +1424,7 @@ body.gmodal-open {
   }
 }
 
-.gmodal--add .gmodal__tip {
+.gmodal.has-add .gmodal__tip {
   display: block;
 }
 
@@ -1432,7 +1432,7 @@ body.gmodal-open {
   display: none;
 }
 
-.gmodal--edit .gmodal__select {
+.gmodal.has-edit .gmodal__select {
   display: block;
 }
 

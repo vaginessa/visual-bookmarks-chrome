@@ -252,7 +252,7 @@ const NewTab = (() => {
 
   function modalBeforeOpen(props) {
     if (props) {
-      modal.classList.add('modal--edit');
+      modal.classList.add('has-edit');
       const title = Helpers.unescapeHtml(props.title);
       const url = props.url;
       const screen = props.screen;
@@ -277,7 +277,7 @@ const NewTab = (() => {
       titleField.addEventListener('input', changeTitle);
       form.setAttribute('data-action', props.id);
     } else {
-      modal.classList.add('modal--add');
+      modal.classList.add('has-add');
 
       setTimeout(() => {
         titleField.focus();
@@ -291,7 +291,7 @@ const NewTab = (() => {
     }
   }
   function modalAfterClose() {
-    modal.classList.remove('modal--edit', 'modal--add');
+    modal.classList.remove('has-edit', 'has-add');
     titleField.removeEventListener('input', changeTitle);
     customScreen.style.display = '';
     modalDesc.textContent = '';
