@@ -207,7 +207,7 @@ const Bookmarks = (() => {
       `
         <div class="bookmark"
           data-sort="%id%"
-          data-props='{"isFolder":false,"title":"%title%","url":"%url%","id":"%id%","screen":"%screen%"}'>
+          data-props='{"isFolder":false,"title":"%escape_title%","url":"%url%","id":"%id%","screen":"%screen%"}'>
           <div class="bookmark__wrap">
             <button class="bookmark__action"></button>
             ${thumbContainer}
@@ -228,6 +228,7 @@ const Bookmarks = (() => {
       // localStorage.getItem('thumbnailing_service').replace('[URL]', encodeURIComponent(bookmark.url)),
       // eslint-disable-next-line max-len
       thumbnailing_service: localStorage.getItem('thumbnailing_service').replace('[URL]', Helpers.getDomain(bookmark.url)),
+      escape_title: Helpers.escapeHtmlToText(bookmark.title),
       title: Helpers.escapeHtml(bookmark.title)
     });
   }
@@ -246,7 +247,7 @@ const Bookmarks = (() => {
       `
         <div class="bookmark"
           data-sort="%id%"
-          data-props='{"isFolder":true,"title":"%title%","id":"%id%","screen":"%screen%"}'>
+          data-props='{"isFolder":true,"title":"%escape_title%","id":"%id%","screen":"%screen%"}'>
           <div class="bookmark__wrap">
             <button class="bookmark__action"></button>
             ${imgLayout}
@@ -261,6 +262,7 @@ const Bookmarks = (() => {
     return Helpers.templater(tpl, {
       id: bookmark.id,
       url: bookmark.id,
+      escape_title: Helpers.escapeHtmlToText(bookmark.title),
       title: Helpers.escapeHtml(bookmark.title),
       screen: screen
     });

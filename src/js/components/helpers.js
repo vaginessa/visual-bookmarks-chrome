@@ -61,6 +61,13 @@ export default {
     });
   },
 
+  escapeHtmlToText(unsafe) {
+    const escape = this.escapeHtml(unsafe);
+    const div = document.createElement('div');
+    div.textContent = escape;
+    return div.innerHTML;
+  },
+
   escapeHtml(unsafe) {
     return unsafe
       .replace(/&/g, '&amp;')
