@@ -589,7 +589,6 @@ p {
   stroke-dasharray: 265;
   stroke-dashoffset: 0;
   transform-origin: center;
-  stroke: var(--color-primary);
   animation: dash 1.5s ease-in-out infinite;
 }
 

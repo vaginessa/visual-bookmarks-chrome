@@ -9,8 +9,14 @@ import Helpers from './helpers';
 const Bookmarks = (() => {
   const bk = chrome.bookmarks;
   const SVGLoading = `
-    <svg class="loading" viewBox= "0 0 100 100" xmlns= "http://www.w3.org/2000/svg" >
-      <circle class="path" fill="none" stroke-width="8" stroke-linecap="round" cx="50" cy="50" r="40"></circle>
+    <svg class="loading" viewBox="0 0 100 100">
+    <defs>
+        <linearGradient id="gradient">
+          <stop offset="5%"  stop-color="#4285f4"/>
+          <stop offset="95%" stop-color="#b96bd6"/>
+        </linearGradient>
+      </defs>
+      <circle class="path" fill="none" stroke="url(#gradient)" stroke-width="8" stroke-linecap="round" cx="50" cy="50" r="40"></circle>
     </svg>
   `;
 
@@ -279,18 +285,18 @@ const Bookmarks = (() => {
     });
 
     container.innerHTML =
-      `${arr.join('')}
-      ${isCreate
+        `${arr.join('')}
+        ${isCreate
     ?
     `
-      <div class="bookmark--create bookmark--nosort md-ripple">
-        <div class="bookmark__img--add"></div>
-        <a class="bookmark__link--create" id="add" data-create="New"></a>
-      </div>
-    `
+        <div class="bookmark--create bookmark--nosort md-ripple">
+          <div class="bookmark__img--add"></div>
+          <a class="bookmark__link--create" id="add" data-create="New"></a>
+        </div>
+      `
     : ''
   }
-    `;
+      `;
 
     // loaded external images
     const thumbs = container.querySelectorAll('.bookmark__img--external');
