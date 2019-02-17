@@ -1,8 +1,10 @@
+const path = require('path');
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -20,6 +22,11 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.html$/,
+        include: path.resolve(__dirname, 'src/js/components'),
+        use: { loader: 'html-loader' }
+      },
+      {
         test: /\.js$/,
         exclude: [/node_modules/],
         use: [{
@@ -36,6 +43,15 @@ module.exports = {
           'postcss-loader',
         ]
       }
+    ]
+  },
+  optimization: {
+    minimizer: [
+      new TerserPlugin({
+        terserOptions: {
+          output: { comments: false }
+        }
+      })
     ]
   },
   plugins: [

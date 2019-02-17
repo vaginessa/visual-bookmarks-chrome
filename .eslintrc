@@ -74,5 +74,15 @@
     "arrow-spacing": "error",
     "no-var": "error",
     "no-duplicate-imports": "error"
-  }
+  },
+  "overrides": [
+    {
+      "files": ["src/js/newtab.js"],
+      "parser": "babel-eslint",
+      "parserOptions": {
+        "sourceType": "module",
+        "allowImportExportEverywhere": true
+      }
+    }
+  ]
 }

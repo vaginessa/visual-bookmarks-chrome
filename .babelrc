@@ -1,8 +1,16 @@
 {
   "presets": [
-    "@babel/env"
+    [
+      "@babel/env",
+      {
+        "targets": {
+          "chrome": "58"
+        }
+      }
+    ]
   ],
   "plugins": [
-    "@babel/plugin-transform-object-assign"
+    "@babel/plugin-transform-object-assign",
+    "@babel/plugin-syntax-dynamic-import"
   ]
 }

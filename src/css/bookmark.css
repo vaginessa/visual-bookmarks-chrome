@@ -1187,6 +1187,17 @@ select {
 .text-warning {
   color: #dd4b39;
 }
+.badge {
+  display: inline-block;
+  padding: 1px 3px;
+  font-size: 85%;
+  line-height: 1.1;
+  font-weight: 500;
+  letter-spacing: 0;
+  border-radius: 2px;
+  color: #333;
+  background: #e4dcdc;
+}
 
 /* Context */
 .context-menu {

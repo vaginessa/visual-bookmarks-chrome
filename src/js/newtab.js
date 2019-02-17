@@ -1,5 +1,4 @@
 import '../css/bookmark.css';
-
 import Gmodal from 'glory-modal';
 import Helpers from './components/helpers';
 import Settings from './components/settings';
@@ -9,8 +8,9 @@ import UI from './components/ui';
 import ContextMenu from './components/contextmenu';
 import Ripple from './components/ripple';
 
-const NewTab = (() => {
+// import './components/g-services';
 
+const NewTab = (() => {
   const container = document.getElementById('bookmarks'),
     modal         = document.getElementById('modal'),
     form          = document.getElementById('formBookmark'),
@@ -30,12 +30,15 @@ const NewTab = (() => {
 
   function init() {
     modalApi = new Gmodal(modal, {
-      stickySelectors: ['#bg'],
+      stickySelectors: ['.sticky'],
       closeBackdrop: false
     });
     ctxMenu = new ContextMenu(ctxMenuEl, {
       delegateSelector: '.bookmark'
     });
+
+    // TODO: if
+    (localStorage.google_services === 'true') && runServices();
 
     upload.addEventListener('change', uploadScreen);
     container.addEventListener('click', delegateClick);
@@ -80,6 +83,25 @@ const NewTab = (() => {
       }
       window.location.reload();
     }
+  }
+
+  // TODO: experiment webcomponents
+  function runServices() {
+    import(/* webpackChunkName: "webcomponents/gservices" */'./components/g-services').then(() => {
+      const el = document.createElement('g-services');
+      el.classList.add('sticky');
+      el.setAttribute('data-services', localStorage.google_services_list);
+      document.body.append(el);
+
+      // update storage after sorting
+      el.addEventListener('sort', e => {
+        localStorage.google_services_list = JSON.stringify(e.detail.services);
+        // TODO: sync
+        // Settings.syncSingleToStorage('google_services');
+      });
+    }).catch(err => {
+      console.warn(err);
+    });
   }
 
   function changeTitle(e) {
