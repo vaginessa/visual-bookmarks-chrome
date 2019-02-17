@@ -19,7 +19,7 @@ const Settings = (() => {
     show_favicon: 'true',
     thumbnailing_service: 'https://logo.clearbit.com/[URL]',
     // TODO: experiment
-    google_services: true
+    google_services: false
   };
 
   // TODO: experiment service object (without sync)

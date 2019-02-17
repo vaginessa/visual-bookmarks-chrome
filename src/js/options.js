@@ -210,6 +210,7 @@ const Options = (() => {
         localStorage.removeItem(property);
       });
       Settings.init();
+      UI.toggleTheme();
       getOptions();
       Helpers.notifications(
         chrome.i18n.getMessage('notice_reset_default_settings')
