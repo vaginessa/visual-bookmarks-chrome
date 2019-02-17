@@ -21,7 +21,7 @@
   "license": "ISC",
   "homepage": "https://github.com/k-ivan/visual-bookmarks-chrome#readme",
   "devDependencies": {
-    "@babel/core": "^7.2.2",
+    "@babel/core": "^7.3.3",
     "@babel/plugin-transform-object-assign": "^7.2.0",
     "@babel/preset-env": "^7.3.1",
     "autoprefixer": "^9.4.7",
@@ -29,7 +29,7 @@
     "clean-webpack-plugin": "^1.0.1",
     "copy-webpack-plugin": "^4.6.0",
     "css-loader": "^2.1.0",
-    "eslint": "^5.13.0",
+    "eslint": "^5.14.0",
     "html-webpack-plugin": "^3.2.0",
     "htmlhint": "^0.10.1",
     "mini-css-extract-plugin": "^0.5.0",
@@ -37,12 +37,12 @@
     "postcss-loader": "^3.0.0",
     "stylelint": "^9.10.1",
     "stylelint-config-standard": "^18.2.0",
-    "webpack": "^4.29.3",
+    "webpack": "^4.29.4",
     "webpack-cli": "^3.2.3"
   },
   "dependencies": {
     "glory-modal": "^1.1.1",
-    "sortablejs": "^1.8.1",
+    "sortablejs": "^1.8.3",
     "tabs-slider": "^1.2.1"
   }
 }
