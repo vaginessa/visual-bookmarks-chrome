@@ -17,8 +17,20 @@ const Settings = (() => {
     show_settings_icon: 'true',
     show_create_column: 'true',
     show_favicon: 'true',
-    thumbnailing_service: 'https://logo.clearbit.com/[URL]'
+    thumbnailing_service: 'https://logo.clearbit.com/[URL]',
+    // TODO: experiment
+    google_services: true
   };
+
+  // TODO: experiment service object (without sync)
+  const google_services = [
+    { name: 'youtube', link: 'https://www.youtube.com' },
+    { name: 'search', link: 'https://google.com' },
+    { name: 'translate', link: 'https://translate.google.com' },
+    { name: 'gmail', link: 'https://mail.google.com/mail' },
+    { name: 'drive', link: 'https://drive.google.com/' },
+    { name: 'photos', link: 'https://photos.google.com' }
+  ];
 
   function init() {
     // Creates default localStorage values if they don't already exist
@@ -37,13 +49,10 @@ const Settings = (() => {
       localStorage.setItem('thumbnailing_service', default_values['thumbnailing_service']);
     }
 
-    // if (localStorage.getItem('enable_sync') === 'true') {
-    //   chrome.storage.onChanged.addListener(function(e) {
-    //     console.log(e);
-    //     // Settings.restoreFromSync();
-    //     // window.location.reload();
-    //   });
-    // }
+    // TODO: experiment service object
+    if (localStorage.getItem('google_services_list') === null) {
+      localStorage.setItem('google_services_list', JSON.stringify(google_services));
+    }
   }
 
   function restoreFromSync(cb) {
@@ -69,10 +78,19 @@ const Settings = (() => {
     chrome.storage.sync.set(settings_object);
   }
 
+  function syncSingleToStorage(key) {
+    let settings_object = {};
+    if (localStorage[key] && key !== 'default_folder_id') {
+      settings_object[key] = localStorage[key];
+    }
+    chrome.storage.sync.set(settings_object);
+  }
+
   return {
     init,
     restoreFromSync,
-    syncToStorage
+    syncToStorage,
+    syncSingleToStorage
   };
 
 })();

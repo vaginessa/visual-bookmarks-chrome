@@ -23,9 +23,7 @@
     "value-no-vendor-prefix": true,
     "number-leading-zero": "always",
     "at-rule-no-vendor-prefix": true,
-    "rule-empty-line-before": ["always-multi-line", {
-      ignore: ["after-comment", "first-nested"]
-    }],
+    "rule-empty-line-before": null,
     "selector-pseudo-element-colon-notation": "double",
     "selector-pseudo-class-parentheses-space-inside": "never",
     "selector-no-vendor-prefix": true,

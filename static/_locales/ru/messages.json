@@ -244,5 +244,8 @@
   },
   "version": {
     "message": "Версия"
+  },
+  "google_services": {
+    "message": "Сервисы Google"
   }
 }
