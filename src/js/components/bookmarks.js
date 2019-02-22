@@ -8,17 +8,15 @@ import Helpers from './helpers';
  */
 const Bookmarks = (() => {
   const bk = chrome.bookmarks;
-  const SVGLoading = `
-    <svg class="loading" viewBox="0 0 100 100">
-    <defs>
+  const SVGLoading =
+    `<svg class="loading" viewBox="0 0 100 100">
+      <defs>
         <linearGradient id="gradient">
-          <stop offset="5%"  stop-color="#4285f4"/>
-          <stop offset="95%" stop-color="#b96bd6"/>
+          <stop offset="5%"  stop-color="#4285f4"/><stop offset="95%" stop-color="#b96bd6"/>
         </linearGradient>
       </defs>
       <circle class="path" fill="none" stroke="url(#gradient)" stroke-width="8" stroke-linecap="round" cx="50" cy="50" r="40"></circle>
-    </svg>
-  `;
+    </svg>`;
 
   const container = document.getElementById('bookmarks');
   let sort = null;
@@ -205,13 +203,12 @@ const Bookmarks = (() => {
       `<div class="bookmark__img" style="background-image: url('${screen}');"></div>`
       :
       `<div class="bookmark__img bookmark__img--external"
-            data-fail-thumb="/img/broken-image.svg"
-            data-external-thumb="%thumbnailing_service%">
+        data-fail-thumb="/img/broken-image.svg"
+        data-external-thumb="%thumbnailing_service%">
       </div>`;
 
     const tpl =
-      `
-        <div class="bookmark"
+      `<div class="bookmark"
           data-sort="%id%"
           data-props='{"isFolder":false,"title":"%escape_title%","url":"%url%","id":"%id%","screen":"%screen%"}'>
           <div class="bookmark__wrap">
@@ -223,8 +220,7 @@ const Bookmarks = (() => {
             </div>
           </div>
           <a class="bookmark__link" href="%url%" title="%title%"></a>
-        </div>
-      `;
+        </div>`;
 
     return Helpers.templater(tpl, {
       id: bookmark.id,
@@ -250,21 +246,20 @@ const Bookmarks = (() => {
     }
 
     const tpl =
-      `
-        <div class="bookmark"
-          data-sort="%id%"
-          data-props='{"isFolder":true,"title":"%escape_title%","id":"%id%","screen":"%screen%"}'>
-          <div class="bookmark__wrap">
-            <button class="bookmark__action"></button>
-            ${imgLayout}
-            <div class="bookmark__caption">
-              <img src="/img/folder.svg" class="bookmark__favicon" width="16" height="16" alt="">
-              <div class="bookmark__title">%title%</div>
-            </div>
+     `<div class="bookmark"
+        data-sort="%id%"
+        data-props='{"isFolder":true,"title":"%escape_title%","id":"%id%","screen":"%screen%"}'>
+        <div class="bookmark__wrap">
+          <button class="bookmark__action"></button>
+          ${imgLayout}
+          <div class="bookmark__caption">
+            <img src="/img/folder.svg" class="bookmark__favicon" width="16" height="16" alt="">
+            <div class="bookmark__title">%title%</div>
           </div>
-          <a class="bookmark__link" href="#%url%" title="%title%"></a>
         </div>
-      `;
+        <a class="bookmark__link" href="#%url%" title="%title%"></a>
+      </div>`;
+
     return Helpers.templater(tpl, {
       id: bookmark.id,
       url: bookmark.id,
@@ -284,12 +279,12 @@ const Bookmarks = (() => {
       }
     });
 
-    isCreate && arr.push(`
-      <div class="bookmark--create bookmark--nosort md-ripple">
+    isCreate && arr.push(
+      `<div class="bookmark--create bookmark--nosort md-ripple">
         <div class="bookmark__img--add"></div>
         <a class="bookmark__link--create" id="add" data-create="New"></a>
-      </div>
-    `);
+      </div>`
+    );
 
     container.innerHTML = arr.join('');
 
@@ -334,8 +329,8 @@ const Bookmarks = (() => {
         Helpers.notifications(chrome.i18n.getMessage('notice_cant_find_id'));
         // remove grid class
         container.classList.remove('grid');
-        container.innerHTML = `
-          <div class="not-found">
+        container.innerHTML =
+          `<div class="not-found">
             <div class="not-found__wrap">
               <div class="not-found__icon"></div>
               <div class="not-found__text">
@@ -343,8 +338,7 @@ const Bookmarks = (() => {
               </div>
               <a class="btn md-ripple" href="#1">${chrome.i18n.getMessage('not_found_link_text')}</a>
             </div>
-          </div>
-        `;
+          </div>`;
       }
     });
   }

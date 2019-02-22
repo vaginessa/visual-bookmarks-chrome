@@ -24,7 +24,12 @@ module.exports = {
       {
         test: /\.html$/,
         include: path.resolve(__dirname, 'src/js/components'),
-        use: { loader: 'html-loader' }
+        use: {
+          loader: 'html-loader',
+          options: {
+            minimize: true
+          }
+        }
       },
       {
         test: /\.js$/,
@@ -49,7 +54,8 @@ module.exports = {
     minimizer: [
       new TerserPlugin({
         terserOptions: {
-          output: { comments: false }
+          output: { comments: false },
+          compress: { passes: 3 }
         }
       })
     ]
