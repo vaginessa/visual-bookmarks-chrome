@@ -125,6 +125,9 @@
   "notice_bg_image_updated": {
     "message": "Background image has been changed"
   },
+  "notice_thumbnails_update_complete": {
+    "message": "Thumbnail update complete"
+  },
   "alert_create_fail_bookmark": {
     "message": "- Adding a new Folder only requires a Title \n- Adding a new Bookmark requires both a Title and a URL"
   },
@@ -247,5 +250,11 @@
   },
   "google_services": {
     "message": "Google services"
+  },
+  "thumbnails_update_warn": {
+    "message": "Updating thumbnails can affect performance (depending on the number of bookmarks in a folder and computer performance)"
+  },
+  "thumbnails_update_button": {
+    "message": "Thumbnails update button"
   }
 }

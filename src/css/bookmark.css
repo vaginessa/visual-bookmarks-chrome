@@ -231,6 +231,11 @@ p {
   padding: 20px 0;
 }
 
+.thumbnails-updating .header {
+  pointer-events: none;
+  opacity: 0.3;
+}
+
 .header__grid {
   display: grid;
   grid-gap: 15px;
@@ -553,7 +558,7 @@ p {
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 99999;
+  z-index: 999;
   background: var(--bookmark-overlay-bg);
   border-radius: var(--bookmark-radius);
 }
@@ -1101,47 +1106,74 @@ select {
 /**
  * Helpers
  */
-.settings-link {
+.circ-btn {
   display: none;
 }
 
 @media (min-width: 768px) {
-  .settings-link {
-    display: block;
+  .circ-btn {
     position: fixed;
-    top: 12px;
-    left: 10px;
+    z-index: 9999;
+    display: block;
     width: 30px;
     height: 30px;
+    text-decoration: none;
+    border: 0;
+    padding: 0;
     background: rgba(33, 33, 33, 0.5);
     border-radius: 50%;
-    opacity: 0.2;
+    opacity: 0.3;
     transition: opacity 3s linear;
-    z-index: 9999;
     overflow: hidden;
+    cursor: pointer;
+    outline: 0;
   }
 
-  .settings-link:hover {
+  .circ-btn:hover,
+  .circ-btn:focus {
     transition: opacity 0.3s linear;
     opacity: 1;
   }
 
-  .settings-link::after {
+  .circ-btn::after {
     content: "";
     position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
-    background-image: url(/img/cog.svg);
     background-position: center;
     background-repeat: no-repeat;
     background-size: 20px;
     transition: transform 0.3s ease;
   }
 
+  .circ-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .settings-link {
+    top: 12px;
+    left: 10px;
+  }
+
+  .settings-link::after {
+    background-image: url(/img/cog.svg);
+  }
+
   .settings-link:hover::after {
     transform: rotate(30deg);
+  }
+
+  .update-thumbnails {
+    bottom: 12px;
+    left: 10px;
+    top: auto;
+  }
+
+  .update-thumbnails::after {
+    background-image: url(/img/camera.svg);
   }
 }
 
@@ -1297,7 +1329,7 @@ body.gmodal-open {
   top: 0;
   right: 0;
   bottom: 0;
-  z-index: 9999;
+  z-index: 99999;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
   outline: 0;

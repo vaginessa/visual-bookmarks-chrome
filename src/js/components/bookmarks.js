@@ -20,6 +20,7 @@ const Bookmarks = (() => {
 
   const container = document.getElementById('bookmarks');
   let sort = null;
+  let isGeneratedThumbs = false;
 
   function init() {
     if (!container) return;
@@ -313,6 +314,29 @@ const Bookmarks = (() => {
     return image;
   }
 
+  function autoUpdateThumb() {
+    if (isGeneratedThumbs) return;
+    const id = startFolder();
+    bk.getChildren(id, async function(item) {
+
+      isGeneratedThumbs = true;
+      document.body.classList.add('thumbnails-updating');
+      Helpers.customTrigger('thumbnails:updating', container);
+
+      for (let b of item) {
+        if (!b.url) continue;
+        const bookmark = container.querySelector(`[data-sort="${b.id}"]`);
+        await createScreen(bookmark, b.id, b.url);
+      }
+      isGeneratedThumbs = false;
+      document.body.classList.remove('thumbnails-updating');
+      Helpers.notifications(
+        chrome.i18n.getMessage('notice_thumbnails_update_complete')
+      );
+      Helpers.customTrigger('thumbnails:updated', container);
+    });
+  }
+
   function createSpeedDial(id) {
 
     const hasCreate = (localStorage.getItem('show_create_column') === 'true');
@@ -414,31 +438,41 @@ const Bookmarks = (() => {
   }
 
   function createScreen(bookmark, idBookmark, captureUrl) {
+    if (!bookmark) return;
+
     bookmark.classList.add('disable-events');
     bookmark.innerHTML += `<div class="bookmark__overlay">${SVGLoading}</div>`;
 
     const image = bookmark.querySelector('.bookmark__img');
 
-    chrome.runtime.sendMessage({ captureUrl: captureUrl, id: idBookmark }, (response) => {
+    return new Promise((resolve) => {
+      chrome.runtime.sendMessage({ captureUrl: captureUrl, id: idBookmark }, (response) => {
 
-      let overlay = bookmark.querySelector('.bookmark__overlay');
+        let overlay = bookmark.querySelector('.bookmark__overlay');
 
-      if (response.warning) {
-        console.warn(response.warning);
+        if (response.warning) {
+          console.warn(response.warning);
+          if (overlay) {
+            overlay.remove();
+            bookmark.classList.remove('disable-events');
+          }
+          // reject();
+          // return the promise even if it was not possible to make a thumbnail, to continue generating the folder thumbnails
+          resolve();
+          return false;
+        }
+
+        image.classList.remove('bookmark__img--external', 'bookmark__img--broken');
+        image.style.backgroundImage = `url('${response}?refresh=${Date.now()}')`;
+        bookmark.classList.remove('disable-events');
         if (overlay) {
           overlay.remove();
-          bookmark.classList.remove('disable-events');
         }
-        return false;
-      }
+        resolve();
+      });
 
-      image.classList.remove('bookmark__img--external', 'bookmark__img--broken');
-      image.style.backgroundImage = `url('${response}?refresh=${Date.now()}')`;
-      bookmark.classList.remove('disable-events');
-      if (overlay) {
-        overlay.remove();
-      }
     });
+
   }
 
   function search(evt) {
@@ -642,7 +676,8 @@ const Bookmarks = (() => {
     generateFolderList,
     createScreen,
     uploadScreen,
-    rmCustomScreen
+    rmCustomScreen,
+    autoUpdateThumb
   };
 
 })();

@@ -36,6 +36,11 @@ function captureScreen(link, callback) {
       chrome.tabs.executeScript(tab.id, {
         code: 'document.addEventListener("DOMContentLoaded", function(){document.body.style.overflow = "hidden";});',
         runAt: 'document_start'
+      }, () => {
+        let e = chrome.runtime.lastError;
+        if (e !== undefined) {
+          console.log(tab.id, e);
+        }
       });
     } catch (e) {
       console.warn(e);

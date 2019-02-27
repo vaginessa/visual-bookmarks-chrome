@@ -8,8 +8,6 @@ import UI from './components/ui';
 import ContextMenu from './components/contextmenu';
 import Ripple from './components/ripple';
 
-// import './components/g-services';
-
 const NewTab = (() => {
   const container = document.getElementById('bookmarks'),
     modal         = document.getElementById('modal'),
@@ -25,8 +23,10 @@ const NewTab = (() => {
     upload        = document.getElementById('upload'),
     ctxActionCapture = ctxMenuEl.querySelector('[data-action="capture"]'),
     ctxHiddenItems = [...document.querySelectorAll('.folder-hidden')];
+  let isGenerateThumbs = false;
   let modalApi;
   let ctxMenu;
+  let generateThumbsBtn = null;
 
   function init() {
     modalApi = new Gmodal(modal, {
@@ -38,7 +38,7 @@ const NewTab = (() => {
     });
 
     // TODO: if
-    (localStorage.google_services === 'true') && runServices();
+    (localStorage.getItem('google_services') === 'true') && runServices();
 
     upload.addEventListener('change', uploadScreen);
     container.addEventListener('click', delegateClick);
@@ -63,6 +63,38 @@ const NewTab = (() => {
       }
     });
 
+    // If thumbnail generation button
+    if (localStorage.getItem('thumbnails_update_button') === 'true') {
+
+      generateThumbsBtn = Object.assign(document.createElement('button'), {
+        className: 'circ-btn update-thumbnails'
+      });
+      document.body.appendChild(generateThumbsBtn);
+
+      // Thumbnail generation tracking events
+      // Switching the flag in the local storage to prevent multiple launches
+      // Reset the flag when you close the window
+      if (localStorage.getItem('update_thumbnails') === 'true') {
+        // if the storage has a launch flag for generating thumbnails, disable button
+        generateThumbsBtn.disabled = true;
+      }
+      container.addEventListener('thumbnails:updating', function() {
+        isGenerateThumbs = true;
+        generateThumbsBtn.disabled = true;
+        localStorage.setItem('update_thumbnails', true);
+      });
+      container.addEventListener('thumbnails:updated', function() {
+        isGenerateThumbs = false;
+        generateThumbsBtn.disabled = false;
+        localStorage.removeItem('update_thumbnails');
+      });
+      generateThumbsBtn.addEventListener('click', generateThumbs);
+    }
+
+    window.addEventListener('beforeunload', beforeUnload);
+    window.addEventListener('unload', unload);
+    window.addEventListener('storage', storageUpdate);
+
     // if support Page Visibility API
     // if the tab is open but not active, then when you change bookmarks from other places,
     // we will do a reload of the bookmarks page to display the latest changes
@@ -72,6 +104,31 @@ const NewTab = (() => {
       chrome.bookmarks.onRemoved.addListener(pageVisibility);
       chrome.bookmarks.onMoved.addListener(pageVisibility);
     }
+  }
+
+  function beforeUnload(e) {
+    // if generate thumbs exist
+    if (localStorage.getItem('update_thumbnails') !== null && isGenerateThumbs)
+      return e.returnValue = '';
+  }
+
+  function unload() {
+    // remove flag from storage to unlock button generate
+    if (isGenerateThumbs)
+      localStorage.removeItem('update_thumbnails');
+  }
+
+  function storageUpdate(e) {
+    // If several tabs are open, on the rest of them we will update the attribute at the button
+    if (e.key === 'update_thumbnails') {
+      generateThumbsBtn.disabled = !e.newValue ? false : true;
+    }
+  }
+
+  function generateThumbs() {
+    // method to start generating all bookmark thumbnails
+    if (this.hasAttribute('disabled') || localStorage.getItem('update_thumbnails') !== null) return;
+    Bookmarks.autoUpdateThumb();
   }
 
   function pageVisibility(id) {

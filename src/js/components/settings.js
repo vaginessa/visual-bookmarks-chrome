@@ -18,6 +18,7 @@ const Settings = (() => {
     show_create_column: 'true',
     show_favicon: 'true',
     thumbnailing_service: 'https://logo.clearbit.com/[URL]',
+    thumbnails_update_button: 'true',
     // TODO: experiment
     google_services: false
   };
