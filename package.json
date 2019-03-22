@@ -25,13 +25,13 @@
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@babel/plugin-transform-object-assign": "^7.2.0",
     "@babel/preset-env": "^7.3.4",
-    "autoprefixer": "^9.4.10",
+    "autoprefixer": "^9.5.0",
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.5",
-    "clean-webpack-plugin": "^2.0.0",
-    "copy-webpack-plugin": "^5.0.0",
+    "clean-webpack-plugin": "^2.0.1",
+    "copy-webpack-plugin": "^5.0.2",
     "css-loader": "^2.1.1",
-    "eslint": "^5.15.1",
+    "eslint": "^5.15.3",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
     "htmlhint": "^0.11.0",
@@ -42,7 +42,7 @@
     "stylelint-config-standard": "^18.2.0",
     "terser-webpack-plugin": "^1.2.3",
     "webpack": "^4.29.6",
-    "webpack-cli": "^3.2.3"
+    "webpack-cli": "^3.3.0"
   },
   "dependencies": {
     "glory-modal": "^1.1.1",

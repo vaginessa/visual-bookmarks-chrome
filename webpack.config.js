@@ -13,7 +13,7 @@ module.exports = {
     eventPage: './src/js/eventPage.js',
   },
   output: {
-    path: __dirname + '/extension/',
+    path: path.resolve(__dirname, 'extension'),
     filename: 'js/[name].js',
   },
   resolve: {
@@ -61,7 +61,9 @@ module.exports = {
     ]
   },
   plugins: [
-    new CleanWebpackPlugin('extension/*'),
+    new CleanWebpackPlugin({
+      cleanStaleWebpackAssets: false
+    }),
     new CopyWebpackPlugin([
       { from: 'static' }
     ]),
