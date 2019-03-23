@@ -316,16 +316,33 @@ const NewTab = (() => {
     Bookmarks.rmCustomScreen(id, function() {
       const bookmark = container.querySelector('[data-sort="' + id + '"]');
       const bookmarkImg = bookmark.querySelector('.bookmark__img');
-      bookmarkImg.style.backgroundImage = '';
-      bookmarkImg.classList.remove('bookmark__img--contain');
-      bookmarkImg.classList.add('bookmark__img--folder');
-
       const props = JSON.parse(bookmark.dataset.props);
+
+      if (!props.isFolder) {
+        const url = localStorage.getItem('thumbnailing_service').replace('[URL]', Helpers.getDomain(props.url));
+        Helpers.imageLoaded(url, {
+          done() {
+            bookmarkImg.style.backgroundImage = `url(${url})`;
+            bookmarkImg.classList.add('bookmark__img--external');
+          },
+          fail() {
+            bookmarkImg.style.backgroundImage = 'url(/img/broken-image.svg)';
+            bookmarkImg.classList.add('bookmark__img--broken');
+          }
+        });
+
+      } else {
+        bookmarkImg.style.backgroundImage = '';
+        bookmarkImg.classList.remove('bookmark__img--contain');
+        bookmarkImg.classList.add('bookmark__img--folder');
+      }
+
+
       props.screen = '';
       bookmark.dataset.props = JSON.stringify(props);
 
       target.closest('#customScreen').style.display = '';
-      Helpers.notifications(chrome.i18n.getMessage('notice_image_removed'));
+      // Helpers.notifications(chrome.i18n.getMessage('notice_image_removed'));
     });
   }
 
@@ -336,7 +353,8 @@ const NewTab = (() => {
       const url = props.url;
       const screen = props.screen;
 
-      if (screen && !url) {
+      // if (screen && !url) {
+      if (screen) {
         customScreen.style.display = 'block';
         customScreen.querySelector('img').src = `${screen}?refresh=${Date.now()}`;
         customScreen.querySelector('#resetCustomImage').setAttribute('data-bookmark', props.id);

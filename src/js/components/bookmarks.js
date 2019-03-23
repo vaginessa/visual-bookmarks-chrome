@@ -465,6 +465,9 @@ const Bookmarks = (() => {
         image.classList.remove('bookmark__img--external', 'bookmark__img--broken');
         image.style.backgroundImage = `url('${response}?refresh=${Date.now()}')`;
         bookmark.classList.remove('disable-events');
+        const props = JSON.parse(bookmark.dataset.props);
+        props.screen = response;
+        bookmark.dataset.props = JSON.stringify(props);
         if (overlay) {
           overlay.remove();
         }
