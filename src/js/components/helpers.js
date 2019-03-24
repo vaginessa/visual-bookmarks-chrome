@@ -1,19 +1,5 @@
 export default {
 
-  transitionEnd() {
-    let prefix = {
-      'transition': 'transitionend',
-      'webkitTransition': 'webkitTransitionEnd'
-    };
-    let fake = document.createElement('fake');
-    for (let name in prefix) {
-      if (fake.style[name] !== undefined) {
-        return prefix[name];
-      }
-    }
-    return false;
-  },
-
   debounce(func, wait, immediate) {
     let timeout = null;
 
@@ -112,7 +98,6 @@ export default {
   },
 
   imageLoaded(img, cbObj) {
-    // for (let img of imgsPath) {
     const image = new Image();
 
     image.onload = () => {
@@ -121,9 +106,7 @@ export default {
     image.onerror = () => {
       cbObj.fail && cbObj.fail(img);
     };
-
     image.src = img;
-    // }
   },
 
   base64ToBlob(base64, type, callback) {
@@ -168,11 +151,11 @@ export default {
     img.src = image;
   },
 
-  rand(min, max) {
-    return Math.round(
-      min - 0.5 + Math.random() * (max - min + 1)
-    );
-  },
+  // rand(min, max) {
+  //   return Math.round(
+  //     min - 0.5 + Math.random() * (max - min + 1)
+  //   );
+  // },
 
   getDomain(url) {
     // return url.replace(/https?:\/\/(www.)?/i, '').replace(/\/.*/i, '');
