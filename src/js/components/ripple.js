@@ -1,5 +1,3 @@
-import './polyfill';
-
 const Ripple = function() {
 
   let module = {};
