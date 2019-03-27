@@ -573,6 +573,11 @@ p {
   z-index: 100;
 }
 
+.dial-loading.is-initial {
+  right: -20px;
+  background-color: var(--theme-bg);
+}
+
 .loading {
   position: absolute;
   left: 50%;
