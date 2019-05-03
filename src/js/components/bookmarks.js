@@ -372,7 +372,7 @@ const Bookmarks = (() => {
     const file = target.files[0];
     if (!file) return;
 
-    if (!/image\/(jpe?g|png)$/.test(file.type)) {
+    if (!/image\/(jpe?g|png|webp)$/.test(file.type)) {
       return alert(chrome.i18n.getMessage('alert_file_type_fail'));
     }
     target.value = '';

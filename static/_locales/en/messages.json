@@ -135,7 +135,7 @@
     "message": "Editing an existing Bookmark requires both a Title and a valid URL in Chrome\n\n For example, valid URL's start with: \n - http:// \n - https:// \n - ftp://"
   },
   "alert_file_type_fail": {
-    "message": "Bad file type\nValid file type (jpg | jpeg | png)"
+    "message": "Bad file type\nValid file type (jpg | jpeg | png | webp)"
   },
   "not_found_text": {
     "message": "Can not find the folder by id. You may not have synchronized bookmarks, or you deleted | moved this folder."
