@@ -47,6 +47,12 @@
   "contextmenu_window": {
     "message": "Open in new window"
   },
+  "contextmenu_open_all": {
+    "message": "Open all"
+  },
+  "contextmenu_open_all_window": {
+    "message": "Open all in new window"
+  },
   "contextmenu_incognito": {
     "message": "Open in incognito mode"
   },

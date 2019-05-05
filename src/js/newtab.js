@@ -9,20 +9,22 @@ import ContextMenu from './components/contextmenu';
 import Ripple from './components/ripple';
 
 const NewTab = (() => {
-  const container = document.getElementById('bookmarks'),
-    modal         = document.getElementById('modal'),
-    form          = document.getElementById('formBookmark'),
-    modalHead     = document.getElementById('modalHead'),
-    foldersList   = document.getElementById('folderList'),
-    titleField    = document.getElementById('title'),
-    urlField      = document.getElementById('url'),
-    urlWrap       = document.getElementById('urlWrap'),
-    modalDesc     = document.getElementById('desc'),
-    customScreen  = document.getElementById('customScreen'),
-    ctxMenuEl     = document.getElementById('context-menu'),
-    upload        = document.getElementById('upload'),
-    ctxActionCapture = ctxMenuEl.querySelector('[data-action="capture"]'),
-    ctxHiddenItems = [...document.querySelectorAll('.folder-hidden')];
+  const container = document.getElementById('bookmarks');
+  const modal         = document.getElementById('modal');
+  const form          = document.getElementById('formBookmark');
+  const modalHead     = document.getElementById('modalHead');
+  const foldersList   = document.getElementById('folderList');
+  const titleField    = document.getElementById('title');
+  const urlField      = document.getElementById('url');
+  const urlWrap       = document.getElementById('urlWrap');
+  const modalDesc     = document.getElementById('desc');
+  const customScreen  = document.getElementById('customScreen');
+  const ctxMenuEl     = document.getElementById('context-menu');
+  const upload        = document.getElementById('upload');
+  const ctxToggleItems = [
+    ...document.querySelectorAll('.is-bookmark'),
+    ...document.querySelectorAll('.is-folder')
+  ];
   let isGenerateThumbs = false;
   let modalApi;
   let ctxMenu;
@@ -185,19 +187,20 @@ const NewTab = (() => {
     const props = JSON.parse(bookmark.dataset.props);
 
     if (props.isFolder) {
-      ctxActionCapture.classList.add('is-disabled');
-      ctxHiddenItems.forEach(item => {
-        item.style.display = 'none';
-        item.classList.add('is-disabled');
+      ctxToggleItems.forEach(item => {
+        item.style.display = '';
+        if (item.classList.contains('is-bookmark')) {
+          item.style.display = 'none';
+        }
       });
     } else {
-      ctxActionCapture.classList.remove('is-disabled');
-      ctxHiddenItems.forEach(item => {
+      ctxToggleItems.forEach(item => {
         item.style.display = '';
-        item.classList.remove('is-disabled');
+        if (item.classList.contains('is-folder')) {
+          item.style.display = 'none';
+        }
       });
     }
-
   }
 
   function controlsHandler(evt) {
@@ -209,6 +212,10 @@ const NewTab = (() => {
       case 'new_window':
       case 'new_window_incognito':
         openWindow(props, action);
+        break;
+      case 'open_all':
+      case 'open_all_window':
+        openAll(props, action);
         break;
       case 'new_tab':
         openTab(props);
@@ -248,6 +255,20 @@ const NewTab = (() => {
     return props.url;
   }
 
+  function openAll(props, action) {
+    chrome.bookmarks.getChildren(props.id, (childrens) => {
+      if (action === 'open_all_window') {
+        chrome.windows.create({
+          focused: true
+        }, win => {
+          childrens.forEach(children => openTab(children, { windowId: win.id }));
+        });
+      } else {
+        childrens.forEach(children => openTab(children));
+      }
+    });
+  }
+
   function openWindow(props, action) {
     const url = getUrl(props);
     try {
@@ -259,12 +280,16 @@ const NewTab = (() => {
     } catch (e) {}
   }
 
-  function openTab(props) {
+  function openTab(props, options = {}) {
     const url = getUrl(props);
+    const defaults = {
+      url: url,
+      active: false
+    };
     try {
       chrome.tabs.create({
-        url: url,
-        active: false
+        ...defaults,
+        ...options
       });
     } catch (e) {}
   }
