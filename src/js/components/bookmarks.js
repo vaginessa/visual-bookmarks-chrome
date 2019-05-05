@@ -551,7 +551,7 @@ const Bookmarks = (() => {
 
   function rmCustomScreen(id, cb) {
     const screen = getCustomDial(id);
-    const { image = screen } = screen;
+    const { image = screen } = screen || {};
     if (!image) return;
 
     const name = image.split('/').pop();
