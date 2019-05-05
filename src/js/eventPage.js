@@ -220,9 +220,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
         FS.createDir('images', function(dirEntry) {
           FS.createFile(`${dirEntry.fullPath}/${name}`, { file: blob, fileType: blob.type }, function(fileEntry) {
-            const obj = JSON.parse(localStorage.getItem('custom_dials'));
-            obj[request.id] = fileEntry.toURL();
-            localStorage.setItem('custom_dials', JSON.stringify(obj));
             console.info(`Image file saved as ${fileEntry.toURL()}`);
             try {
               sendResponse(fileEntry.toURL());

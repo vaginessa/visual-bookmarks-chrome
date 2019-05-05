@@ -199,9 +199,13 @@ const Bookmarks = (() => {
       : '';
 
     const screen = getCustomDial(bookmark.id);
-    const thumbContainer = (screen)
+    // key screen destructuring
+    // the old key does not contain nested properties(image, custom), so we assign the key value to the variable image
+    // the key may be undefined,in this case we are trying to work with an empty object
+    const { image = screen, custom = false } = screen || {};
+    const thumbContainer = (image)
       ?
-      `<div class="bookmark__img" style="background-image: url('${screen}');"></div>`
+      `<div class="bookmark__img${custom ? ' bookmark__img--contain' : ''}" style="background-image: url('${image}');"></div>`
       :
       `<div class="bookmark__img bookmark__img--external"
         data-fail-thumb="/img/broken-image.svg"
@@ -211,7 +215,7 @@ const Bookmarks = (() => {
     const tpl =
       `<div class="bookmark"
           data-sort="%id%"
-          data-props='{"isFolder":false,"title":"%escape_title%","url":"%url%","id":"%id%","screen":"%screen%"}'>
+          data-props='{"isFolder":false,"title":"%escape_title%","url":"%url%","id":"%id%","screen":%screen%}'>
           <div class="bookmark__wrap">
             <button class="bookmark__action"></button>
             ${thumbContainer}
@@ -227,7 +231,7 @@ const Bookmarks = (() => {
       id: bookmark.id,
       url: bookmark.url,
       site: Helpers.getDomain(bookmark.url),
-      screen: screen,
+      screen: JSON.stringify(screen || null),
       // localStorage.getItem('thumbnailing_service').replace('[URL]', encodeURIComponent(bookmark.url)),
       // eslint-disable-next-line max-len
       thumbnailing_service: localStorage.getItem('thumbnailing_service').replace('[URL]', Helpers.getDomain(bookmark.url)),
@@ -239,9 +243,13 @@ const Bookmarks = (() => {
   function genFolder(bookmark) {
     let imgLayout;
     const screen = getCustomDial(bookmark.id);
+    // key screen destructuring
+    // the old key does not contain nested properties(image, custom), so we assign the key value to the variable image
+    // the key may be undefined,in this case we are trying to work with an empty object
+    const { image = screen } = screen || {};
 
-    if (screen) {
-      imgLayout = `<div class="bookmark__img bookmark__img--contain" style="background-image: url(${screen})"></div>`;
+    if (image) {
+      imgLayout = `<div class="bookmark__img bookmark__img--contain" style="background-image: url(${image})"></div>`;
     } else {
       imgLayout = '<div class="bookmark__img bookmark__img--folder"></div>';
     }
@@ -249,7 +257,7 @@ const Bookmarks = (() => {
     const tpl =
      `<div class="bookmark"
         data-sort="%id%"
-        data-props='{"isFolder":true,"title":"%escape_title%","id":"%id%","screen":"%screen%"}'>
+        data-props='{"isFolder":true,"title":"%escape_title%","id":"%id%","screen":%screen%}'>
         <div class="bookmark__wrap">
           <button class="bookmark__action"></button>
           ${imgLayout}
@@ -266,7 +274,7 @@ const Bookmarks = (() => {
       url: bookmark.id,
       escape_title: Helpers.escapeHtmlToText(bookmark.title),
       title: Helpers.escapeHtml(bookmark.title),
-      screen: screen
+      screen: JSON.stringify(screen || null)
     });
   }
 
@@ -307,11 +315,7 @@ const Bookmarks = (() => {
 
   function getCustomDial(id) {
     const storage = JSON.parse(localStorage.getItem('custom_dials'));
-    let image;
-    if (storage) {
-      image = storage[id];
-    }
-    return image;
+    return storage[id];
   }
 
   function autoUpdateThumb() {
@@ -388,32 +392,30 @@ const Bookmarks = (() => {
       Helpers.resizeScreen(reader.result, function(image) {
         const blob = Helpers.base64ToBlob(image, 'image/jpg');
 
-        let name;
-        if (site) {
-          name = `${site}_${id}.jpg`;
-        } else {
-          name = `folder-${id}.jpg`;
-        }
+        const name = (site) ? `${site}_${id}.jpg` : `folder-${id}.jpg`;
 
         FS.createDir('images', function() {
           FS.createFile(`/images/${name}`, { file: blob, fileType: 'jpg' }, function(fileEntry) {
 
             const obj = JSON.parse(localStorage.getItem('custom_dials'));
-            obj[id] = fileEntry.toURL();
+            obj[id] = {
+              image: fileEntry.toURL(),
+              custom: !!site
+            };
             localStorage.setItem('custom_dials', JSON.stringify(obj));
 
-            const imgEl = bookmark.querySelector('.bookmark__img');
-            const props = JSON.parse(bookmark.dataset.props);
-            props.screen = fileEntry.toURL();
+            bookmark.dataset.props = crudProps(bookmark.dataset.props, {
+              screen: obj[id]
+            });
 
+            const imgEl = bookmark.querySelector('.bookmark__img');
             if (data.site) {
               imgEl.classList.remove('bookmark__img--external', 'bookmark__img--broken');
             } else {
               imgEl.classList.remove('bookmark__img--folder');
-              imgEl.classList.add('bookmark__img--contain');
             }
+            imgEl.classList.add('bookmark__img--contain');
 
-            bookmark.dataset.props = JSON.stringify(props);
             imgEl.style.backgroundImage = `url('${fileEntry.toURL()}?refresh=${Date.now()}')`;
 
             let overlay = bookmark.querySelector('.bookmark__overlay');
@@ -462,12 +464,21 @@ const Bookmarks = (() => {
           return false;
         }
 
-        image.classList.remove('bookmark__img--external', 'bookmark__img--broken');
+        image.className = 'bookmark__img';
         image.style.backgroundImage = `url('${response}?refresh=${Date.now()}')`;
         bookmark.classList.remove('disable-events');
-        const props = JSON.parse(bookmark.dataset.props);
-        props.screen = response;
-        bookmark.dataset.props = JSON.stringify(props);
+
+        const obj = JSON.parse(localStorage.getItem('custom_dials'));
+        obj[idBookmark] = {
+          image: response,
+          custom: false
+        };
+        localStorage.setItem('custom_dials', JSON.stringify(obj));
+
+        bookmark.dataset.props = crudProps(bookmark.dataset.props, {
+          screen: obj[idBookmark]
+        });
+
         if (overlay) {
           overlay.remove();
         }
@@ -476,6 +487,12 @@ const Bookmarks = (() => {
 
     });
 
+  }
+
+  function crudProps(source, extend = {}) {
+    source = JSON.parse(source);
+    const obj = { ...source, ...extend };
+    return JSON.stringify(obj);
   }
 
   function search(evt) {
@@ -534,9 +551,10 @@ const Bookmarks = (() => {
 
   function rmCustomScreen(id, cb) {
     const screen = getCustomDial(id);
-    if (!screen) return;
+    const { image = screen } = screen;
+    if (!image) return;
 
-    const name = screen.split('/').pop();
+    const name = image.split('/').pop();
     FS.deleteFile(`/images/${name}`, function() {
       const storage = JSON.parse(localStorage.getItem('custom_dials'));
       delete storage[id];

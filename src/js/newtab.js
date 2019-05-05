@@ -317,6 +317,7 @@ const NewTab = (() => {
       const bookmark = container.querySelector('[data-sort="' + id + '"]');
       const bookmarkImg = bookmark.querySelector('.bookmark__img');
       const props = JSON.parse(bookmark.dataset.props);
+      bookmarkImg.classList.remove('bookmark__img--contain');
 
       if (!props.isFolder) {
         const url = localStorage.getItem('thumbnailing_service').replace('[URL]', Helpers.getDomain(props.url));
@@ -330,13 +331,10 @@ const NewTab = (() => {
             bookmarkImg.classList.add('bookmark__img--broken');
           }
         });
-
       } else {
         bookmarkImg.style.backgroundImage = '';
-        bookmarkImg.classList.remove('bookmark__img--contain');
         bookmarkImg.classList.add('bookmark__img--folder');
       }
-
 
       props.screen = '';
       bookmark.dataset.props = JSON.stringify(props);
@@ -351,12 +349,12 @@ const NewTab = (() => {
       modal.classList.add('has-edit');
       const title = Helpers.unescapeHtml(props.title);
       const url = props.url;
-      const screen = props.screen;
+      const { image = props.screen } = props.screen || {};
 
       // if (screen && !url) {
-      if (screen) {
+      if (image) {
         customScreen.style.display = 'block';
-        customScreen.querySelector('img').src = `${screen}?refresh=${Date.now()}`;
+        customScreen.querySelector('img').src = `${image}?refresh=${Date.now()}`;
         customScreen.querySelector('#resetCustomImage').setAttribute('data-bookmark', props.id);
       }
 
