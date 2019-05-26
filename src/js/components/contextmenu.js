@@ -60,13 +60,15 @@ class ContextMenu {
 
   detachEvents() {
     window.removeEventListener('resize', this.handlerClose);
-    window.removeEventListener('resize', this.handlerClose);
+    window.removeEventListener('scroll', this.handlerClose);
     document.removeEventListener('contextmenu', this.handlerTrigger);
     document.removeEventListener('keydown', this.handlerKeyboard);
     document.removeEventListener('click', this.handlerClick);
   }
 
   position(e) {
+    this.menu.style.top = 0;
+    this.menu.style.left = 0;
 
     if (!e.clientX && !e.clientY) {
       // trigger by key
@@ -82,8 +84,8 @@ class ContextMenu {
     this.menuWidth = this.menu.offsetWidth;
     this.menuHeight = this.menu.offsetHeight;
 
-    const windowWidth = window.innerWidth + window.pageXOffset;
-    const windowHeight = window.innerHeight + window.pageYOffset;
+    const windowWidth = document.documentElement.clientWidth + window.pageXOffset;
+    const windowHeight = document.documentElement.clientHeight + window.pageYOffset;
 
     if ((windowWidth - this.menuX) < this.menuWidth) {
       this.menu.style.left = `${windowWidth - this.menuWidth - this.settings.tresholdMargin}px`;
@@ -152,8 +154,7 @@ class ContextMenu {
       e.preventDefault();
       this.trigger = target;
       this.close();
-      this.open();
-      this.position(e);
+      this.open(e);
     } else {
       this.close();
     }
@@ -210,36 +211,37 @@ class ContextMenu {
     }
   }
 
-  open() {
-    if (!this.state) {
-      this.state = true;
-      this.menu.classList.add('context-menu--open');
+  open(e) {
+    if (this.state) return;
 
-      Helpers.customTrigger('contextMenuOpen', this.menu, {
-        detail: {
-          trigger: this.trigger
-        }
-      });
-    }
+    this.state = true;
+    this.menu.classList.add('context-menu--open');
+
+    Helpers.customTrigger('contextMenuOpen', this.menu, {
+      detail: {
+        trigger: this.trigger
+      }
+    });
+    this.position(e);
   }
 
   close() {
-    if (this.state) {
-      this.state = false;
-      this.menu.classList.remove('context-menu--open');
+    if (!this.state) return;
 
-      const current = this.menu.querySelector('.hover');
-      if (current) {
-        current.classList.remove('hover');
-      }
-      this.currentIndex = -1;
+    this.state = false;
+    this.menu.classList.remove('context-menu--open');
 
-      Helpers.customTrigger('contextMenuClose', this.menu, {
-        detail: {
-          trigger: this.trigger
-        }
-      });
+    const current = this.menu.querySelector('.hover');
+    if (current) {
+      current.classList.remove('hover');
     }
+    this.currentIndex = -1;
+
+    Helpers.customTrigger('contextMenuClose', this.menu, {
+      detail: {
+        trigger: this.trigger
+      }
+    });
   }
 
   destroy() {
