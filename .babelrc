@@ -10,7 +10,6 @@
     ]
   ],
   "plugins": [
-    "@babel/plugin-transform-object-assign",
     "@babel/plugin-syntax-dynamic-import"
   ]
 }
