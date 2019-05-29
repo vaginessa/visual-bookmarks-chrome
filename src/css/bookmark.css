@@ -837,6 +837,16 @@ select {
   filter: var(--select-icon-color);
 }
 
+textarea {
+  height: 100px;
+  resize: none;
+  box-sizing: content-box;
+}
+
+.is-editor {
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
 .label {
   display: block;
   font-size: 0.9rem;

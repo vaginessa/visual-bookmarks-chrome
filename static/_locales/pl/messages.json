@@ -11,6 +11,9 @@
   "dark_theme": {
     "message": "Ciemny motyw"
   },
+  "placeholder_input_customstyle": {
+    "message": "Wprowadź swój niestandardowy CSS(Dla zaawansowanych użytkowników)"
+  },
   "placeholder_input_search": {
     "message": "Wyszukaj w zakładkach"
   },
@@ -250,6 +253,9 @@
   },
   "option_not_sync": {
     "message": "Opcja nie jest synchronizowana"
+  },
+  "option_customstyle": {
+    "message": "Niestandardowe CSS"
   },
   "version": {
     "message": "Wersja"

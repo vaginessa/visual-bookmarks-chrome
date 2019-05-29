@@ -11,6 +11,9 @@
   "dark_theme": {
     "message": "Dark theme"
   },
+  "placeholder_input_customstyle": {
+    "message": "Enter your custom CSS(For advanced users)"
+  },
   "placeholder_input_search": {
     "message": "Search bookmarks"
   },
@@ -250,6 +253,9 @@
   },
   "option_not_sync": {
     "message": "Option is not synchronized"
+  },
+  "option_customstyle": {
+    "message": "Custom CSS"
   },
   "version": {
     "message": "Version"

@@ -7,6 +7,7 @@ import UI from './components/ui';
 import Localization from './components/localization';
 import Ripple from './components/ripple';
 import Helpers from './components/helpers';
+import AutosizeTextarea from './components/autosizeTextarea';
 
 // Set lang attr
 // Replacement underscore on the dash because underscore is not a valid language subtag
@@ -26,6 +27,12 @@ let tabsSlider = new TabsSlider(tabs, {
 });
 tabs.addEventListener('tabChange', function(evt) {
   localStorage['option_tab_slide'] = evt.detail.currentIndex;
+});
+
+// textarea autosize
+const textarea = new AutosizeTextarea('#custom_style');
+textarea.el.addEventListener('textarea-autosize', function() {
+  tabsSlider.recalcStyles();
 });
 
 const Options = (() => {

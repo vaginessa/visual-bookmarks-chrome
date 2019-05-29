@@ -449,6 +449,7 @@ Settings.init();
 UI.toggleTheme();
 UI.calculateStyles();
 UI.setBG();
+UI.userStyles();
 /**
  * Bookmarks
  */

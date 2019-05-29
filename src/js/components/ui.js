@@ -10,6 +10,14 @@ export default {
       document.documentElement.classList.remove('dark');
     }
   },
+  userStyles() {
+    const styles = localStorage.getItem('custom_style');
+    if (!styles) return;
+
+    const style = document.createElement('style');
+    style.appendChild(document.createTextNode(styles));
+    document.head.appendChild(style);
+  },
   setBG() {
     const bgEl = document.getElementById('bg');
     const bgState = localStorage.getItem('background_image');

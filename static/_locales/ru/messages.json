@@ -11,6 +11,9 @@
   "dark_theme": {
     "message": "Тёмная тема"
   },
+  "placeholder_input_customstyle": {
+    "message": "Стили пользователя CSS(Для продвинутых пользователей)"
+  },
   "placeholder_input_search": {
     "message": "Поиск закладок"
   },
@@ -250,6 +253,9 @@
   },
   "option_not_sync": {
     "message": "Параметр не синхронизируется"
+  },
+  "option_customstyle": {
+    "message": "Пользовательский CSS"
   },
   "version": {
     "message": "Версия"

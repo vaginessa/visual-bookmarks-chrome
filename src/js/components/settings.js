@@ -17,6 +17,7 @@ const DEFAULTS = {
   show_favicon: 'true',
   thumbnailing_service: 'https://logo.clearbit.com/[URL]',
   thumbnails_update_button: 'true',
+  custom_style: '',
   // TODO: experiment
   google_services: false
 };
