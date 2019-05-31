@@ -86,6 +86,10 @@ const Options = (() => {
         elOption.checked = localStorage.getItem(id) === 'true';
       } else {
         elOption.value = localStorage.getItem(id);
+        // Triggering event at program input to the textarea(for autosize textarea)
+        if (elOption === textarea.el) {
+          Helpers.trigger('input', textarea.el);
+        }
       }
     }
   }
@@ -100,6 +104,7 @@ const Options = (() => {
       localStorage.setItem(id, target.checked);
     } else {
       localStorage.setItem(id, target.value);
+
     }
 
     // dark theme
