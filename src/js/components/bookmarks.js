@@ -42,11 +42,6 @@ const Bookmarks = (() => {
       container.classList.add('grid--vcenter');
     }
 
-    // TODO: experiment low transparency thumbs
-    if (localStorage.getItem('low_transparency') === 'true') {
-      container.classList.add('low-transparency');
-    }
-
     // Create speeddial
     createSpeedDial(startFolder());
 

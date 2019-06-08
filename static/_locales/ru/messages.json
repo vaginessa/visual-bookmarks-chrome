@@ -182,9 +182,6 @@
   "default_folder_show": {
     "message": "Отображать папку по умолчанию"
   },
-  "low_transparency_thumbs": {
-    "message": "Небольшая прозрачность"
-  },
   "background": {
     "message": "Фон"
   },
