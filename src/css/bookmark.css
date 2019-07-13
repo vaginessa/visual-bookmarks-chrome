@@ -196,10 +196,14 @@ body {
   line-height: var(--line-height);
   font-family: var(--font-family);
   font-size: var(--font-size-base);
-  overflow-y: hidden;
+  overflow-y: scroll;
   overflow-x: hidden;
   background-color: var(--theme-bg);
   color: var(--theme-text-color);
+}
+
+body:not(.options) {
+  overflow-y: hidden;
 }
 
 h1 {
