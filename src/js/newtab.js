@@ -342,9 +342,18 @@ const NewTab = (() => {
       const bookmark = container.querySelector('[data-sort="' + id + '"]');
       const bookmarkImg = bookmark.querySelector('.bookmark__img');
       const props = JSON.parse(bookmark.dataset.props);
-      bookmarkImg.classList.remove('bookmark__img--contain');
 
-      if (!props.isFolder) {
+      // if folder: selector exists if folder_preview option is off
+      // update view only if folder_preview option is off
+      bookmarkImg && bookmarkImg.classList.remove('bookmark__img--contain');
+
+      if (props.isFolder) {
+        // update view only if folder_preview option is off
+        if (bookmarkImg) {
+          bookmarkImg.style.backgroundImage = '';
+          bookmarkImg.classList.add('bookmark__img--folder');
+        }
+      } else {
         const url = localStorage.getItem('thumbnailing_service').replace('[URL]', Helpers.getDomain(props.url));
         Helpers.imageLoaded(url, {
           done() {
@@ -356,9 +365,6 @@ const NewTab = (() => {
             bookmarkImg.classList.add('bookmark__img--broken');
           }
         });
-      } else {
-        bookmarkImg.style.backgroundImage = '';
-        bookmarkImg.classList.add('bookmark__img--folder');
       }
 
       props.screen = '';

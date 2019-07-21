@@ -265,5 +265,11 @@
   },
   "thumbnails_update_button": {
     "message": "Przycisk aktualizacji miniatur"
+  },
+  "folder_preview": {
+    "message": "Miniatury witryn w folderze zamiast ikony"
+  },
+  "folder_preview_description": {
+    "message": "Gdy to ustawienie jest włączone, zamiast ikony lub niestandardowego obrazu zostaną wyświetlone miniatury 4 losowych witryn z folderu."
   }
 }

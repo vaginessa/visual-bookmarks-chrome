@@ -18,7 +18,8 @@ const DEFAULTS = {
   thumbnails_update_button: 'true',
   custom_style: '',
   // TODO: experiment
-  google_services: false
+  google_services: false,
+  folder_preview: false
 };
 
 // TODO: experiment service object (without sync)

@@ -238,15 +238,20 @@ const Bookmarks = (() => {
   function genFolder(bookmark) {
     let imgLayout;
     const screen = getCustomDial(bookmark.id);
-    // key screen destructuring
-    // the old key does not contain nested properties(image, custom), so we assign the key value to the variable image
-    // the key may be undefined,in this case we are trying to work with an empty object
-    const { image = screen } = screen || {};
 
-    if (image) {
-      imgLayout = `<div class="bookmark__img bookmark__img--contain" style="background-image: url(${image})"></div>`;
+    if (localStorage.getItem('folder_preview') === 'true') {
+      imgLayout = renderFolderChildren(bookmark);
     } else {
-      imgLayout = '<div class="bookmark__img bookmark__img--folder"></div>';
+      // key screen destructuring
+      // the old key does not contain nested properties(image, custom), so we assign the key value to the variable image
+      // the key may be undefined,in this case we are trying to work with an empty object
+      const { image = screen } = screen || {};
+
+      if (image) {
+        imgLayout = `<div class="bookmark__img bookmark__img--contain" style="background-image: url(${image})"></div>`;
+      } else {
+        imgLayout = '<div class="bookmark__img bookmark__img--folder"></div>';
+      }
     }
 
     const tpl =
@@ -271,6 +276,26 @@ const Bookmarks = (() => {
       title: Helpers.escapeHtml(bookmark.title),
       screen: JSON.stringify(screen || null)
     });
+  }
+
+  function renderFolderChildren(bookmark) {
+    if (!bookmark.children || !bookmark.children.length) {
+      return `<div class="bookmark__img bookmark__img--folder"></div>`;
+    }
+
+    const shuffleChildren = Helpers.shuffle(bookmark.children.filter(item => !item.children)).slice(0, 4);
+    const thumbnailingService = localStorage.getItem('thumbnailing_service');
+
+    const childs = shuffleChildren.map(child => {
+      let { image = null } = getCustomDial(child.id) || {};
+      return image
+        ? `<div class="bookmark__childrens" style="background-image: url(${image})"></div>`
+        : `<div class="bookmark__childrens bookmark__img--external"
+            data-fail-thumb="/img/broken-image.svg"
+            data-external-thumb="${thumbnailingService.replace('[URL]', Helpers.getDomain(child.url))}">
+          </div>`;
+    }).join('');
+    return `<div class="bookmark__summary-folder">${childs}</div>`;
   }
 
   function render(_array, isCreate = false) {
@@ -350,7 +375,6 @@ const Bookmarks = (() => {
         container.setAttribute('data-folder', id);
       } else {
         Helpers.notifications(chrome.i18n.getMessage('notice_cant_find_id'));
-        // remove grid class
         container.classList.remove('grid');
         container.innerHTML =
           `<div class="not-found">
@@ -367,6 +391,7 @@ const Bookmarks = (() => {
   }
 
   function uploadScreen(data) {
+    const folderPreviewOff = localStorage.getItem('folder_preview') !== 'true';
     const { target, id, site } = data;
     const file = target.files[0];
     if (!file) return;
@@ -403,15 +428,18 @@ const Bookmarks = (() => {
               screen: obj[id]
             });
 
-            const imgEl = bookmark.querySelector('.bookmark__img');
-            if (data.site) {
-              imgEl.classList.remove('bookmark__img--external', 'bookmark__img--broken');
-            } else {
-              imgEl.classList.remove('bookmark__img--folder');
-            }
-            imgEl.classList.add('bookmark__img--contain');
+            // update view only if folder_preview option is off
+            if (folderPreviewOff) {
+              const imgEl = bookmark.querySelector('.bookmark__img');
+              if (data.site) {
+                imgEl.classList.remove('bookmark__img--external', 'bookmark__img--broken');
+              } else {
+                imgEl.classList.remove('bookmark__img--folder');
+              }
+              imgEl.classList.add('bookmark__img--contain');
 
-            imgEl.style.backgroundImage = `url('${fileEntry.toURL()}?refresh=${Date.now()}')`;
+              imgEl.style.backgroundImage = `url('${fileEntry.toURL()}?refresh=${Date.now()}')`;
+            }
 
             let overlay = bookmark.querySelector('.bookmark__overlay');
             if (overlay) {

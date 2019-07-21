@@ -265,5 +265,11 @@
   },
   "thumbnails_update_button": {
     "message": "Thumbnails update button"
+  },
+  "folder_preview": {
+    "message": "Thumbnails of sites on a folder instead of an icon"
+  },
+  "folder_preview_description": {
+    "message": "While this setting is enabled, thumbnails of 4 random sites from the folder will be displayed instead of the icon or custom picture."
   }
 }

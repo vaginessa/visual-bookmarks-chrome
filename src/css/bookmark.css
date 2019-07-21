@@ -385,6 +385,29 @@ p {
   padding: 0;
 }
 
+.bookmark__summary-folder {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: center;
+  padding: 4px;
+}
+
+.bookmark__childrens {
+  width: calc(40% - 4px);
+  margin: 2px;
+  border-radius: 2px;
+  background-color: rgba(0, 0, 0, 0.1);
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
 .bookmark.disable-events {
   pointer-events: none;
 }

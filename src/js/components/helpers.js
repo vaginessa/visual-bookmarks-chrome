@@ -151,6 +151,14 @@ export default {
     img.src = image;
   },
 
+  shuffle([...arr]) {
+    let m = arr.length;
+    while (m) {
+      const i = Math.floor(Math.random() * m--);
+      [arr[m], arr[i]] = [arr[i], arr[m]];
+    }
+    return arr;
+  },
   // rand(min, max) {
   //   return Math.round(
   //     min - 0.5 + Math.random() * (max - min + 1)
