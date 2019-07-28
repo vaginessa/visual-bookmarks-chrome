@@ -428,8 +428,8 @@ const Bookmarks = (() => {
               screen: obj[id]
             });
 
-            // update view only if folder_preview option is off
-            if (folderPreviewOff) {
+            // update view only if folder_preview option is off or if the tab is not a folder
+            if (folderPreviewOff || data.site) {
               const imgEl = bookmark.querySelector('.bookmark__img');
               if (data.site) {
                 imgEl.classList.remove('bookmark__img--external', 'bookmark__img--broken');
