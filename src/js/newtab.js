@@ -36,7 +36,8 @@ const NewTab = (() => {
       closeBackdrop: false
     });
     ctxMenu = new ContextMenu(ctxMenuEl, {
-      delegateSelector: '.bookmark'
+      delegateSelector: '.bookmark',
+      scrollContainer: '.app'
     });
 
     // TODO: if

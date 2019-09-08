@@ -20,6 +20,7 @@ class ContextMenu {
     this.settings = Object.assign({
       tresholdMargin: 10,
       delegateSelector: 'html',
+      scrollContainer: window
     }, options);
 
     this.init();
@@ -28,6 +29,11 @@ class ContextMenu {
   init() {
     this.state = false;
     this.trigger = null;
+
+    if (this.settings.scrollContainer !== window) {
+      const el = document.querySelector(this.settings.scrollContainer);
+      this.scrollContainer = el ? el : window;
+    }
 
     // links
     this.items = this.menu.querySelectorAll('.context-menu__link');
@@ -51,16 +57,16 @@ class ContextMenu {
     this.handlerKeyboard = this.handlerKeyboard.bind(this);
     this.handlerClose = this.handlerClose.bind(this);
 
+    this.scrollContainer.addEventListener('scroll', this.handlerClose);
     window.addEventListener('resize', this.handlerClose);
-    window.addEventListener('scroll', this.handlerClose);
     document.addEventListener('contextmenu', this.handlerTrigger);
     document.addEventListener('keydown', this.handlerKeyboard);
     document.addEventListener('click', this.handlerClick);
   }
 
   detachEvents() {
+    this.scrollContainer.removeEventListener('scroll', this.handlerClose);
     window.removeEventListener('resize', this.handlerClose);
-    window.removeEventListener('scroll', this.handlerClose);
     document.removeEventListener('contextmenu', this.handlerTrigger);
     document.removeEventListener('keydown', this.handlerKeyboard);
     document.removeEventListener('click', this.handlerClick);
