@@ -226,7 +226,7 @@ p {
 
 .app {
   height: 100vh;
-  overflow-y: auto;
+  overflow-y: scroll;
 }
 
 /* Grid */
