@@ -53,8 +53,11 @@ module.exports = {
   optimization: {
     minimizer: [
       new TerserPlugin({
+        // do not extract to separate file
+        extractComments: false,
         terserOptions: {
-          output: { comments: false },
+          // output: { comments: false, },
+          output: { comments: /@?license/i, },
           compress: { passes: 3 }
         }
       })
