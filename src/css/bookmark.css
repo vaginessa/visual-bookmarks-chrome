@@ -393,7 +393,6 @@ p {
   bottom: 30px;
   display: flex;
   flex-wrap: wrap;
-  align-items: stretch;
   justify-content: center;
   padding: 4px;
 }
@@ -407,6 +406,14 @@ p {
   background-size: contain;
   background-repeat: no-repeat;
 }
+
+.bookmark__childrens:only-child,
+.bookmark__childrens:first-child:nth-last-child(2),
+.bookmark__childrens:first-child:nth-last-child(2) ~ .bookmark__childrens {
+  align-self: center;
+  padding-bottom: 26%;
+}
+
 
 .bookmark.disable-events {
   pointer-events: none;
