@@ -700,8 +700,8 @@ p {
 
 /* Options page */
 .wrap {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: 1fr auto;
   min-height: 100vh;
 }
 
@@ -711,17 +711,11 @@ p {
   color: var(--theme-text-color);
 }
 
-.option-bg--hide {
-  display: none;
-}
-
 .settings-container {
-  flex: 1 0 auto;
   padding-top: 50px;
 }
 
 .footer {
-  flex: 0 0 auto;
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
