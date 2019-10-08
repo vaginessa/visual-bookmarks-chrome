@@ -279,8 +279,16 @@ const Bookmarks = (() => {
   }
 
   function renderFolderChildren(bookmark) {
-    if (!bookmark.children || !bookmark.children.length) {
-      return `<div class="bookmark__img bookmark__img--folder"></div>`;
+    // if there are only folders inside the bookmark, display the default icon
+    if (bookmark.children && bookmark.children.length) {
+      const subChildrenFolderCount = bookmark.children.reduce((acc, cur) => {
+        if (cur.children) acc += 1;
+        return acc;
+      }, 0);
+
+      if (subChildrenFolderCount === bookmark.children.length) {
+        return `<div class="bookmark__img bookmark__img--folder"></div>`;
+      }
     }
 
     const shuffleChildren = Helpers.shuffle(bookmark.children.filter(item => !item.children)).slice(0, 4);
