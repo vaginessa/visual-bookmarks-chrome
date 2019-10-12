@@ -56,15 +56,15 @@ const NewTab = (() => {
 
     Bookmarks.generateFolderList(foldersList);
 
-    container.addEventListener('changeFolder', function(e) {
-      if (!e.detail || !e.detail.id) return;
-      Bookmarks.generateFolderList(foldersList);
-    });
-    container.addEventListener('updateFolderList', function(e) {
-      if (e.detail && e.detail.isFolder) {
-        Bookmarks.generateFolderList(foldersList);
-      }
-    });
+    // container.addEventListener('changeFolder', function(e) {
+    //   if (!e.detail || !e.detail.id) return;
+    //   Bookmarks.generateFolderList(foldersList);
+    // });
+    // container.addEventListener('updateFolderList', function(e) {
+    //   if (e.detail && e.detail.isFolder) {
+    //     Bookmarks.generateFolderList(foldersList);
+    //   }
+    // });
 
     // If thumbnail generation button
     if (localStorage.getItem('thumbnails_update_button') === 'true') {
@@ -379,9 +379,14 @@ const NewTab = (() => {
   function modalBeforeOpen(props) {
     if (props) {
       modal.classList.add('has-edit');
+
       const title = Helpers.unescapeHtml(props.title);
       const url = props.url;
+      const parentId = String(props.parentId);
       const { image = props.screen } = props.screen || {};
+
+      // generate bookmark folder list
+      Bookmarks.generateFolderList(foldersList, parentId);
 
       // if (screen && !url) {
       if (image) {

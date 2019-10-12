@@ -147,7 +147,7 @@ const Bookmarks = (() => {
     return folderId;
   }
 
-  function generateFolderList(select) {
+  function generateFolderList(select, activeFolder = null) {
     // If not select element
     if (!(select instanceof HTMLSelectElement)) return;
 
@@ -180,8 +180,9 @@ const Bookmarks = (() => {
         return a.path.localeCompare(b.path);
       });
 
-      let optionsList = folderList.map(function(item) {
-        return `<option${item.id === startFolder() ? ' selected' : ''} value="${item.id}">${item.path}</option>`;
+      const folderId = activeFolder ? activeFolder : startFolder();
+      const optionsList = folderList.map(function(item) {
+        return `<option${item.id === folderId ? ' selected' : ''} value="${item.id}">${item.path}</option>`;
       }).join('');
       select.innerHTML = optionsList;
     });
@@ -210,7 +211,7 @@ const Bookmarks = (() => {
     const tpl =
       `<div class="bookmark"
           data-sort="%id%"
-          data-props='{"isFolder":false,"title":"%escape_title%","url":"%url%","id":"%id%","screen":%screen%}'>
+          data-props='{"isFolder":false, "parentId": "%parentId%", "title":"%escape_title%","url":"%url%","id":"%id%","screen":%screen%}'>
           <div class="bookmark__wrap">
             <button class="bookmark__action"></button>
             ${thumbContainer}
@@ -224,6 +225,7 @@ const Bookmarks = (() => {
 
     return Helpers.templater(tpl, {
       id: bookmark.id,
+      parentId: bookmark.parentId,
       url: bookmark.url,
       site: Helpers.getDomain(bookmark.url),
       screen: JSON.stringify(screen || null),
@@ -240,7 +242,8 @@ const Bookmarks = (() => {
     const screen = getCustomDial(bookmark.id);
 
     if (localStorage.getItem('folder_preview') === 'true') {
-      imgLayout = renderFolderChildren(bookmark);
+      const folderChildren = renderFolderChildren(bookmark);
+      imgLayout = folderChildren ? folderChildren : `<div class="bookmark__img bookmark__img--folder"></div>`;
     } else {
       // key screen destructuring
       // the old key does not contain nested properties(image, custom), so we assign the key value to the variable image
@@ -255,9 +258,9 @@ const Bookmarks = (() => {
     }
 
     const tpl =
-     `<div class="bookmark"
+    `<div class="bookmark"
         data-sort="%id%"
-        data-props='{"isFolder":true,"title":"%escape_title%","id":"%id%","screen":%screen%}'>
+        data-props='{"isFolder":true, "parentId": "%parentId%", "title":"%escape_title%","id":"%id%","screen":%screen%}'>
         <div class="bookmark__wrap">
           <button class="bookmark__action"></button>
           ${imgLayout}
@@ -271,6 +274,7 @@ const Bookmarks = (() => {
 
     return Helpers.templater(tpl, {
       id: bookmark.id,
+      parentId: bookmark.parentId,
       url: bookmark.id,
       escape_title: Helpers.escapeHtmlToText(bookmark.title),
       title: Helpers.escapeHtml(bookmark.title),
@@ -279,16 +283,16 @@ const Bookmarks = (() => {
   }
 
   function renderFolderChildren(bookmark) {
-    // if there are only folders inside the bookmark, display the default icon
-    if (bookmark.children && bookmark.children.length) {
-      const subChildrenFolderCount = bookmark.children.reduce((acc, cur) => {
-        if (cur.children) acc += 1;
-        return acc;
-      }, 0);
+    // if the folder is empty or if there are only folders inside the bookmark, display the default icon
+    if (!bookmark.children) return false;
 
-      if (subChildrenFolderCount === bookmark.children.length) {
-        return `<div class="bookmark__img bookmark__img--folder"></div>`;
-      }
+    const subChildrenFolderCount = bookmark.children.reduce((acc, cur) => {
+      if (cur.children) acc += 1;
+      return acc;
+    }, 0);
+
+    if (!bookmark.children.length || subChildrenFolderCount === bookmark.children.length) {
+      return false;
     }
 
     const shuffleChildren = Helpers.shuffle(bookmark.children.filter(item => !item.children)).slice(0, 4);
