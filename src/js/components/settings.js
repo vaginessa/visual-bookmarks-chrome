@@ -17,27 +17,28 @@ const DEFAULTS = {
   thumbnailing_service: 'https://logo.clearbit.com/[URL]',
   thumbnails_update_button: 'true',
   custom_style: '',
-  // TODO: experiment
   google_services: false,
+  google_services_list: [
+    { name: 'youtube', link: 'https://www.youtube.com' },
+    { name: 'search', link: 'https://google.com' },
+    { name: 'translate', link: 'https://translate.google.com' },
+    { name: 'gmail', link: 'https://mail.google.com/mail' },
+    { name: 'drive', link: 'https://drive.google.com/' },
+    { name: 'photos', link: 'https://photos.google.com' }
+  ],
   folder_preview: false
 };
-
-// TODO: experiment service object (without sync)
-const GOOGLE_SERVICES = [
-  { name: 'youtube', link: 'https://www.youtube.com' },
-  { name: 'search', link: 'https://google.com' },
-  { name: 'translate', link: 'https://translate.google.com' },
-  { name: 'gmail', link: 'https://mail.google.com/mail' },
-  { name: 'drive', link: 'https://drive.google.com/' },
-  { name: 'photos', link: 'https://photos.google.com' }
-];
 
 export default {
   init() {
     // Creates default localStorage values if they don't already exist
     Object.keys(DEFAULTS).forEach(function(name) {
       if (localStorage.getItem(name) === null) {
-        localStorage.setItem(name, DEFAULTS[name]);
+        const value = (name === 'google_services_list')
+          ? JSON.stringify(DEFAULTS[name])
+          : DEFAULTS[name];
+
+        localStorage.setItem(name, value);
       }
     });
 

@@ -736,10 +736,6 @@ p {
   float: right;
 }
 
-.options-controls {
-  background-color: var(--theme-bg-200);
-}
-
 .tbl {
   display: table;
   width: 100%;
@@ -834,6 +830,12 @@ p {
   width: var(--df-width);
 }
 
+.tabs__footer {
+  padding: 10px;
+  text-align: center;
+  background-color: var(--theme-bg-200);
+}
+
 /* Forms */
 .group {
   position: relative;
@@ -873,10 +875,11 @@ select {
 textarea {
   height: 100px;
   resize: none;
-  box-sizing: content-box;
 }
 
-.is-editor {
+textarea.is-editor {
+  width: calc(100% - 20px); /* tbl__value padding 10px */
+  box-sizing: content-box;
   font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
@@ -1041,7 +1044,11 @@ textarea {
 }
 
 .btn-group {
-  padding: 10px;
+  display: flex;
+}
+
+.btn-group--full .btn {
+  flex: 1;
 }
 
 .btn-group .btn + .btn {
@@ -1064,6 +1071,16 @@ textarea {
 }
 
 /* Upload component */
+.c-upload.btn .c-upload__btn {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: inherit;
+}
 .c-upload__input {
   width: 1px;
   height: 1px;
@@ -1081,11 +1098,10 @@ textarea {
 }
 
 .c-upload__btn {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 10px 15px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  text-align: center;
   text-transform: uppercase;
   font-size: 0.9em;
   font-weight: 500;
@@ -1112,6 +1128,8 @@ textarea {
 
 .c-upload__preview {
   position: relative;
+  margin-top: 10px;
+  margin-bottom: 10px;
   overflow: hidden;
   border-radius: var(--base-radius);
 }

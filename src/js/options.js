@@ -61,6 +61,68 @@ const Options = (() => {
     document.getElementById('restore_sync').addEventListener('click', clearSyncData, false);
     document.getElementById('enable_sync').addEventListener('change', checkEnableSync, false);
     document.getElementById('clear_images').addEventListener('click', deleteImages, false);
+
+    document.getElementById('export').addEventListener('click', exportSettings, false);
+    document.getElementById('import').addEventListener('change', importSettings, false);
+  }
+
+  function importSettings(e) {
+    const input = e.target;
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+
+      reader.addEventListener('load', function(e) {
+        try {
+          const settings = JSON.parse(e.target.result);
+          Object.keys(settings).forEach(setting => {
+            localStorage.setItem(setting, settings[setting]);
+          });
+          Helpers.notifications(
+            'Настройки импортированы'
+            // chrome.i18n.getMessage('notice_bg_image_updated')
+          );
+          setTimeout(() => {
+            location.reload();
+          }, 0);
+        } catch (error) {
+          Helpers.notifications(
+            'Неудалось распарсить файл с настройками'
+            // chrome.i18n.getMessage('notice_bg_image_updated')
+          );
+          input.value = '';
+          console.warn(error);
+        }
+      });
+      reader.readAsBinaryString(input.files[0]);
+    }
+
+  }
+
+  function exportSettings() {
+    const data = Object.keys(localStorage).reduce((acc, cur) => {
+      if (
+        ![
+          'default_folder_id',
+          'custom_dials',
+          'background_local',
+        ].includes(cur)
+      ) {
+        acc[cur] = localStorage[cur];
+      }
+      return acc;
+    }, {});
+
+    const file = new Blob([JSON.stringify(data)], {type: 'text/plain'});
+    // TODO: permission is required to download
+    // chrome.downloads.download({
+    //   url: URL.createObjectURL(file),
+    //   filename: 'visual-bookmarks-settings.backup'
+    // });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(file);
+    a.download = 'visual-bookmarks-settings.backup';
+    a.click();
+    a.remove();
   }
 
   function getOptions() {

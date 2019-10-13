@@ -156,8 +156,7 @@ const NewTab = (() => {
       // update storage after sorting
       el.addEventListener('sort', e => {
         localStorage.google_services_list = JSON.stringify(e.detail.services);
-        // TODO: sync
-        // Settings.syncSingleToStorage('google_services');
+        Settings.syncSingleToStorage('google_services_list');
       });
     }).catch(err => {
       console.warn(err);

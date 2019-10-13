@@ -137,10 +137,7 @@
             </div>
 
             <div class="tbl">
-              <div class="tbl__setting">
-                <div data-locale-message="google_services"></div>
-                <span class="badge">Experiment</span>
-              </div>
+              <div class="tbl__setting" data-locale-message="google_services"></div>
               <div class="tbl__value">
                 <div class="switch">
                   <input type="checkbox" class="switch__input js-change" name="google_services" id="google_services">
@@ -152,8 +149,6 @@
             <div class="tbl">
               <div class="tbl__setting">
                 <div data-locale-message="folder_preview"></div>
-                <span class="badge">Experiment</span>
-                <br>
                 <small class="text-muted" data-locale-message="folder_preview_description"></small>
               </div>
               <div class="tbl__value">
@@ -288,9 +283,27 @@
               </div>
             </div>
 
+            <div class="tbl">
+              <div class="tbl__setting">
+                <div data-locale-message="backup_settings">Backup settings</div>
+                <small class="text-muted" data-locale-message="backup_settings_description"></small>
+              </div>
+              <div class="tbl__value">
+                <div class="btn-group btn-group--full">
+                  <div class="c-upload btn">
+                    <input type="file" name="import" id="import" class="c-upload__input" accept=".backup">
+                    <label for="import" class="c-upload__btn md-ripple">
+                      <span class="c-upload__name" data-locale-message="import">Import</span>
+                    </label>
+                  </div>
+                  <button class="btn md-ripple" data-locale-message="export" id="export">Export</button>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
-        <div class="btn-group text-center options-controls">
+        <div class="tabs__footer">
           <a href="newtab.html" class="btn md-ripple" data-locale-message="btn_back" data-ripple-color="rgba(0,0,0,.3)">Done</a>
         </div>
       </div>

@@ -271,5 +271,11 @@
   },
   "folder_preview_description": {
     "message": "Gdy to ustawienie jest włączone, zamiast ikony lub niestandardowego obrazu zostaną wyświetlone miniatury 4 losowych witryn z folderu."
+  },
+  "backup_settings": {
+    "message": "Ustawienia importu / eksportu"
+  },
+  "backup_settings_description": {
+    "message": "Kopia zapasowa tylko dla ustawień rozszerzeń, z wyłączeniem zakładek i obrazów"
   }
 }
