@@ -78,16 +78,14 @@ const Options = (() => {
             localStorage.setItem(setting, settings[setting]);
           });
           Helpers.notifications(
-            'Настройки импортированы'
-            // chrome.i18n.getMessage('notice_bg_image_updated')
+            chrome.i18n.getMessage('import_settings_success')
           );
           setTimeout(() => {
             location.reload();
           }, 0);
         } catch (error) {
           Helpers.notifications(
-            'Неудалось распарсить файл с настройками'
-            // chrome.i18n.getMessage('notice_bg_image_updated')
+            chrome.i18n.getMessage('import_settings_failed')
           );
           input.value = '';
           console.warn(error);

@@ -277,5 +277,11 @@
   },
   "backup_settings_description": {
     "message": "Kopia zapasowa tylko dla ustawień rozszerzeń, z wyłączeniem zakładek i obrazów"
+  },
+  "import_settings_success": {
+    "message": "Ustawienia zaimportowane"
+  },
+  "import_settings_failed": {
+    "message": "Nie można przeanalizować pliku ustawień"
   }
 }

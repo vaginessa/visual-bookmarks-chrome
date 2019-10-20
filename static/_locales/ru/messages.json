@@ -277,5 +277,11 @@
   },
   "backup_settings_description": {
     "message": "Резервное копирование только для настроек расширения, исключая закладки и изображения"
+  },
+  "import_settings_success": {
+    "message": "Настройки импортированы"
+  },
+  "import_settings_failed": {
+    "message": "Неудалось распарсить файл с настройками"
   }
 }
