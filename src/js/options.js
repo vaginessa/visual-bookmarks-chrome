@@ -8,6 +8,7 @@ import Localization from './components/localization';
 import Ripple from './components/ripple';
 import Helpers from './components/helpers';
 import AutosizeTextarea from './components/autosizeTextarea';
+import Toast from './components/toast';
 
 // Set lang attr
 // Replacement underscore on the dash because underscore is not a valid language subtag
@@ -84,9 +85,7 @@ const Options = (() => {
             location.reload();
           }, 0);
         } catch (error) {
-          Helpers.notifications(
-            chrome.i18n.getMessage('import_settings_failed')
-          );
+          Toast.show(chrome.i18n.getMessage('import_settings_failed'));
           input.value = '';
           console.warn(error);
         }
@@ -198,13 +197,11 @@ const Options = (() => {
         document.querySelector('.c-upload__preview').style.display = '';
         document.getElementById('preview_upload').innerHTML = `
           <div class="c-upload__preview-image"
-               style="background-image: url(${fileEntry.toURL()}?new=${Date.now()});">
+            style="background-image: url(${fileEntry.toURL()}?new=${Date.now()});">
           <div>
         `;
         localStorage.setItem('background_local', fileEntry.toURL());
-        Helpers.notifications(
-          chrome.i18n.getMessage('notice_bg_image_updated')
-        );
+        Toast.show(chrome.i18n.getMessage('notice_bg_image_updated'));
         tabsSlider.recalcStyles();
       });
     });
@@ -227,9 +224,7 @@ const Options = (() => {
     const name = img.split('/').pop();
 
     FS.deleteFile(`/images/${name}`, function() {
-      Helpers.notifications(
-        chrome.i18n.getMessage('notice_image_removed')
-      );
+      Toast.show(chrome.i18n.getMessage('notice_image_removed'));
       localStorage.removeItem('background_local');
       preview.innerHTML = '';
       previewParent.style.display = 'none';
@@ -266,7 +261,7 @@ const Options = (() => {
     if (!confirm(chrome.i18n.getMessage('confirm_delete_images'), '')) return;
 
     FS.purge();
-    Helpers.notifications(chrome.i18n.getMessage('notice_images_removed'));
+    Toast.show(chrome.i18n.getMessage('notice_images_removed'));
     localStorage.setItem('background_local', '');
     localStorage.setItem('custom_dials', '{}');
   }
@@ -284,17 +279,13 @@ const Options = (() => {
       Settings.init();
       UI.toggleTheme();
       getOptions();
-      Helpers.notifications(
-        chrome.i18n.getMessage('notice_reset_default_settings')
-      );
+      Toast.show(chrome.i18n.getMessage('notice_reset_default_settings'));
     }
   }
   function clearSyncData() {
     if (confirm(chrome.i18n.getMessage('confirm_clear_sync_settings'), '')) {
       chrome.storage.sync.clear(() => {
-        Helpers.notifications(
-          chrome.i18n.getMessage('notice_sync_settings_cleared')
-        );
+        Toast.show(chrome.i18n.getMessage('notice_sync_settings_cleared'));
         // after cleaning, if synch is enabled, force to synch the current settings
         if (localStorage.getItem('enable_sync') === 'true') {
           Settings.syncToStorage();

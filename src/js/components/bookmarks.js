@@ -1,5 +1,6 @@
 // import '../img/broken-image.svg';
 import Sortable from 'sortablejs';
+import Toast from './toast';
 import FS from './fs';
 import Helpers from './helpers';
 
@@ -386,7 +387,7 @@ const Bookmarks = (() => {
         render(item[0].children, hasCreate);
         container.setAttribute('data-folder', id);
       } else {
-        Helpers.notifications(chrome.i18n.getMessage('notice_cant_find_id'));
+        Toast.show(chrome.i18n.getMessage('notice_cant_find_id'));
         container.classList.remove('grid');
         container.innerHTML =
           `<div class="not-found">
@@ -457,10 +458,7 @@ const Bookmarks = (() => {
             if (overlay) {
               overlay.remove();
             }
-            Helpers.notifications(
-              chrome.i18n.getMessage('notice_thumb_image_updated')
-            );
-
+            Toast.show(chrome.i18n.getMessage('notice_thumb_image_updated'));
           });
         });
 
@@ -559,9 +557,7 @@ const Bookmarks = (() => {
       bk.remove(id, function() {
         bookmark.remove();
         rmCustomScreen(id);
-        Helpers.notifications(
-          chrome.i18n.getMessage('notice_bookmark_removed')
-        );
+        Toast.show(chrome.i18n.getMessage('notice_bookmark_removed'));
       });
     }
   }
@@ -577,9 +573,7 @@ const Bookmarks = (() => {
             isFolder: true
           }
         });
-        Helpers.notifications(
-          chrome.i18n.getMessage('notice_folder_removed')
-        );
+        Toast.show(chrome.i18n.getMessage('notice_folder_removed'));
       });
     }
   }
@@ -715,7 +709,7 @@ const Bookmarks = (() => {
           }
         }
 
-        Helpers.notifications(chrome.i18n.getMessage('notice_bookmark_updated'));
+        Toast.show(chrome.i18n.getMessage('notice_bookmark_updated'));
       });
       return true;
     }

@@ -414,7 +414,6 @@ p {
   padding-bottom: 26%;
 }
 
-
 .bookmark.disable-events {
   pointer-events: none;
 }
@@ -1597,6 +1596,104 @@ body.gmodal-open {
 
 .gmodal__footer button + button {
   margin-left: 10px;
+}
+
+/* Snackbar */
+.toast {
+  position: fixed;
+  display: none;
+  z-index: 99999;
+  width: auto;
+  min-width: 340px;
+  max-width: 550px;
+  min-height: 48px;
+  font-family: inherit;
+  color: #fff;
+  background-color: #323232;
+  border-radius: 4px;
+  box-sizing: border-box;
+  will-change: transform, opacity;
+  opacity: 0;
+  transition: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition-property: opacity, transform;
+  box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12);
+}
+.toast__body {
+  display: flex;
+  align-items: center;
+}
+.toast__message {
+  padding: 14px 16px;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  letter-spacing: 0.015em;
+}
+.toast__btn {
+  flex-shrink: 0;
+  margin-right: 8px;
+  margin-left: auto;
+  width: 2.25rem;
+  height: 2.25rem;
+  text-align: center;
+  background-color: transparent;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+  outline: none;
+}
+.toast__btn:hover,
+.toast__btn:focus {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+.toast__btn:active {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+.toast__btn svg {
+  display: inline-block;
+  width: 1.4em;
+  height: 1.4em;
+  margin: auto;
+  vertical-align: middle;
+  fill: #fff;
+}
+.toast--bottom-right {
+  right: 20px;
+  bottom: 20px;
+  transform: translate3d(0, calc(100% + 20px), 0);
+}
+.toast--bottom-center {
+  left: 50%;
+  bottom: 20px;
+  transform: translate3d(-50%, 100%, 0);
+}
+.toast--bottom-left {
+  left: 20px;
+  bottom: 20px;
+  transform: translate3d(0, calc(100% + 20px), 0);
+}
+.toast--top-right {
+  right: 20px;
+  top: 20px;
+  transform: translate3d(0, calc(-100% - 20px), 0);
+}
+.toast--top-center {
+  left: 50%;
+  top: 20px;
+  transform: translate3d(-50%, -100%, 0);
+}
+.toast--top-left {
+  left: 20px;
+  top: 20px;
+  transform: translate3d(0, calc(-100% - 20px), 0);
+}
+.toast-enter {
+  opacity: 1;
+  transform: none;
+}
+.toast-enter.toast--top-center,
+.toast-enter.toast--bottom-center {
+  transform: translate3d(-50%, 0, 0);
 }
 
 /* Ripple */
