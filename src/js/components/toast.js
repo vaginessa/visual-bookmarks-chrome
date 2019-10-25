@@ -55,7 +55,9 @@ const Toast = (() => {
     isShow = true;
 
     window.requestAnimationFrame(() => {
-      toast.classList.add('toast-enter');
+      window.requestAnimationFrame(() => {
+        toast.classList.add('toast-enter');
+      });
     });
 
     if (settings.delay) {
