@@ -7,8 +7,10 @@
     "lint:css": "stylelint src/css/**;  exit 0",
     "lint:html": "htmlhint src/*.html; exit 0",
     "lint": "npm run lint:es && npm run lint:css && npm run lint:html",
-    "start": "webpack --mode production --watch --hide-modules",
-    "build": "webpack --mode production --hide-modules"
+    "start": "webpack --mode=development --watch --progress --hide-modules",
+    "build": "webpack --mode=production --progress --hide-modules",
+    "zip": "bestzip extension.zip extension/*",
+    "release": "npm run build && npm run zip"
   },
   "repository": {
     "type": "git",
@@ -27,6 +29,7 @@
     "autoprefixer": "^9.6.4",
     "babel-eslint": "^10.0.3",
     "babel-loader": "^8.0.6",
+    "bestzip": "^2.1.5",
     "clean-webpack-plugin": "^3.0.0",
     "copy-webpack-plugin": "^5.0.4",
     "css-loader": "^3.2.0",
