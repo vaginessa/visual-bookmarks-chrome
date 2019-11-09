@@ -1,0 +1,110 @@
+.thumbnails-updating .header {
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+.header__grid {
+  display: grid;
+  grid-gap: 15px;
+  padding: 10px 0;
+}
+
+@media (min-width: 480px) {
+  .header__grid {
+    grid-template-columns: 3fr 1fr;
+  }
+}
+
+.header__items {
+  position: relative;
+}
+
+.search-wrap {
+  position: relative;
+}
+
+.search-label {
+  left: 0;
+  color: #999;
+  pointer-events: none;
+}
+
+.search-wrap input:focus + .search-label,
+.search-wrap input:focus ~ .search-reset-btn {
+  color: var(--header-input-color-controls);
+}
+
+.search-icon {
+  fill: currentColor;
+}
+
+.field-icon {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-reset-btn {
+  right: 0;
+  padding: 5px 8px;
+  line-height: 0;
+  border: 0;
+  color: var(--search-reset-btn-color);
+  background-color: transparent;
+  outline: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+  cursor: pointer;
+}
+
+.search-reset-btn.show {
+  opacity: 0.8;
+  visibility: visible;
+}
+
+.search-reset-btn.show:hover {
+  opacity: 1;
+}
+
+.has-image .header select {
+  transition: none;
+}
+
+.has-image .header select:not(:focus) {
+  background-image: url("data:image/svg+xml,%0A%3Csvg fill='%23fff' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3C/svg%3E");
+}
+
+.has-image .header .form-control:not(:focus) {
+  color: rgba(255, 255, 255, 0.7);
+  border-color: transparent;
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+.has-image .header .form-control:focus {
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.has-image .search-label,
+.has-image .search-reset-btn {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.has-image .header .form-control:not(:focus)::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.header input {
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+.header .form-control {
+  transition-property: color, border-color, background-color;
+  transition-duration: 0.25s;
+}

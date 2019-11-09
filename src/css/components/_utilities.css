@@ -1,0 +1,16 @@
+/* Utils */
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-muted {
+  color: #999;
+}
+
+.text-warning {
+  color: #dd4b39;
+}

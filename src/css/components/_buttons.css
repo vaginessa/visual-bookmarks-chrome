@@ -1,0 +1,50 @@
+.btn {
+  position: relative;
+  display: inline-block;
+  margin: 0;
+  padding: var(--btn-padding);
+  line-height: normal;
+  vertical-align: middle;
+  font-size: 0.9em;
+  font-family: inherit;
+  font-weight: 500;
+  letter-spacing: 0.05rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  user-select: none;
+  color: var(--btn-color);
+  border: 0;
+  border-radius: var(--btn-radius);
+  background: var(--btn);
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  outline: 0;
+}
+
+.btn-group {
+  display: flex;
+}
+
+.btn-group--full .btn {
+  flex: 1;
+}
+
+.btn-group .btn + .btn {
+  margin-left: 10px;
+}
+
+.btn--clear {
+  color: inherit;
+  background-color: transparent;
+  transition: background-color 0.5s ease;
+}
+
+.btn--clear:hover {
+  background-color: rgba(0, 0, 0, 0.07);
+}
+
+.btn--clear:active,
+.btn--clear:focus {
+  box-shadow: none;
+}

@@ -1,0 +1,160 @@
+:root {
+  /* Theme */
+  --theme-bg: #f8f9fa;
+  --theme-bg-200: var(--theme-bg);
+  --theme-bg-300: var(--theme-bg);
+  --theme-bg-300-transparent: rgba(255, 255, 255, 0);
+  --theme-text-color: #000;
+
+  /* Colors */
+  --color-primary: hsl(217, 89%, 61%);
+  --color-primary-dark: hsl(217, 69%, 50%);
+  --color-muted: hsl(0, 0%, 66%);
+  --color-warning: #dd4b39;
+  --filter-invert-image: none;
+
+  /* Base */
+  --font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-size-base: 14px;
+  --line-height: 1.5;
+  --base-radius: 4px;
+
+  /* Spiner */
+  --spinner-size: 12px;
+  --spinner-color: var(--color-primary);
+
+  /* Bookmark */
+  --bookmark-radius: var(--base-radius);
+  --bookmark-bg: hsla(0, 4%, 92%, 0.9);
+  --bookmark-overlay-bg: rgba(255, 255, 255, 0.95);
+  --bookmark-caption-height: 30px;
+  --bookmark-caption-bg: rgba(255, 255, 255, 1);
+  --bookmark-caption-after-transparent: rgba(255, 255, 255, 0);
+  --bookmark-caption-color: #333;
+  --bookmark-outline-color: hsla(217, 89%, 61%, 0.4);
+  --bookmark-image-fill: var(--filter-invert-image);
+
+  /* Options */
+  --df-width: 600px;
+  --transition: 0.35s cubic-bezier(0, 0, 0.2, 1);
+
+  /* Forms */
+  --header-input-color-controls: var(--color-primary-dark);
+  --search-reset-btn-color: #000;
+  --input-border: 1px solid #ddd;
+  --input-padding: 7px 10px;
+  --input-shadow-color: hsla(217, 89%, 61%, 0.2);
+  --input-shadow: 0 0 7px 2px var(--input-shadow-color);
+  --input-placeholder-color: hsl(0, 0%, 66%);
+  --input-placeholder-focus-color: hsla(0, 0%, 80%);
+  --input-bg: #fff;
+  --input-text-color: inherit;
+  --select-icon: url(/img/select-arrow.svg);
+  --input-radius: var(--base-radius);
+
+  /* Buttons */
+  --btn: var(--color-primary);
+  --btn-active: var(--color-primary-dark);
+  --btn-color: #fff;
+  --btn-padding: 9px 15px;
+  --btn-radius: var(--base-radius);
+
+  /* Scrollbar */
+  --scrollbar-width: 12px;
+  --scrollbar-color: #666;
+  --scrollbar-hover-color: #999;
+
+  /* Switch */
+  --switch-width: 30px;
+  --switch-height: 12px;
+  --switch-inactive-bar: #9e9e9e;
+  --switch-inactive-circle: #fff;
+  --switch-active-bar-color: hsla(217, 89%, 61%, 0.4);
+  --switch-active-bar: var(--switch-active-bar-color);
+  --switch-active-circle: var(--color-primary);
+  --switch-circle-size: 16px;
+
+  /* Grid */
+  --container-width: 100%;
+  --grid-column-width: 120px;
+  --grid-row-height: 90px;
+  --grid-gap: 10px;
+  --grid-columns: auto-fit;
+
+  /* Modal */
+  --modal-header-border-color: #ddd;
+  --modal-close-fill: #000;
+  --modal-custom-image-filter: invert(1);
+
+  /* options */
+  --options-bg: #f8f9fa;
+  --options-footer-bg: #f9f9f9;
+  --option-controls: #f9f9f9;
+  --tabs-bar-bg: #f9f9f9;
+  --tabs-content-bg: #fff;
+
+  /* not found */
+  --notfound-bg: hsla(0, 0%, 100%, 0.75);
+  --notfound-color: var(--theme-text-color);
+  --notfound-icon-filter: var(--filter-invert-image);
+
+  /* Context menu */
+  --context-menu-bg: #fff;
+  --context-menu-color: #555;
+  --context-menu-divider: rgba(0, 0, 0, 0.1);
+}
+
+.dark {
+  --theme-bg: hsl(0, 0%, 13%);
+  --theme-bg-200: hsl(0, 0%, 19%);
+  --theme-bg-300: hsl(0, 0%, 25%);
+  --theme-text-color: #fff;
+
+  /* Colors */
+  --filter-invert-image: invert(1);
+
+  /* Scrollbar dark theme */
+  --scrollbar-color: #999;
+  --scrollbar-hover-color: #666;
+
+  /* bookmark  dark theme */
+  --bookmark-bg: hsla(0, 0%, 25%, 0.9);
+  --bookmark-overlay-bg: var(--theme-bg-300);
+  --bookmark-caption-bg: rgba(48, 48, 48, 0.95);
+  --bookmark-caption-after-transparent: rgba(48, 48, 48, 0);
+  --bookmark-caption-color: rgba(255, 255, 255, 0.8);
+  --bookmark-image-fill: var(--filter-invert-image);
+
+  /* Forms  dark theme */
+  --header-input-color-controls: #fff;
+  --search-reset-btn-color: #fff;
+  --input-bg: var(--theme-bg-200);
+  --input-text-color: rgba(255, 255, 255, 0.8);
+  --input-placeholder-color: hsl(0, 0%, 50%);
+  --input-placeholder-focus-color: hsla(0, 0%, 50%, 0.7);
+  --input-border: 1px solid transparent;
+  --select-icon: url(/img/select-arrow-light.svg);
+
+  /* Options  dark theme */
+  --options-bg: var(--theme-bg);
+  --options-footer-bg: var(--theme-bg-200);
+  --option-controls: var(--theme-bg-200);
+  --tabs-bar-bg: var(--theme-bg-200);
+  --tabs-content-bg: var(--theme-bg-300);
+
+  /* Modal dark theme */
+  --modal-header-border-color: rgb(220, 220, 220, 0.1);
+  --modal-close-fill: #fff;
+  --modal-custom-image-bg: var(--theme-bg-200);
+  --modal-custom-image-filter: none;
+
+  /* notfound dark theme */
+  --notfound-bg: hsla(0, 0%, 13%, 0.95);
+  --notfound-color: var(--theme-text-color);
+  --notfound-icon-filter: var(--filter-invert-image);
+
+  /* Context menu */
+  --context-menu-bg: var(--theme-bg-300);
+  --context-menu-color: var(--theme-text-color);
+  --context-menu-divider: rgba(255, 255, 255, 0.1);
+}

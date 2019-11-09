@@ -1,0 +1,218 @@
+/* Bookmark */
+.bookmark,
+.bookmark--create {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.bookmark__summary-folder {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 4px;
+}
+
+.bookmark__childrens {
+  width: calc(40% - 4px);
+  margin: 2px;
+  border-radius: 2px;
+  background-color: rgba(0, 0, 0, 0.1);
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.bookmark__childrens:only-child,
+.bookmark__childrens:first-child:nth-last-child(2),
+.bookmark__childrens:first-child:nth-last-child(2) ~ .bookmark__childrens {
+  align-self: center;
+  padding-bottom: 26%;
+}
+
+.bookmark.disable-events {
+  pointer-events: none;
+}
+
+.bookmark--ghost {
+  opacity: 0;
+}
+
+.bookmark__wrap,
+.bookmark--create {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.2);
+  background-color: var(--bookmark-bg);
+  border-radius: var(--bookmark-radius);
+  overflow: hidden;
+}
+
+.bookmark:hover .bookmark__control {
+  transition-delay: 0.3s;
+  opacity: 1;
+}
+
+.bookmark--create {
+  cursor: pointer;
+  opacity: 0.4;
+  transition: opacity 0.3s ease;
+}
+
+.bookmark--create:hover {
+  opacity: 0.8;
+}
+
+.bookmark__img,
+.bookmark__img--folder,
+.bookmark__img--add {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: var(--bookmark-caption-height);
+  left: 0;
+  background-repeat: no-repeat;
+}
+
+.bookmark__img {
+  background-position: center top;
+  background-size: cover;
+}
+
+.bookmark__img--external,
+.bookmark__img--broken,
+.bookmark__img--folder {
+  background-size: 50% auto;
+  background-position: center;
+}
+
+.bookmark__img--folder {
+  /* background-image: url(../img/folder.svg); */
+  background-image: url(/img/folder.svg);
+}
+
+.bookmark__img--contain {
+  background-size: contain;
+  background-position: 50% 50%;
+}
+
+.bookmark__img--add {
+  bottom: 0;
+  background-image: url(/img/add.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 50px;
+  z-index: -1;
+}
+
+.bookmark__img--broken,
+.bookmark__img--add,
+.bookmark__img--folder {
+  filter: var(--bookmark-image-fill);
+}
+
+.bookmark__link,
+.bookmark__link--create {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 500;
+  border-radius: var(--base-radius);
+}
+
+.bookmark__link:focus {
+  box-shadow: 0 0 0 3px var(--bookmark-outline-color);
+}
+
+.bookmark__action {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  top: 5px;
+  left: 5px;
+  z-index: 1000;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background-color: rgb(33, 33, 33);
+  background-image: url(/img/more.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 18px;
+  outline: 0;
+  opacity: 0;
+  transition: opacity 0.25s;
+  cursor: pointer;
+}
+
+.bookmark:hover .bookmark__action {
+  opacity: 1;
+}
+
+.bookmark__action:focus {
+  opacity: 1;
+  box-shadow: 0 0 0 3px var(--bookmark-outline-color);
+}
+
+.bookmark__caption {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: var(--bookmark-caption-height);
+  line-height: var(--bookmark-caption-height);
+  padding-left: 15px;
+  padding-right: 15px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  background: var(--bookmark-caption-bg);
+  text-align: center;
+  z-index: 100;
+}
+
+.bookmark__caption::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 50px;
+  background: linear-gradient(to left, var(--bookmark-caption-bg) 20%, var(--bookmark-caption-after-transparent) 100%);
+}
+
+.bookmark__favicon {
+  position: relative;
+  top: -2px;
+  margin-right: 5px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.bookmark__title {
+  font-weight: 600;
+  display: inline;
+  color: var(--bookmark-caption-color);
+}
+
+.bookmark__overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 999;
+  background: var(--bookmark-overlay-bg);
+  border-radius: var(--bookmark-radius);
+}

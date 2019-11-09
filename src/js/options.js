@@ -1,4 +1,4 @@
-import '../css/bookmark.css';
+import '../css/options.css';
 
 import TabsSlider from 'tabs-slider';
 import FS from './components/fs';

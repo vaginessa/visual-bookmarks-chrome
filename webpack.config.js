@@ -71,7 +71,7 @@ module.exports = {
       { from: 'static' }
     ]),
     new MiniCssExtractPlugin({
-      filename: 'css/bookmark.css'
+      filename: 'css/[name].css'
     }),
     new HtmlWebpackPlugin({
       template: './src/newtab.html',

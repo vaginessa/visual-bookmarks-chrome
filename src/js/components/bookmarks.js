@@ -375,7 +375,7 @@ const Bookmarks = (() => {
   }
 
   function createSpeedDial(id) {
-
+    container.innerHTML = '';
     const hasCreate = (localStorage.getItem('show_create_column') === 'true');
 
     bk.getSubTree(id, function(item) {
