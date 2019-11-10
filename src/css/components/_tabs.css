@@ -40,14 +40,12 @@
   cursor: pointer;
   font-weight: 600;
   letter-spacing: 1px;
-}
-
-.tabs__controls:hover {
-  background-color: rgba(0, 0, 0, 0.03);
-}
-
-.tabs__controls:active {
-  user-select: none;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+  }
+  &:active {
+    user-select: none;
+  }
 }
 
 .tabs__content {

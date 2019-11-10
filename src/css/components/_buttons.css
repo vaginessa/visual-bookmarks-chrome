@@ -38,13 +38,11 @@
   color: inherit;
   background-color: transparent;
   transition: background-color 0.5s ease;
-}
-
-.btn--clear:hover {
-  background-color: rgba(0, 0, 0, 0.07);
-}
-
-.btn--clear:active,
-.btn--clear:focus {
-  box-shadow: none;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.07);
+  }
+  &:focus,
+  &:active {
+    box-shadow: none;
+  }
 }

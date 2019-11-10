@@ -9,17 +9,8 @@ import Helpers from './helpers';
  */
 const Bookmarks = (() => {
   const bk = chrome.bookmarks;
-  const SVGLoading =
-    `<svg class="loading" viewBox="0 0 100 100">
-      <defs>
-        <linearGradient id="gradient">
-          <stop offset="5%"  stop-color="#4285f4"/><stop offset="95%" stop-color="#b96bd6"/>
-        </linearGradient>
-      </defs>
-      <circle class="path" fill="none" stroke="url(#gradient)" stroke-width="8" stroke-linecap="round" cx="50" cy="50" r="40"></circle>
-    </svg>`;
-
   const container = document.getElementById('bookmarks');
+  const SVGLoading = document.getElementById('loading').outerHTML;
   let sort = null;
   let isGeneratedThumbs = false;
 

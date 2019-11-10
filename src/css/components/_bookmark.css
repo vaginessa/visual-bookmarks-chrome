@@ -29,13 +29,12 @@
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
-}
-
-.bookmark__childrens:only-child,
-.bookmark__childrens:first-child:nth-last-child(2),
-.bookmark__childrens:first-child:nth-last-child(2) ~ .bookmark__childrens {
-  align-self: center;
-  padding-bottom: 26%;
+  &:only-child,
+  &:first-child:nth-last-child(2),
+  &:first-child:nth-last-child(2) ~ .bookmark__childrens {
+    align-self: center;
+    padding-bottom: 26%;
+  }
 }
 
 .bookmark.disable-events {
@@ -66,10 +65,9 @@
   cursor: pointer;
   opacity: 0.4;
   transition: opacity 0.3s ease;
-}
-
-.bookmark--create:hover {
-  opacity: 0.8;
+  &:hover {
+    opacity: 0.8;
+  }
 }
 
 .bookmark__img,
@@ -154,15 +152,14 @@
   opacity: 0;
   transition: opacity 0.25s;
   cursor: pointer;
+  &:focus {
+    opacity: 1;
+    box-shadow: 0 0 0 3px var(--bookmark-outline-color);
+  }
 }
 
 .bookmark:hover .bookmark__action {
   opacity: 1;
-}
-
-.bookmark__action:focus {
-  opacity: 1;
-  box-shadow: 0 0 0 3px var(--bookmark-outline-color);
 }
 
 .bookmark__caption {
@@ -180,16 +177,15 @@
   background: var(--bookmark-caption-bg);
   text-align: center;
   z-index: 100;
-}
-
-.bookmark__caption::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  width: 50px;
-  background: linear-gradient(to left, var(--bookmark-caption-bg) 20%, var(--bookmark-caption-after-transparent) 100%);
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 50px;
+    background: linear-gradient(to left, var(--bookmark-caption-bg) 20%, var(--bookmark-caption-after-transparent) 100%);
+  }
 }
 
 .bookmark__favicon {

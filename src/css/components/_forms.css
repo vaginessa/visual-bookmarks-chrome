@@ -14,11 +14,10 @@
   background-color: var(--input-bg);
   outline: 0;
   transition: box-shadow 0.15s ease;
-}
-
-.form-control:focus {
-  border-color: var(--color-primary);
-  box-shadow: var(--input-shadow);
+  &:focus {
+    border-color: var(--color-primary);
+    box-shadow: var(--input-shadow);
+  }
 }
 
 select {
@@ -35,12 +34,11 @@ select {
 textarea {
   height: 100px;
   resize: none;
-}
-
-textarea.is-editor {
-  width: calc(100% - 20px); /* tbl__value padding 10px */
-  box-sizing: content-box;
-  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  &.is-editor {
+    width: calc(100% - 20px); /* tbl__value padding 10px */
+    box-sizing: content-box;
+    font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  }
 }
 
 .label {
@@ -123,34 +121,31 @@ textarea.is-editor {
   font-weight: 500;
   text-align: left;
   padding-left: calc(var(--switch-width) + 10px);
-}
-
-.switch__label::after,
-.switch__label::before {
-  content: "";
-  position: absolute;
-  margin: 0;
-  outline: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  transition: all 0.2s ease;
-}
-
-.switch__label::before {
-  left: 1px;
-  width: var(--switch-width);
-  height: var(--switch-height);
-  background-color: var(--switch-inactive-bar);
-  border-radius: 8px;
-}
-
-.switch__label::after {
-  left: 0;
-  width: var(--switch-circle-size);
-  height: var(--switch-circle-size);
-  background-color: var(--switch-inactive-circle);
-  border-radius: 50%;
-  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.6);
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    margin: 0;
+    outline: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: all 0.2s ease;
+  }
+  &::before {
+    left: 1px;
+    width: var(--switch-width);
+    height: var(--switch-height);
+    background-color: var(--switch-inactive-bar);
+    border-radius: 8px;
+  }
+  &::after {
+    left: 0;
+    width: var(--switch-circle-size);
+    height: var(--switch-circle-size);
+    background-color: var(--switch-inactive-circle);
+    border-radius: 50%;
+    box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.6);
+  }
 }
 
 .switch__input:focus + .switch__label::after {

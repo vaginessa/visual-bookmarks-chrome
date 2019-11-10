@@ -1,4 +1,4 @@
-import '../css/bookmark.css';
+import '../css/newtab.css';
 import Gmodal from 'glory-modal';
 import Helpers from './components/helpers';
 import Settings from './components/settings';
