@@ -1,0 +1,125 @@
+.app {
+  height: 100vh;
+  overflow-y: scroll;
+}
+
+.content {
+  padding: 20px 0;
+}
+
+.thumb-upload {
+  display: none;
+}
+
+/* Page loading */
+.dial-loading {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  display: none;
+  &.is-initial {
+    right: -20px;
+    background-color: var(--theme-bg);
+
+    @nest .has-image & {
+      background-color: transparent;
+    }
+  }
+}
+
+/**
+ * Helpers
+ */
+.circ-btn {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .circ-btn {
+    position: fixed;
+    z-index: 9999;
+    display: block;
+    width: 30px;
+    height: 30px;
+    text-decoration: none;
+    border: 0;
+    padding: 0;
+    background: rgba(33, 33, 33, 0.5);
+    border-radius: 50%;
+    opacity: 0.3;
+    transition: opacity 3s linear;
+    overflow: hidden;
+    cursor: pointer;
+    outline: 0;
+    &:hover,
+    &:focus {
+      transition: opacity 0.3s linear;
+      opacity: 1;
+    }
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: 20px;
+      transition: transform 0.3s ease;
+    }
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+  }
+
+  .settings-link {
+    top: 12px;
+    left: 10px;
+    &::after {
+      background-image: url(/img/cog.svg);
+    }
+    &:hover::after {
+      transform: rotate(30deg);
+    }
+  }
+
+  .update-thumbnails {
+    bottom: 12px;
+    left: 10px;
+    top: auto;
+    &::after {
+      background-image: url(/img/camera.svg);
+    }
+  }
+}
+
+/* background image */
+.bg {
+  position: fixed;
+  z-index: -1;
+  top: 0;
+  right: -20px;
+  bottom: 0;
+  left: 0;
+  will-change: transform;
+  transition: opacity 0.55s linear;
+  opacity: 0;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+
+  @nest .has-image &::after {
+    content: "";
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    height: 280px;
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0) 100%);
+  }
+}

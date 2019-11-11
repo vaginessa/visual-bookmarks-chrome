@@ -1,0 +1,84 @@
+.options {
+  min-width: 400px;
+  background-color: var(--options-bg);
+  color: var(--theme-text-color);
+}
+
+.wrap {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: 1fr auto;
+  min-height: 100vh;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.settings-container {
+  padding-top: 50px;
+}
+
+.footer {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  margin-bottom: 10px;
+  background: var(--theme-bg-200);
+  height: 50px;
+  line-height: 50px;
+  padding: 0 15px;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);
+  border-radius: var(--base-radius);
+}
+
+.footer__pull--left {
+  float: left;
+}
+
+.footer__pull--right {
+  float: right;
+}
+
+.tbl {
+  display: table;
+  width: 100%;
+}
+
+.tbl__option,
+.tbl__value .form-control.tbl__option {
+  display: none;
+  margin-top: 10px;
+}
+
+.tbl__setting,
+.tbl__value {
+  display: table-cell;
+  vertical-align: middle;
+  padding: 10px;
+}
+
+.tbl__setting {
+  width: 50%;
+  text-align: right;
+  font-weight: 600;
+}
+
+.tbl__value {
+  width: 50%;
+}
+
+.inline-middle {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.badge {
+  display: inline-block;
+  padding: 1px 3px;
+  font-size: 85%;
+  line-height: 1.1;
+  font-weight: 500;
+  letter-spacing: 0;
+  border-radius: 2px;
+  color: #333;
+  background: #e4dcdc;
+}
