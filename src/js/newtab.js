@@ -188,16 +188,16 @@ const NewTab = (() => {
 
     if (props.isFolder) {
       ctxToggleItems.forEach(item => {
-        item.style.display = '';
+        item.classList.remove('is-disabled');
         if (item.classList.contains('is-bookmark')) {
-          item.style.display = 'none';
+          item.classList.add('is-disabled');
         }
       });
     } else {
       ctxToggleItems.forEach(item => {
-        item.style.display = '';
+        item.classList.remove('is-disabled');
         if (item.classList.contains('is-folder')) {
-          item.style.display = 'none';
+          item.classList.add('is-disabled');
         }
       });
     }
