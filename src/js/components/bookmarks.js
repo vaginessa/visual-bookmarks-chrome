@@ -139,7 +139,7 @@ const Bookmarks = (() => {
     return folderId;
   }
 
-  function generateFolderList(select, activeFolder = null) {
+  function generateFolderList(select, activeFolder = null, itemId = null) {
     // If not select element
     if (!(select instanceof HTMLSelectElement)) return;
 
@@ -149,9 +149,7 @@ const Bookmarks = (() => {
       // openList.push(rootNode[0].children[0]);
       // openList.push(rootNode[0].children[1]);
       // root folders
-      openList = rootNode[0].children.map(item => {
-        return item;
-      });
+      openList = rootNode[0].children.map(item => item);
 
       while ((node = openList.pop()) !== undefined) {
         if (node.children !== undefined) {
@@ -160,7 +158,13 @@ const Bookmarks = (() => {
           }
           node.path += node.title;
           while ((child = node.children.pop()) !== undefined) {
-            if (child.children !== undefined) {
+            // get folder &&
+            // (
+            //  list of folders for editing the current bookmark-folder
+            //  need to hide the subfolders
+            //  exclude the transfer of the parent folder to the child
+            // )
+            if (child.children !== undefined && (itemId !== child.id && child.parentId !== itemId)) {
               child.path = node.path + '/';
               openList.push(child);
             }
@@ -168,14 +172,12 @@ const Bookmarks = (() => {
           folderList.push(node);
         }
       }
-      folderList.sort(function(a, b) {
-        return a.path.localeCompare(b.path);
-      });
-
       const folderId = activeFolder ? activeFolder : startFolder();
-      const optionsList = folderList.map(function(item) {
-        return `<option${item.id === folderId ? ' selected' : ''} value="${item.id}">${item.path}</option>`;
-      }).join('');
+      const optionsList = folderList
+        .sort((a, b) => a.path.localeCompare(b.path))
+        .map(item => `<option${item.id === folderId ? ' selected' : ''} value="${item.id}">${item.path}</option>`)
+        .join('');
+
       select.innerHTML = optionsList;
     });
   }

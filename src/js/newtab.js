@@ -381,11 +381,12 @@ const NewTab = (() => {
 
       const title = Helpers.unescapeHtml(props.title);
       const url = props.url;
+      const id = String(props.id);
       const parentId = String(props.parentId);
       const { image = props.screen } = props.screen || {};
 
       // generate bookmark folder list
-      Bookmarks.generateFolderList(foldersList, parentId);
+      Bookmarks.generateFolderList(foldersList, parentId, id);
 
       // if (screen && !url) {
       if (image) {
