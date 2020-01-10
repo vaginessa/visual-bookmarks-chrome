@@ -94,6 +94,7 @@ const NewTab = (() => {
       generateThumbsBtn.addEventListener('click', generateThumbs);
     }
 
+    window.addEventListener('popstate', popStateHandler);
     window.addEventListener('beforeunload', beforeUnload);
     window.addEventListener('unload', unload);
     window.addEventListener('storage', storageUpdate);
@@ -107,6 +108,13 @@ const NewTab = (() => {
       chrome.bookmarks.onRemoved.addListener(pageVisibility);
       chrome.bookmarks.onMoved.addListener(pageVisibility);
     }
+  }
+
+  function popStateHandler() {
+    // when navigating through the history
+    // hide the context menu or the modal window if they are active
+    ctxMenu.close();
+    modalApi.close();
   }
 
   function beforeUnload(e) {
