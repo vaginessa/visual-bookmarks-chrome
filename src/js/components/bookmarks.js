@@ -214,7 +214,10 @@ const Bookmarks = (() => {
               <div class="bookmark__title">%title%</div>
             </div>
           </div>
-          <a class="bookmark__link" href="%url%" title="%title%"></a>
+          ${(localStorage.getItem('open_link_newtab') === 'true')
+            ? `<a class="bookmark__link" href="%url%" target="_blank" rel="noopener noreferrer" title="%title%"></a>`
+            : `<a class="bookmark__link" href="%url%" title="%title%"></a>`
+          }
         </div>`;
 
     return Helpers.templater(tpl, {

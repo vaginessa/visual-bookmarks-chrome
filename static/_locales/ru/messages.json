@@ -215,6 +215,9 @@
   "show_favicon": {
     "message": "Показывать иконки сайтов рядом с названием"
   },
+  "open_link_newtab": {
+    "message": "Открывать закладку в новой вкладке"
+  },
   "show_contextmenu_item": {
     "message": "Показывать в контекстном меню"
   },

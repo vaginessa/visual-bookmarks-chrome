@@ -14,6 +14,7 @@ const DEFAULTS = {
   show_settings_icon: 'true',
   show_create_column: 'true',
   show_favicon: 'true',
+  open_link_newtab: 'false',
   thumbnailing_service: 'https://logo.clearbit.com/[URL]',
   thumbnails_update_button: 'true',
   custom_style: '',

@@ -215,6 +215,9 @@
   "show_favicon": {
     "message": "Pokaż ikonę ulubionych obok tytułu"
   },
+  "open_link_newtab": {
+    "message": "Otwórz zakładkę w nowej karcie"
+  },
   "show_contextmenu_item": {
     "message": "Pokaż w menu kontekstowym"
   },
