@@ -166,31 +166,30 @@ const Bookmarks = (() => {
     // If not select element
     if (!(select instanceof HTMLSelectElement)) return;
 
-    try {
-      const optionsArr = [];
-      const folderId = activeFolder ? activeFolder : startFolder();
-      const folders = await getFolders();
+    const folders = await getFolders().catch(err => console.warn(err));
+    if (!folders) return;
 
-      const processTree = (three, pass = 0) => {
-        for (let folder of three) {
-          if (itemId !== folder.id && folder.parentId !== itemId) {
-            let prefix = '-'.repeat(pass);
-            if (pass > 0) {
-              prefix = `&nbsp;&nbsp;${prefix}` + '&nbsp;';
-            }
+    const folderId = activeFolder ? activeFolder : startFolder();
+    const optionsArr = [];
+    const processTree = (three, pass = 0) => {
+      for (let folder of three) {
+        if (itemId !== folder.id && folder.parentId !== itemId) {
+          let prefix = '-'.repeat(pass);
+          if (pass > 0) {
+            prefix = `&nbsp;&nbsp;${prefix}` + '&nbsp;';
+          }
 
-            const name = `${prefix} ${folder.title}`;
-            optionsArr.push(`<option${folder.id === folderId ? ' selected' : ''} value="${folder.id}">${name}</option>`);
-            if (folder.children.length) {
-              processTree(folder.children, pass + 1);
-            }
+          const name = `${prefix} ${folder.title}`;
+          optionsArr.push(`<option${folder.id === folderId ? ' selected' : ''} value="${folder.id}">${name}</option>`);
+          if (folder.children.length) {
+            processTree(folder.children, pass + 1);
           }
         }
-      };
-      processTree(folders);
-      // eslint-disable-next-line require-atomic-updates
-      select.innerHTML = optionsArr.join('');
-    } catch (error) {}
+      }
+    };
+    processTree(folders);
+    // eslint-disable-next-line require-atomic-updates
+    select.innerHTML = optionsArr.join('');
   }
 
   function genBookmark(bookmark) {
@@ -229,7 +228,7 @@ const Bookmarks = (() => {
             ? `<a class="bookmark__link" href="%url%" target="_blank" rel="noopener noreferrer" title="%title%"></a>`
             : `<a class="bookmark__link" href="%url%" title="%title%"></a>`
           }
-        </div>`;
+        </div>`.trim();
 
     return Helpers.templater(tpl, {
       id: bookmark.id,
@@ -278,7 +277,7 @@ const Bookmarks = (() => {
           </div>
         </div>
         <a class="bookmark__link" href="#%url%" title="%title%"></a>
-      </div>`;
+      </div>`.trim();
 
     return Helpers.templater(tpl, {
       id: bookmark.id,
