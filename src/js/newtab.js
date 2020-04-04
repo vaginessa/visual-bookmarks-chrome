@@ -7,6 +7,7 @@ import Localization from './components/localization';
 import UI from './components/ui';
 import ContextMenu from './components/contextmenu';
 import Ripple from './components/ripple';
+import { get, getChildren } from './api/bookmark';
 
 const NewTab = (() => {
   const container = document.getElementById('bookmarks');
@@ -17,7 +18,6 @@ const NewTab = (() => {
   const titleField    = document.getElementById('title');
   const urlField      = document.getElementById('url');
   const urlWrap       = document.getElementById('urlWrap');
-  const modalDesc     = document.getElementById('desc');
   const customScreen  = document.getElementById('customScreen');
   const ctxMenuEl     = document.getElementById('context-menu');
   const upload        = document.getElementById('upload');
@@ -56,16 +56,6 @@ const NewTab = (() => {
 
     Bookmarks.generateFolderList(foldersList);
 
-    // container.addEventListener('changeFolder', function(e) {
-    //   if (!e.detail || !e.detail.id) return;
-    //   Bookmarks.generateFolderList(foldersList);
-    // });
-    // container.addEventListener('updateFolderList', function(e) {
-    //   if (e.detail && e.detail.isFolder) {
-    //     Bookmarks.generateFolderList(foldersList);
-    //   }
-    // });
-
     // If thumbnail generation button
     if (localStorage.getItem('thumbnails_update_button') === 'true') {
 
@@ -103,10 +93,22 @@ const NewTab = (() => {
     // if the tab is open but not active, then when you change bookmarks from other places,
     // we will do a reload of the bookmarks page to display the latest changes
     if ('hidden' in document) {
-      chrome.bookmarks.onCreated.addListener(pageVisibility);
+      if (localStorage.getItem('auto_generate_thumbnail') !== 'true') {
+        chrome.bookmarks.onCreated.addListener(pageVisibility);
+      }
       chrome.bookmarks.onChanged.addListener(pageVisibility);
       chrome.bookmarks.onRemoved.addListener(pageVisibility);
       chrome.bookmarks.onMoved.addListener(pageVisibility);
+    }
+
+    // if there is auto-generation of thumbnails, and a tab with bookmarks is open, we need to reload, after saving the thumbnail
+    if (localStorage.getItem('auto_generate_thumbnail') === 'true') {
+      chrome.runtime.onMessage.addListener(
+        function(request) {
+          if (request.autoGenerateThumbnail) {
+            window.location.reload();
+          }
+        });
     }
   }
 
@@ -171,18 +173,11 @@ const NewTab = (() => {
     });
   }
 
-  function changeTitle(e) {
-    const value = e.target.value.trim();
-    const elem = document.getElementById('desc');
-    elem.textContent = value;
-  }
-
   function uploadScreen(evt) {
     evt.preventDefault();
 
     const el = evt.target;
-    const data = evt.target.dataset;
-
+    const data = el.dataset;
     Bookmarks.uploadScreen({
       target: el,
       id: data.id,
@@ -192,9 +187,10 @@ const NewTab = (() => {
 
   function ctxMenuOpen(evt) {
     const bookmark = evt.detail.trigger;
-    const props = JSON.parse(bookmark.dataset.props);
+    // const props = JSON.parse(bookmark.dataset.props);
+    const isFolder = bookmark.dataset.folder !== undefined;
 
-    if (props.isFolder) {
+    if (isFolder) {
       ctxToggleItems.forEach(item => {
         item.classList.remove('is-disabled');
         if (item.classList.contains('is-bookmark')) {
@@ -211,44 +207,47 @@ const NewTab = (() => {
     }
   }
 
-  function controlsHandler(evt) {
+  async function controlsHandler(evt) {
     const target = evt.detail.trigger;
     const action = evt.detail.selection;
-    const props = JSON.parse(target.dataset.props);
+    const props = target.dataset;
+    const isFolder = props.folder !== undefined;
 
     switch (action) {
       case 'new_window':
       case 'new_window_incognito':
-        openWindow(props, action);
+        openWindow(target.href, action);
         break;
       case 'open_all':
       case 'open_all_window':
         openAll(props, action);
         break;
       case 'new_tab':
-        openTab(props);
+        openTab(target.href);
         break;
       case 'edit':
         modalBeforeOpen(props);
         modalApi.open();
         break;
       case 'copy_link':
-        copyLink(props);
+        Helpers.copyStr(target.href);
         break;
       case 'capture': {
-        const idBookmark = target.getAttribute('data-sort');
-        const captureUrl = target.querySelector('.bookmark__link').href;
+        const idBookmark = target.getAttribute('data-id');
+        const captureUrl = target.href;
         Bookmarks.createScreen(target, idBookmark, captureUrl);
         break;
       }
       case 'upload': {
         upload.dataset.id = props.id;
-        upload.dataset.site = (!props.isFolder) ? Helpers.getDomain(props.url) : '';
+        if (!isFolder) {
+          upload.dataset.site = Helpers.getDomain(target.href);
+        }
         upload.click();
         break;
       }
       case 'remove': {
-        (props.isFolder)
+        (isFolder)
           ? Bookmarks.removeFolder(target)
           : Bookmarks.removeBookmark(target);
         break;
@@ -256,29 +255,22 @@ const NewTab = (() => {
     }
   }
 
-  function getUrl(props) {
-    if (props.isFolder) {
-      return chrome.runtime.getURL(`newtab.html#${props.id}`);
-    }
-    return props.url;
-  }
-
   function openAll(props, action) {
-    chrome.bookmarks.getChildren(props.id, (childrens) => {
-      if (action === 'open_all_window') {
-        chrome.windows.create({
-          focused: true
-        }, win => {
-          childrens.forEach(children => openTab(children, { windowId: win.id }));
-        });
-      } else {
-        childrens.forEach(children => openTab(children));
-      }
-    });
+    getChildren(props.id)
+      .then(childrens => {
+        if (action === 'open_all_window') {
+          chrome.windows.create({
+            focused: true
+          }, win => {
+            childrens.forEach(children => openTab(children.url, { windowId: win.id }));
+          });
+        } else {
+          childrens.forEach(children => openTab(children.url));
+        }
+      });
   }
 
-  function openWindow(props, action) {
-    const url = getUrl(props);
+  function openWindow(url, action) {
     try {
       chrome.windows.create({
         url: url,
@@ -288,8 +280,7 @@ const NewTab = (() => {
     } catch (e) {}
   }
 
-  function openTab(props, options = {}) {
-    const url = getUrl(props);
+  function openTab(url, options = {}) {
     const defaults = {
       url: url,
       active: false
@@ -300,11 +291,6 @@ const NewTab = (() => {
         ...options
       });
     } catch (e) {}
-  }
-
-  function copyLink(props) {
-    const url = getUrl(props);
-    Helpers.copyStr(url);
   }
 
   function delegateClick(evt) {
@@ -321,48 +307,42 @@ const NewTab = (() => {
 
   function submitForm(evt) {
     evt.preventDefault();
-
     const id = this.getAttribute('data-action');
     const title = document.getElementById('title').value;
     const url = document.getElementById('url').value;
+    let success = false;
     if (id !== 'New') {
       const newLocation = foldersList.value;
-      if (Bookmarks.updateBookmark(id, title, url, newLocation)) {
-        modalApi.close();
-      }
+      success = Bookmarks.updateBookmark(id, title, url, newLocation);
     } else {
-      if (Bookmarks.createBookmark(title, url)) {
-        modalApi.close();
-      }
+      success = Bookmarks.createBookmark(title, url);
     }
-
+    success && modalApi.close();
   }
 
   function resetThumb(evt) {
     evt.preventDefault();
-
     if (!confirm(chrome.i18n.getMessage('confirm_delete_image'))) return;
 
     const target = evt.target;
     const id = target.getAttribute('data-bookmark');
 
     Bookmarks.rmCustomScreen(id, function() {
-      const bookmark = container.querySelector('[data-sort="' + id + '"]');
+      const bookmark = container.querySelector(`[data-id="${id}"]`);
       const bookmarkImg = bookmark.querySelector('.bookmark__img');
-      const props = JSON.parse(bookmark.dataset.props);
-
       // if folder: selector exists if folder_preview option is off
       // update view only if folder_preview option is off
       bookmarkImg && bookmarkImg.classList.remove('bookmark__img--contain');
 
-      if (props.isFolder) {
+      if (bookmark.dataset.folder !== undefined) {
         // update view only if folder_preview option is off
         if (bookmarkImg) {
           bookmarkImg.style.backgroundImage = '';
           bookmarkImg.classList.add('bookmark__img--folder');
         }
       } else {
-        const url = localStorage.getItem('thumbnailing_service').replace('[URL]', Helpers.getDomain(props.url));
+        // const bookmark = await get(props.id);
+        const url = localStorage.getItem('thumbnailing_service').replace('[URL]', Helpers.getDomain(bookmark.href));
         Helpers.imageLoaded(url, {
           done() {
             bookmarkImg.style.backgroundImage = `url(${url})`;
@@ -375,36 +355,33 @@ const NewTab = (() => {
         });
       }
 
-      props.screen = '';
-      bookmark.dataset.props = JSON.stringify(props);
-
+      bookmark.removeAttribute('data-screen');
       target.closest('#customScreen').style.display = '';
       // Helpers.notifications(chrome.i18n.getMessage('notice_image_removed'));
     });
   }
 
-  function modalBeforeOpen(props) {
+  async function modalBeforeOpen(props) {
     if (props) {
       modal.classList.add('has-edit');
 
-      const title = Helpers.unescapeHtml(props.title);
-      const url = props.url;
-      const id = String(props.id);
-      const parentId = String(props.parentId);
-      const { image = props.screen } = props.screen || {};
+      const bookmarkNode = await get(props.id).catch(err => console.warn(err));
+      if (!bookmarkNode) return;
+
+      const { id, url, parentId } = bookmarkNode[0];
+      const title = Helpers.unescapeHtml(bookmarkNode[0].title);
+      const image = props.screen ? JSON.parse(props.screen).image : null;
 
       // generate bookmark folder list
       Bookmarks.generateFolderList(foldersList, parentId, id);
 
-      // if (screen && !url) {
       if (image) {
         customScreen.style.display = 'block';
         customScreen.querySelector('img').src = `${image}?refresh=${Date.now()}`;
-        customScreen.querySelector('#resetCustomImage').setAttribute('data-bookmark', props.id);
+        customScreen.querySelector('#resetCustomImage').setAttribute('data-bookmark', id);
       }
 
       modalHead.textContent = chrome.i18n.getMessage('edit_bookmark');
-      modalDesc.textContent = title;
       titleField.value = title;
 
       if (url) {
@@ -413,9 +390,7 @@ const NewTab = (() => {
       } else {
         urlWrap.style.display = 'none';
       }
-
-      titleField.addEventListener('input', changeTitle);
-      form.setAttribute('data-action', props.id);
+      form.setAttribute('data-action', id);
     } else {
       modal.classList.add('has-add');
 
@@ -432,9 +407,7 @@ const NewTab = (() => {
   }
   function modalAfterClose() {
     modal.classList.remove('has-edit', 'has-add');
-    titleField.removeEventListener('input', changeTitle);
     customScreen.style.display = '';
-    modalDesc.textContent = '';
     form.reset();
   }
 

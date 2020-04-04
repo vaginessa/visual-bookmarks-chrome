@@ -1,7 +1,8 @@
 /* eslint-disable no-console */
 import Settings from './components/settings';
-import FS from './components/fs';
+import FS from './api/fs';
 import Helpers from './components/helpers';
+import { create, search } from './api/bookmark';
 
 FS.init(500);
 Settings.init();
@@ -92,51 +93,55 @@ function captureScreen(link, callback) {
 }
 
 function handlerCreateBookmark(data) {
-  chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+  chrome.tabs.query({active: true, currentWindow: true}, async function(tabs){
     // const searchQuery = {
     //   url: data.pageUrl,
     //   title: tabs[0].title
     // }
-    chrome.bookmarks.search(data.pageUrl, function(matches) {
-      const isExist = matches.some(match => match.url === data.pageUrl);
+    const matches = await search(data.pageUrl);
+    if (!matches) return;
 
-      if (isExist) {
-        // Bookmarks exist
-        Helpers.notifications(chrome.i18n.getMessage('notice_bookmark_exist'));
-      } else {
-        // Create
-        chrome.bookmarks.create({
-          'parentId': window.localStorage.getItem('default_folder_id'),
-          'url': data.pageUrl,
-          'title': tabs[0].title
-        }, function(response) {
+    const isExist = matches.some(match => match.url === data.pageUrl);
+    if (isExist) {
+      // Bookmarks exist
+      Helpers.notifications(chrome.i18n.getMessage('notice_bookmark_exist'));
+    } else {
+      // Create
+      const response = await create({
+        'parentId': window.localStorage.getItem('default_folder_id'),
+        'url': data.pageUrl,
+        'title': tabs[0].title
+      }).catch(err => {
+        console.warn(err);
+      });
+      // do not generate a thumbnail if you could not create a bookmark or the auto-generation option is turned off
+      if (!response || localStorage.getItem('auto_generate_thumbnail') !== 'true') return;
 
-          Helpers.notifications(chrome.i18n.getMessage('notice_bookmark_created'));
+      Helpers.notifications(chrome.i18n.getMessage('notice_bookmark_created'));
+      captureScreen(response.url, async function(data) {
+        const image = await Helpers.resizeScreen(data.capture);
+        const blob = Helpers.base64ToBlob(image, 'image/jpg');
+        const name = `${Helpers.getDomain(response.url)}_${response.id}.jpg`;
 
-          captureScreen(response.url, function(data) {
+        const dirEntry = await FS.createDir('images').catch(err => console.log(err));
+        const fileEntry = await FS.createFile(`${dirEntry.fullPath}/${name}`, {
+          file: blob,
+          fileType: blob.type
+        }).catch(err => console.warn(err));
 
-            Helpers.resizeScreen(data.capture, function(image) {
-              const blob = Helpers.base64ToBlob(image, 'image/jpg');
-              const name = `${Helpers.getDomain(response.url)}_${response.id}.jpg`;
+        const obj = JSON.parse(localStorage.getItem('custom_dials'));
+        obj[response.id] = {
+          image: fileEntry.toURL(),
+          custom: false
+        };
 
-              FS.createDir('images', function(dirEntry) {
-                FS.createFile(`${dirEntry.fullPath}/${name}`, { file: blob, fileType: blob.type }, function(fileEntry) {
-                  const obj = JSON.parse(localStorage.getItem('custom_dials'));
-                  obj[response.id] = fileEntry.toURL();
-                  localStorage.setItem('custom_dials', JSON.stringify(obj));
-                });
-              });
-            });
-          });
-        });
-
-      }
-    });
-
+        localStorage.setItem('custom_dials', JSON.stringify(obj));
+        chrome.runtime.sendMessage({ autoGenerateThumbnail: true });
+      });
+    }
   });
 }
 
-// experiments with the context menu as an option with the persistent option false
 const ContextMenu = {
   init() {
     const isShow = localStorage.getItem('show_contextmenu_item') === 'true';
@@ -193,9 +198,7 @@ chrome.contextMenus.onClicked.addListener(function(data) {
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if (request.captureUrl) {
-
-    captureScreen(request.captureUrl, function(data) {
-
+    captureScreen(request.captureUrl, async function(data) {
       if (data && data.error) {
         try {
           sendResponse({ warning: 'Timeout waiting for a screenshot' });
@@ -213,22 +216,16 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         return false;
       }
 
-      Helpers.resizeScreen(data.capture, function(image) {
+      const image = await Helpers.resizeScreen(data.capture);
+      const blob = Helpers.base64ToBlob(image, 'image/jpg');
+      const name = `${Helpers.getDomain(request.captureUrl)}_${request.id}.jpg`;
 
-        const blob = Helpers.base64ToBlob(image, 'image/jpg');
-        const name = `${Helpers.getDomain(request.captureUrl)}_${request.id}.jpg`;
-
-        FS.createDir('images', function(dirEntry) {
-          FS.createFile(`${dirEntry.fullPath}/${name}`, { file: blob, fileType: blob.type }, function(fileEntry) {
-            console.info(`Image file saved as ${fileEntry.toURL()}`);
-            try {
-              sendResponse(fileEntry.toURL());
-            } catch (e) {}
-          });
-        });
-
-
-      });
+      const dirEntry = await FS.createDir('images');
+      const fileEntry = await FS.createFile(`${dirEntry.fullPath}/${name}`, { file: blob, fileType: blob.type });
+      // console.info(`Image file saved as ${fileEntry.toURL()}`);
+      try {
+        sendResponse(fileEntry.toURL());
+      } catch (e) {}
     });
 
     // send a response asynchronously (return true)

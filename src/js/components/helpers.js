@@ -133,22 +133,24 @@ export default {
     return bb;
   },
 
-  resizeScreen(image, callback) {
-    let img = new Image();
-    let maxHeight = 300;
-    img.onload = function() {
-      if (maxHeight < img.height) {
-        img.width *= maxHeight / img.height;
-        img.height = maxHeight;
-      }
-      let canvas = document.createElement('canvas');
-      let ctx = canvas.getContext('2d');
-      canvas.width = img.width;
-      canvas.height = img.height;
-      ctx.drawImage(img, 0, 0, img.width, img.height);
-      callback(canvas.toDataURL('image/jpg'));
-    };
-    img.src = image;
+  resizeScreen(image) {
+    return new Promise((resolve) => {
+      let img = new Image();
+      let maxHeight = 300;
+      img.onload = function() {
+        if (maxHeight < img.height) {
+          img.width *= maxHeight / img.height;
+          img.height = maxHeight;
+        }
+        let canvas = document.createElement('canvas');
+        let ctx = canvas.getContext('2d');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0, img.width, img.height);
+        resolve(canvas.toDataURL('image/jpg'));
+      };
+      img.src = image;
+    });
   },
 
   shuffle([...arr]) {
@@ -170,6 +172,15 @@ export default {
     return url
       .replace(/(https?|ftps?|chrome|chrome-extension|file):\/\/\/?(www.)?/i, '')
       .replace(/:?\/.*/i, '');
+  },
+
+  isValidUrl(url) {
+    // The regex used in AngularJS to validate a URL + chrome internal pages & extension url & on-disk files
+    const URL_REGEXP = /^(http|https|ftp|file|chrome|chrome-extension):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/;
+    if (URL_REGEXP.test(url)) {
+      return true;
+    }
+    return false;
   },
 
   // Copy String

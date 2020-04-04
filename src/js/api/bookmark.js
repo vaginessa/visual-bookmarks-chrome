@@ -15,6 +15,18 @@ const recurseFolders = (arr) => {
   }, []);
 };
 
+export function getThree() {
+  return new Promise((resolve, reject) => {
+    API.getTree(function(rootNode) {
+      if (RUNTIME.lastError) {
+        reject(RUNTIME.lastError);
+      }
+      const rootFolders = rootNode[0].children.map(item => item);
+      resolve(rootFolders);
+    });
+  });
+}
+
 // Retrieves folders
 export function getFolders() {
   return new Promise((resolve, reject) => {
@@ -25,6 +37,17 @@ export function getFolders() {
       const root = rootNode[0].children.map(item => item);
       const folders = recurseFolders(root);
       resolve(folders);
+    });
+  });
+}
+
+export function get(id) {
+  return new Promise((resolve, reject) => {
+    API.get(id, function(BookmarkTreeNode) {
+      if (RUNTIME.lastError) {
+        reject(RUNTIME.lastError);
+      }
+      resolve(BookmarkTreeNode);
     });
   });
 }
@@ -102,7 +125,7 @@ export function remove(id) {
 }
 
 // Recursively removes a bookmark folder.
-export function removeFolder(id) {
+export function removeTree(id) {
   return new Promise((resolve, reject) => {
     API.removeTree(id, function() {
       if (RUNTIME.lastError) {

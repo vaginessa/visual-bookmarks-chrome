@@ -7,6 +7,25 @@
   height: 100%;
   margin: 0;
   padding: 0;
+  text-decoration: none;
+  border-radius: var(--bookmark-radius);
+  &:focus {
+    box-shadow: 0 0 0 3px var(--bookmark-outline-color);
+  }
+}
+
+.bookmark--create {
+  border: 0;
+  cursor: pointer;
+  opacity: 0.4;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.2);
+  background-color: var(--bookmark-bg);
+  border-radius: var(--bookmark-radius);
+  transition: opacity 0.3s ease;
+  &:hover,
+  &:focus {
+    opacity: 0.8;
+  }
 }
 
 .bookmark__summary-folder {
@@ -45,8 +64,7 @@
   opacity: 0;
 }
 
-.bookmark__wrap,
-.bookmark--create {
+.bookmark__wrap {
   position: relative;
   width: 100%;
   height: 100%;
@@ -54,20 +72,6 @@
   background-color: var(--bookmark-bg);
   border-radius: var(--bookmark-radius);
   overflow: hidden;
-}
-
-.bookmark:hover .bookmark__control {
-  transition-delay: 0.3s;
-  opacity: 1;
-}
-
-.bookmark--create {
-  cursor: pointer;
-  opacity: 0.4;
-  transition: opacity 0.3s ease;
-  &:hover {
-    opacity: 0.8;
-  }
 }
 
 .bookmark__img,
@@ -116,21 +120,6 @@
 .bookmark__img--add,
 .bookmark__img--folder {
   filter: var(--bookmark-image-fill);
-}
-
-.bookmark__link,
-.bookmark__link--create {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 500;
-  border-radius: var(--base-radius);
-}
-
-.bookmark__link:focus {
-  box-shadow: 0 0 0 3px var(--bookmark-outline-color);
 }
 
 .bookmark__action {

@@ -1,7 +1,8 @@
 import '../css/options.css';
 
 import TabsSlider from 'tabs-slider';
-import FS from './components/fs';
+import { getFolders } from './api/bookmark';
+import FS from './api/fs';
 import Settings from './components/settings';
 import UI from './components/ui';
 import Localization from './components/localization';
@@ -38,9 +39,9 @@ textarea.el.addEventListener('textarea-autosize', function() {
 
 const Options = (() => {
 
-  function init() {
+  async function init() {
 
-    FS.init(500);
+    await FS.init(500);
     Settings.init();
 
     document.getElementById('background_image').addEventListener('change', selectBg, false);
@@ -126,8 +127,8 @@ const Options = (() => {
     generateFolderList();
 
     const optionBg = document.getElementById('background_image');
-    const options = Array.prototype.slice.call(optionBg.querySelectorAll('option'));
-    options.forEach(function(item) {
+    const options = Array.from(optionBg.querySelectorAll('option'));
+    options.forEach((item) => {
       if (item.value === localStorage.getItem('background_image')) {
         item.selected = true;
         Helpers.trigger('change', optionBg);
@@ -181,7 +182,7 @@ const Options = (() => {
     }
   }
 
-  function uploadFile() {
+  async function uploadFile() {
     const file = this.files[0];
     if (!file) return;
 
@@ -192,23 +193,21 @@ const Options = (() => {
     }
     const fileName = `background.${file.type.replace('image/', '')}`;
 
-    FS.createDir('images', function() {
-      FS.createFile('/images/' + fileName, { file: file, fileType: file.type }, function(fileEntry) {
-        document.querySelector('.c-upload__preview').style.display = '';
-        document.getElementById('preview_upload').innerHTML = `
+    await FS.createDir('images');
+    const fileEntry = await FS.createFile('/images/' + fileName, { file: file, fileType: file.type }).catch(err => err);
+
+    document.querySelector('.c-upload__preview').style.display = '';
+    document.getElementById('preview_upload').innerHTML = `
           <div class="c-upload__preview-image"
             style="background-image: url(${fileEntry.toURL()}?new=${Date.now()});">
           <div>
         `;
-        localStorage.setItem('background_local', fileEntry.toURL());
-        Toast.show(chrome.i18n.getMessage('notice_bg_image_updated'));
-        tabsSlider.recalcStyles();
-      });
-    });
-
+    localStorage.setItem('background_local', fileEntry.toURL());
+    Toast.show(chrome.i18n.getMessage('notice_bg_image_updated'));
+    tabsSlider.recalcStyles();
   }
 
-  function removeFile(evt) {
+  async function removeFile(evt) {
     const target = evt.target.closest('#delete_upload');
     if (!target) return;
 
@@ -223,18 +222,16 @@ const Options = (() => {
 
     const name = img.split('/').pop();
 
-    FS.deleteFile(`/images/${name}`, function() {
-      Toast.show(chrome.i18n.getMessage('notice_image_removed'));
-      localStorage.removeItem('background_local');
-      preview.innerHTML = '';
-      previewParent.style.display = 'none';
-      tabsSlider.recalcStyles();
-    });
+    await FS.removeFile(`/images/${name}`);
+    Toast.show(chrome.i18n.getMessage('notice_image_removed'));
+    localStorage.removeItem('background_local');
+    preview.innerHTML = '';
+    previewParent.style.display = 'none';
+    tabsSlider.recalcStyles();
   }
 
   function selectBg() {
-
-    Array.prototype.slice.call(document.querySelectorAll('.tbl__option')).forEach(function(item) {
+    Array.from(document.querySelectorAll('.tbl__option')).forEach((item) => {
       item.style.display = '';
     });
 
@@ -250,17 +247,15 @@ const Options = (() => {
         document.getElementById('preview_upload').innerHTML = '';
       }
     }
-
-    // localStorage.setItem('background_image', this.value);
     document.getElementById(this.value).style.display = 'block';
     tabsSlider.recalcStyles();
   }
 
-  function deleteImages(evt) {
+  async function deleteImages(evt) {
     evt.preventDefault();
     if (!confirm(chrome.i18n.getMessage('confirm_delete_images'), '')) return;
 
-    FS.purge();
+    await FS.purge();
     Toast.show(chrome.i18n.getMessage('notice_images_removed'));
     localStorage.setItem('background_local', '');
     localStorage.setItem('custom_dials', '{}');
@@ -268,14 +263,11 @@ const Options = (() => {
 
   function restoreLocalOptions() {
     if (confirm(chrome.i18n.getMessage('confirm_restore_default_settings'), '')) {
-      // localStorage.clear();
 
-      Object.keys(localStorage).forEach(function(property) {
-        if (property === 'background_local' || property === 'custom_dials') {
-          return;
-        }
+      for (let property of Object.keys(localStorage)) {
+        if (property === 'background_local' || property === 'custom_dials') continue;
         localStorage.removeItem(property);
-      });
+      }
       Settings.init();
       UI.toggleTheme();
       getOptions();
@@ -311,44 +303,34 @@ const Options = (() => {
     }
   }
 
-  function generateFolderList() {
+  async function generateFolderList() {
     const select = document.getElementById('default_folder_id');
-    select.innerHTML = '';
-    chrome.bookmarks.getTree(function(rootNode) {
-      let folderList = [], openList = [], node, child;
-      // Never more than 2 root nodes, push both Bookmarks Bar & Other Bookmarks into array
-      // openList.push(rootNode[0].children[0]);
-      // openList.push(rootNode[0].children[1]);
-      // root folders
-      openList = rootNode[0].children.map(item => {
-        return item;
-      });
+    // If not select element
+    if (!select) return;
 
-      while ((node = openList.pop()) !== undefined) {
-        if (node.children !== undefined) {
-          if (node.parentId === '0') {
-            node.path = ''; // Root elements have no parent so we shouldn't show their path
-          }
-          node.path += node.title;
-          while ((child = node.children.pop()) !== undefined) {
-            if (child.children !== undefined) {
-              child.path = node.path + '/';
-              openList.push(child);
-            }
-          }
-          folderList.push(node);
+    const folders = await getFolders().catch(err => console.warn(err));
+    if (!folders) return;
+
+    const folderId = localStorage.getItem('default_folder_id');
+    const optionsArr = [];
+
+    const processTree = (three, pass = 0) => {
+      for (let folder of three) {
+        let prefix = '-'.repeat(pass);
+        if (pass > 0) {
+          prefix = `&nbsp;&nbsp;${prefix}` + '&nbsp;';
         }
+
+        const name = `${prefix} ${folder.title}`;
+        optionsArr.push(`<option${folder.id === folderId ? ' selected' : ''} value="${folder.id}">${name}</option>`);
+        if (folder.children.length) {
+          processTree(folder.children, pass + 1);
+        }
+
       }
-      folderList.sort(function(a, b) {
-        return a.path.localeCompare(b.path);
-      });
-      let arr = [];
-      const folderId = localStorage.getItem('default_folder_id');
-      folderList.forEach(function(item) {
-        arr.push(`<option${item.id === folderId ? ' selected' : ''} value="${item.id}">${item.path}</option>`);
-      });
-      select.innerHTML = arr.join('');
-    });
+    };
+    processTree(folders);
+    select.innerHTML = optionsArr.join('');
   }
 
   return {
