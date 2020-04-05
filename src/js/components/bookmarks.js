@@ -90,16 +90,15 @@ const Bookmarks = (() => {
 
     // Change the current dial if the page hash changes
     window.addEventListener('hashchange', function() {
-      createSpeedDial(startFolder());
-
-      const id = window.location.hash.slice(1);
+      const folderId = startFolder();
+      createSpeedDial(folderId);
       if (localStorage.getItem('show_toolbar') === 'true' && select) {
-        const option = select.querySelector(`#selectFolder [value="${id}"]`);
+        const option = select.querySelector(`#selectFolder [value="${folderId}"]`);
         if (!option) return;
         option.selected = true;
       }
       Helpers.customTrigger('changeFolder', container, {
-        detail: { id }
+        detail: { folderId }
       });
     }, false);
 
