@@ -199,15 +199,14 @@ const Bookmarks = (() => {
     const tpl =
       `<a class="bookmark"
         data-id="%id%"
-        href="%url%" title="%title%"
+        href="%url%" title="%title%">
         ${(localStorage.getItem('open_link_newtab') === 'true') ? `target="_blank" rel="noopener noreferrer"` : ``}
-        ${ screen ? `data-screen='%screen%'` : `` }>
         <div class="bookmark__wrap">
           <button class="bookmark__action"></button>
           ${thumbContainer}
           <div class="bookmark__caption">
             ${hasFavicon}
-            <div class="bookmark__title">%title%</div>
+            <span class="bookmark__title">%title%</span>
           </div>
         </div>
         </a>`;
@@ -216,7 +215,6 @@ const Bookmarks = (() => {
       id: bookmark.id,
       url: bookmark.url,
       site: Helpers.getDomain(bookmark.url),
-      screen: JSON.stringify(screen),
       // localStorage.getItem('thumbnailing_service').replace('[URL]', encodeURIComponent(bookmark.url)),
       // eslint-disable-next-line max-len
       thumbnailing_service: localStorage.getItem('thumbnailing_service').replace('[URL]', Helpers.getDomain(bookmark.url)),
@@ -247,7 +245,6 @@ const Bookmarks = (() => {
     const tpl =
     `<a class="bookmark"
       data-id="%id%"
-      ${ screen ? `data-screen='%screen%'` : `` }
       href="#%url%" title="%title%"
       data-folder>
       <div class="bookmark__wrap">
@@ -255,7 +252,7 @@ const Bookmarks = (() => {
         ${imgLayout}
         <div class="bookmark__caption">
           <img src="/img/folder.svg" class="bookmark__favicon" width="16" height="16" alt="">
-          <div class="bookmark__title">%title%</div>
+          <span class="bookmark__title">%title%</span>
         </div>
       </div>
       </a>`;
@@ -265,7 +262,6 @@ const Bookmarks = (() => {
       parentId: bookmark.parentId,
       url: bookmark.id,
       title: Helpers.escapeHtml(bookmark.title),
-      screen: JSON.stringify(screen)
     });
   }
 
@@ -420,7 +416,6 @@ const Bookmarks = (() => {
         custom: !!site
       };
       localStorage.setItem('custom_dials', JSON.stringify(obj));
-      bookmark.dataset.screen = JSON.stringify(obj[id]);
 
       // update view only if folder_preview option is off or if the tab is not a folder
       if (folderPreviewOff || data.site) {
@@ -483,7 +478,6 @@ const Bookmarks = (() => {
           custom: false
         };
         localStorage.setItem('custom_dials', JSON.stringify(obj));
-        bookmark.dataset.screen = JSON.stringify(obj[idBookmark]);
 
         if (overlay) {
           overlay.remove();
@@ -549,7 +543,6 @@ const Bookmarks = (() => {
   }
 
   async function rmCustomScreen(id, cb) {
-    // TODO: проверить
     const screen = getCustomDial(id);
     const { image = screen } = screen || {};
     if (!image) return;
@@ -563,15 +556,15 @@ const Bookmarks = (() => {
   }
 
   function buildBookmarkHash(title, url) {
-    if (title.length === 0) {
+    if (!title.length) {
       return undefined;
     }
     // Chrome won't create bookmarks without HTTP
-    if (!Helpers.isValidUrl(url) && url.length !== 0) {
+    if (!Helpers.isValidUrl(url) && url.length) {
       url = 'http://' + url;
     }
 
-    return { 'title': title, 'url': url };
+    return { title, url };
   }
 
   function createBookmark(title, url) {
@@ -680,7 +673,8 @@ const Bookmarks = (() => {
     createScreen,
     uploadScreen,
     rmCustomScreen,
-    autoUpdateThumb
+    autoUpdateThumb,
+    getCustomDial
   };
 
 })();

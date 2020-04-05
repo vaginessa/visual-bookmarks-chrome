@@ -370,7 +370,9 @@ const NewTab = (() => {
 
       const { id, url, parentId } = bookmarkNode[0];
       const title = Helpers.unescapeHtml(bookmarkNode[0].title);
-      const image = props.screen ? JSON.parse(props.screen).image : null;
+
+      const screen = Bookmarks.getCustomDial(id);
+      const { image } = screen || {};
 
       // generate bookmark folder list
       Bookmarks.generateFolderList(foldersList, parentId, id);
