@@ -360,17 +360,17 @@ const Bookmarks = (() => {
 
     getSubTree(id)
       .then(item => {
-        // if the folder by id exists
-        if (item !== undefined && item[0] !== undefined && item[0].children !== undefined) {
-          if (!container.classList.contains('grid')) {
-            container.classList.add('grid');
-          }
-          render(item[0].children, hasCreate);
-          container.setAttribute('data-folder', id);
-        } else {
-          Toast.show(chrome.i18n.getMessage('notice_cant_find_id'));
-          container.classList.remove('grid');
-          container.innerHTML =
+        // folder by id exists
+        if (!container.classList.contains('grid')) {
+          container.classList.add('grid');
+        }
+        render(item[0].children, hasCreate);
+        container.setAttribute('data-folder', id);
+      })
+      .catch(() => {
+        Toast.show(chrome.i18n.getMessage('notice_cant_find_id'));
+        container.classList.remove('grid');
+        container.innerHTML =
             `<div class="not-found">
               <div class="not-found__wrap">
                 <div class="not-found__icon"></div>
@@ -380,7 +380,6 @@ const Bookmarks = (() => {
                 <a class="btn md-ripple" href="#1">${chrome.i18n.getMessage('not_found_link_text')}</a>
               </div>
             </div>`;
-        }
       });
   }
 
