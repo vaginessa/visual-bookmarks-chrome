@@ -2,10 +2,12 @@
 import Settings from './components/settings';
 import FS from './api/fs';
 import Helpers from './components/helpers';
+import browserContextMenu from './components/browserContextMenu';
 import { create, search } from './api/bookmark';
 
 FS.init(500);
 Settings.init();
+
 
 function captureScreen(link, callback) {
   let windowParam = {
@@ -106,11 +108,15 @@ function handlerCreateBookmark(data) {
       // Bookmarks exist
       Helpers.notifications(chrome.i18n.getMessage('notice_bookmark_exist'));
     } else {
+      const parentId =
+        (data.menuItemId !== 'current_folder') ?
+          data.menuItemId :
+          window.localStorage.getItem('default_folder_id');
       // Create
       const response = await create({
-        'parentId': window.localStorage.getItem('default_folder_id'),
-        'url': data.pageUrl,
-        'title': tabs[0].title
+        parentId,
+        url: data.pageUrl,
+        title: tabs[0].title
       }).catch(err => {
         console.warn(err);
       });
@@ -142,59 +148,31 @@ function handlerCreateBookmark(data) {
   });
 }
 
-const ContextMenu = {
-  init() {
-    const isShow = localStorage.getItem('show_contextmenu_item') === 'true';
-    if (!isShow) return;
+function browserActionHandler() {
+  const urls = [
+    chrome.extension.getURL('newtab.html'),
+    'chrome://newtab/'
+  ];
 
-    chrome.contextMenus.removeAll(() => {
-      if (chrome.runtime.lastError) {
-        console.warn(chrome.runtime.lastError);
+  chrome.tabs.query({ currentWindow: true }, function(tabs) {
+    for (let i = 0, tab; tab = tabs[i]; i++) { // eslint-disable-line no-cond-assign
+      if (tab.url && ~urls.indexOf(tab.url)) {
+        return chrome.tabs.update(tab.id, { active: true });
       }
-      this.create();
-    });
-  },
-  create() {
-    const props = {
-      id: 'create-bookmarks',
-      title: chrome.i18n.getMessage('add_bookmark'),
-      contexts: ['page']
-    };
-
-    chrome.contextMenus.create(props, () => {
-      if (chrome.runtime.lastError) {
-        console.warn(chrome.runtime.lastError);
-      }
-    });
-  },
-  toggle() {
-    const isShow = localStorage.getItem('show_contextmenu_item') === 'true';
-
-    if (isShow) {
-      this.create();
-    } else {
-      chrome.contextMenus.removeAll(() => {
-        if (chrome.runtime.lastError) return;
-      });
     }
-  }
-};
+    return chrome.tabs.create({ url: chrome.extension.getURL('newtab.html') });
+  });
+}
 
-// In future
+// chrome.runtime.onStartup.addListener(() => {
+//   ContextMenu.init();
+// });
 chrome.runtime.onInstalled.addListener(function() {
   // if (callback.reason === 'update') {}
-  ContextMenu.init();
+  browserContextMenu.init();
 });
-
-chrome.runtime.onStartup.addListener(() => {
-  ContextMenu.init();
-});
-
-chrome.contextMenus.onClicked.addListener(function(data) {
-  switch (data.menuItemId) {
-    case 'create-bookmarks': handlerCreateBookmark(data); break;
-  }
-});
+chrome.contextMenus.onClicked.addListener(handlerCreateBookmark);
+chrome.browserAction.onClicked.addListener(browserActionHandler);
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if (request.captureUrl) {
@@ -235,24 +213,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
   // Toggle contextmenu item
   if (request.showContextMenuItem) {
-    ContextMenu.toggle();
+    browserContextMenu.toggle();
   }
-});
-
-chrome.browserAction.onClicked.addListener(function() {
-
-  const urls = [
-    chrome.extension.getURL('newtab.html'),
-    'chrome://newtab/'
-  ];
-
-  chrome.tabs.query({ currentWindow: true }, function(tabs) {
-    for (let i = 0, tab; tab = tabs[i]; i++) { // eslint-disable-line no-cond-assign
-      if (tab.url && ~urls.indexOf(tab.url)) {
-        return chrome.tabs.update(tab.id, { active: true });
-      }
-    }
-    return chrome.tabs.create({ url: chrome.extension.getURL('newtab.html') });
-  });
-
 });

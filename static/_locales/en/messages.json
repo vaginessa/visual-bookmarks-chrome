@@ -155,6 +155,9 @@
   "add_bookmark": {
     "message": "Add to bookmarks"
   },
+  "save_to_current_folder": {
+    "message": "Save to current folder"
+  },
   "edit_bookmark": {
     "message": "Edit bookmark"
   },

@@ -155,6 +155,9 @@
   "add_bookmark": {
     "message": "Dodaj do zakładek"
   },
+  "save_to_current_folder": {
+    "message": "Zapisz w bieżącym folderze"
+  },
   "edit_bookmark": {
     "message": "Edytuj zakładkę"
   },

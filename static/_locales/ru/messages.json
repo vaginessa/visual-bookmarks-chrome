@@ -155,6 +155,9 @@
   "add_bookmark": {
     "message": "Добавить в закладки"
   },
+  "save_to_current_folder": {
+    "message": "Сохранить в текущей папке"
+  },
   "edit_bookmark": {
     "message": "Редактировать закладку"
   },
