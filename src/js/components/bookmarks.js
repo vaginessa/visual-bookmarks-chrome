@@ -198,8 +198,8 @@ const Bookmarks = (() => {
     const tpl =
       `<a class="bookmark"
         data-id="%id%"
-        href="%url%" title="%title%">
-        ${(localStorage.getItem('open_link_newtab') === 'true') ? `target="_blank" rel="noopener noreferrer"` : ``}
+        href="%url%" title="%title%"
+        ${(localStorage.getItem('open_link_newtab') === 'true') ? `target="_blank" rel="noopener noreferrer"` : ``}>
         <div class="bookmark__wrap">
           <button class="bookmark__action"></button>
           ${thumbContainer}
