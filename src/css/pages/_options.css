@@ -41,6 +41,15 @@
 .tbl {
   display: table;
   width: 100%;
+  border-radius: var(--base-radius);
+  &:focus-within,
+  &:hover {
+    background-color: var(--option-tbl-hover-bg);
+  }
+}
+
+.tbl__row {
+  display: table-row;
 }
 
 .tbl__option,

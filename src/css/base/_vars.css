@@ -92,6 +92,7 @@
   --option-controls: #f9f9f9;
   --tabs-bar-bg: #f9f9f9;
   --tabs-content-bg: #fff;
+  --option-tbl-hover-bg: #f7f7f7;
 
   /* not found */
   --notfound-bg: hsla(0, 0%, 100%, 0.75);
@@ -139,6 +140,7 @@
   --options-bg: var(--theme-bg);
   --options-footer-bg: var(--theme-bg-200);
   --option-controls: var(--theme-bg-200);
+  --option-tbl-hover-bg: hsla(0, 0%, 0%, 0.07);
   --tabs-bar-bg: var(--theme-bg-200);
   --tabs-content-bg: var(--theme-bg-300);
 
