@@ -1,5 +1,23 @@
 export default {
 
+  createElement(tag, attributes = {}, ...children) {
+    const element = document.createElement(tag);
+    for (const attribute in attributes) {
+      if (Object.prototype.hasOwnProperty.call(attributes, attribute)) {
+        element.setAttribute(attribute, attributes[attribute]);
+      }
+    }
+    const fragment = document.createDocumentFragment();
+    children.forEach(child => {
+      if (typeof child === 'string') {
+        child = document.createTextNode(child);
+      }
+      fragment.appendChild(child);
+    });
+    element.appendChild(fragment);
+    return element;
+  },
+
   debounce(func, wait, immediate) {
     let timeout = null;
 
