@@ -7,14 +7,18 @@ export default {
         element.setAttribute(attribute, attributes[attribute]);
       }
     }
-    const fragment = document.createDocumentFragment();
-    children.forEach(child => {
-      if (typeof child === 'string') {
-        child = document.createTextNode(child);
-      }
-      fragment.appendChild(child);
-    });
-    element.appendChild(fragment);
+    if (children.length && children[0].innerHTML) {
+      element.innerHTML = children[0].innerHTML;
+    } else {
+      const fragment = document.createDocumentFragment();
+      children.forEach(child => {
+        if (typeof child === 'string') {
+          child = document.createTextNode(child);
+        }
+        fragment.appendChild(child);
+      });
+      element.appendChild(fragment);
+    }
     return element;
   },
 
