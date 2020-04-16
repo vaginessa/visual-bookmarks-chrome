@@ -272,6 +272,17 @@
   "thumbnails_update_button": {
     "message": "Przycisk aktualizacji miniatur"
   },
+  "thumbnails_update_recursive": {
+    "message": "W tym podfoldery"
+  },
+  "thumbnails_update_recursive_note": {
+    "message": "Jeśli opcja \"$option$\" jest włączona",
+    "placeholders": {
+      "option": {
+        "content": "$1"
+      }
+    }
+  },
   "folder_preview": {
     "message": "Miniatury witryn w folderze zamiast ikony"
   },

@@ -160,14 +160,29 @@
             </div>
 
             <div class="tbl">
-              <div class="tbl__setting">
-                <div data-locale-message="thumbnails_update_button"></div>
-                <small class="text-muted" data-locale-message="thumbnails_update_warn"></small>
+              <div class="tbl__row">
+                <div class="tbl__setting">
+                  <div data-locale-message="thumbnails_update_button"></div>
+                  <small class="text-muted" data-locale-message="thumbnails_update_warn"></small>
+                </div>
+                <div class="tbl__value">
+                  <div class="switch">
+                    <input type="checkbox" class="switch__input js-change" name="thumbnails_update_button" id="thumbnails_update_button">
+                    <label class="switch__label" for="thumbnails_update_button"></label>
+                  </div>
+                </div>
               </div>
-              <div class="tbl__value">
-                <div class="switch">
-                  <input type="checkbox" class="switch__input js-change" name="thumbnails_update_button" id="thumbnails_update_button">
-                  <label class="switch__label" for="thumbnails_update_button"></label>
+
+              <div class="tbl__row">
+                <div class="tbl__setting">
+                  <div data-locale-message="thumbnails_update_recursive">Recursive</div>
+                  <small class="text-muted" data-locale-message="thumbnails_update_recursive_note:thumbnails_update_button"></small>
+                </div>
+                <div class="tbl__value">
+                  <div class="switch">
+                    <input type="checkbox" class="switch__input js-change" name="thumbnails_update_recursive" id="thumbnails_update_recursive">
+                    <label class="switch__label" for="thumbnails_update_recursive"></label>
+                  </div>
                 </div>
               </div>
             </div>

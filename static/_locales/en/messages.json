@@ -272,6 +272,17 @@
   "thumbnails_update_button": {
     "message": "Thumbnails update button"
   },
+  "thumbnails_update_recursive": {
+    "message": "Including subfolders"
+  },
+  "thumbnails_update_recursive_note": {
+    "message": "If the \"$option$\" option is enabled",
+    "placeholders": {
+      "option": {
+        "content": "$1"
+      }
+    }
+  },
   "folder_preview": {
     "message": "Thumbnails of sites on a folder instead of an icon"
   },

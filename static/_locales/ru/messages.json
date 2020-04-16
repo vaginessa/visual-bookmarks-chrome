@@ -272,6 +272,17 @@
   "thumbnails_update_button": {
     "message": "Кнопка обновления миниатюр"
   },
+  "thumbnails_update_recursive": {
+    "message": "Включая подпапки"
+  },
+  "thumbnails_update_recursive_note": {
+    "message": "Если опция \"$option$\" включена",
+    "placeholders": {
+      "option": {
+        "content": "$1"
+      }
+    }
+  },
   "folder_preview": {
     "message": "Миниатюры сайтов на папке вместо иконки"
   },
