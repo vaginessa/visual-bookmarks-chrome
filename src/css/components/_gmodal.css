@@ -42,7 +42,7 @@ body.gmodal-open {
     background-color: #ccc;
   }
 
-  &.has-animate .gmodal__dialog {
+  &.has-animate .gmodal__container {
     will-change: transform, opacity;
     opacity: 0;
     transform: scale(0.95);
@@ -50,7 +50,7 @@ body.gmodal-open {
     transition-duration: 150ms;
     transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
   }
-  &.has-animate.is-show .gmodal__dialog {
+  &.has-animate.is-show .gmodal__container {
     opacity: 1;
     transform: none;
     transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
@@ -58,7 +58,7 @@ body.gmodal-open {
 }
 
 @media (min-width: 480px) {
-  .gmodal__dialog {
+  .gmodal__container {
     position: relative;
     max-width: 550px;
     width: 100%;
@@ -75,12 +75,9 @@ body.gmodal-open {
       }
     }
   }
-  .gmodal__dialog--lg {
-    max-width: 940px;
-  }
 }
 
-.gmodal__content {
+.gmodal__dialog {
   position: absolute;
   min-height: 100vh;
   width: 100%;
@@ -89,7 +86,7 @@ body.gmodal-open {
 }
 
 @media (min-width: 480px) {
-  .gmodal__content {
+  .gmodal__dialog {
     position: relative;
     min-height: auto;
     border-radius: 3px;

@@ -50,7 +50,7 @@
     "webpack-cli": "^3.3.11"
   },
   "dependencies": {
-    "glory-modal": "^1.2.2",
+    "glory-modal": "^2.0.0",
     "sortablejs": "1.8.1",
     "tabs-slider": "^1.2.2"
   }
