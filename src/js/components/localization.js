@@ -5,7 +5,7 @@ export default function() {
     const msg = item.getAttribute('data-locale-message');
     if (!msg) return;
 
-    // if exist params i18nString:param1,param2,param3
+    // if exist params i18nString:param1,param2,paramI18nString
     const params = msg.split(':');
     if (params.length > 1) {
       const arrString = params[1].split(',').map(str => {

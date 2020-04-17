@@ -9,7 +9,7 @@ export default {
     }
     if (children.length && children[0].innerHTML) {
       element.innerHTML = children[0].innerHTML;
-    } else {
+    } else if (children.length) {
       const fragment = document.createDocumentFragment();
       children.forEach(child => {
         if (typeof child === 'string') {

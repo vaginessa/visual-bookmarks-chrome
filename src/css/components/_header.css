@@ -1,6 +1,5 @@
-.thumbnails-updating .header {
-  pointer-events: none;
-  opacity: 0.3;
+.header {
+  position: relative;
 }
 
 .header__grid {
