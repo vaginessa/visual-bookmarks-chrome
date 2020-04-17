@@ -187,7 +187,6 @@ const NewTab = (() => {
 
   function ctxMenuOpen(evt) {
     const bookmark = evt.detail.trigger;
-    // const props = JSON.parse(bookmark.dataset.props);
     const isFolder = bookmark.dataset.folder !== undefined;
 
     if (isFolder) {

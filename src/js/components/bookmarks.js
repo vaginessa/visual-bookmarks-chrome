@@ -19,7 +19,16 @@ import {
  */
 const Bookmarks = (() => {
   const container = document.getElementById('bookmarks');
-  const SVGLoading = document.getElementById('loading').outerHTML;
+  const SVGLoading =
+    `<svg class="loading" id="loading" viewBox="0 0 100 100">` +
+      `<defs>` +
+        `<linearGradient id="%id%">` +
+          `<stop offset="5%" stop-color="#4285f4"></stop>` +
+          `<stop offset="95%" stop-color="#b96bd6"></stop>` +
+        `</linearGradient>` +
+      `</defs>` +
+      `<circle class="path" fill="none" stroke="url(#%id%)" stroke-width="8" stroke-linecap="round" cx="50" cy="50" r="40"></circle>` +
+    `</svg>`;
   let sort = null;
   let isGeneratedThumbs = false;
 
@@ -326,34 +335,6 @@ const Bookmarks = (() => {
     }
   }
 
-  function getCustomDial(id) {
-    const storage = JSON.parse(localStorage.getItem('custom_dials'));
-    return storage[id];
-  }
-
-  function autoUpdateThumb() {
-    if (isGeneratedThumbs) return;
-    const id = startFolder();
-    getChildren(id)
-      .then(async(items) => {
-        isGeneratedThumbs = true;
-        document.body.classList.add('thumbnails-updating');
-        Helpers.customTrigger('thumbnails:updating', container);
-
-        for (let b of items) {
-          if (!b.url) continue;
-          const bookmark = container.querySelector(`[data-id="${b.id}"]`);
-          await createScreen(bookmark, b.id, b.url);
-        }
-        isGeneratedThumbs = false;
-        document.body.classList.remove('thumbnails-updating');
-        Helpers.notifications(
-          chrome.i18n.getMessage('notice_thumbnails_update_complete')
-        );
-        Helpers.customTrigger('thumbnails:updated', container);
-      });
-  }
-
   function createSpeedDial(id) {
     container.innerHTML = '';
     const hasCreate = (localStorage.getItem('show_create_column') === 'true');
@@ -383,6 +364,90 @@ const Bookmarks = (() => {
       });
   }
 
+  function getCustomDial(id) {
+    const storage = JSON.parse(localStorage.getItem('custom_dials'));
+    return storage[id];
+  }
+
+  function renderProgressToast(sum) {
+    const i18n = chrome.i18n.getMessage('thumbnails_creation', ['<strong id="progress-text">0</strong>', sum]);
+    const progressToast = Helpers.createElement(
+      'div', {
+        class: 'progress-toast'
+      },
+      {
+        innerHTML:
+          `<div class="progress-toast__icon">${SVGLoading.replace(/%id%/g, Date.now())}</div>` +
+          `<div class="progress-toast__text">${i18n}</div>`
+      }
+    );
+    return progressToast;
+  }
+
+  function flattenArrayBookmarks(arr) {
+    return [].concat(...arr.map(item => {
+      return Array.isArray(item.children) ? flattenArrayBookmarks(item.children) : item;
+    }));
+  }
+
+  function autoUpdateThumb() {
+    if (isGeneratedThumbs) return;
+    const id = startFolder();
+    // getChildren(id)
+    getSubTree(id)
+      .then(async(items) => {
+        // check recursively or not
+        const children = (localStorage.getItem('thumbnails_update_recursive') === 'true')
+          // create a flat array of nested bookmarks
+          ? flattenArrayBookmarks(items[0].children)
+          // only first level bookmarks without folders
+          : items[0].children.filter(item => item.url);
+
+        // create notification toast
+        const progressToast = renderProgressToast(children.length);
+        document.body.appendChild(progressToast);
+        const progressText = document.getElementById('progress-text');
+
+        isGeneratedThumbs = true;
+        Helpers.customTrigger('thumbnails:updating', container);
+
+        for (const [index, b] of children.entries()) {
+          // updating toast progress
+          progressText.textContent = index + 1;
+          // get capture
+          const response = await captureScreen(b.url, b.id);
+          if (response.warning) continue;
+
+          // save to localstorage
+          updateStorageCustomDials(b.id, response, false);
+          try {
+            // if we can, then update the bookmark in the DOM
+            const bookmark = container.querySelector(`[data-id="${b.id}"]`);
+            const image = bookmark.querySelector('.bookmark__img');
+            image.className = 'bookmark__img';
+            image.style.backgroundImage = `url('${response}?refresh=${Date.now()}')`;
+          } catch (err) {}
+        }
+
+        isGeneratedThumbs = false;
+        Helpers.notifications(
+          chrome.i18n.getMessage('notice_thumbnails_update_complete')
+        );
+        Helpers.customTrigger('thumbnails:updated', container);
+        progressToast.remove();
+      });
+  }
+
+  function updateStorageCustomDials(id, url, custom = false) {
+    const obj = JSON.parse(localStorage.getItem('custom_dials'));
+    obj[id] = {
+      image: url,
+      custom
+    };
+    localStorage.setItem('custom_dials', JSON.stringify(obj));
+    return obj;
+  }
+
   function uploadScreen(data) {
     const folderPreviewOff = localStorage.getItem('folder_preview') !== 'true';
     const { target, id, site } = data;
@@ -395,7 +460,12 @@ const Bookmarks = (() => {
     target.value = '';
 
     const bookmark = document.querySelector(`[data-id="${id}"]`);
-    bookmark.innerHTML += `<div class="bookmark__overlay">${SVGLoading}</div>`;
+    const overlay = Helpers.createElement('div', {
+      class: 'bookmark__overlay'
+    }, {
+      innerHTML: SVGLoading.replace(/%id%/g, Date.now())
+    });
+    bookmark.appendChild(overlay);
 
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -408,12 +478,7 @@ const Bookmarks = (() => {
       await FS.createDir('images');
       const fileEntry = await FS.createFile(`/images/${name}`, { file: blob, fileType: 'jpg' });
 
-      const obj = JSON.parse(localStorage.getItem('custom_dials'));
-      obj[id] = {
-        image: fileEntry.toURL(),
-        custom: !!site
-      };
-      localStorage.setItem('custom_dials', JSON.stringify(obj));
+      updateStorageCustomDials(id, fileEntry.toURL(), !!site);
 
       // update view only if folder_preview option is off or if the tab is not a folder
       if (folderPreviewOff || data.site) {
@@ -428,10 +493,7 @@ const Bookmarks = (() => {
         imgEl.style.backgroundImage = `url('${fileEntry.toURL()}?refresh=${Date.now()}')`;
       }
 
-      let overlay = bookmark.querySelector('.bookmark__overlay');
-      if (overlay) {
-        overlay.remove();
-      }
+      overlay.remove();
       Toast.show(chrome.i18n.getMessage('notice_thumb_image_updated'));
     };
 
@@ -441,50 +503,39 @@ const Bookmarks = (() => {
 
   }
 
-  function createScreen(bookmark, idBookmark, captureUrl) {
-    if (!bookmark) return;
-
-    bookmark.classList.add('disable-events');
-    bookmark.innerHTML += `<div class="bookmark__overlay">${SVGLoading}</div>`;
-
-    const image = bookmark.querySelector('.bookmark__img');
-
+  function captureScreen(captureUrl, id) {
     return new Promise((resolve) => {
-      chrome.runtime.sendMessage({ captureUrl: captureUrl, id: idBookmark }, (response) => {
-
-        let overlay = bookmark.querySelector('.bookmark__overlay');
-
+      chrome.runtime.sendMessage({ captureUrl, id }, (response) => {
         if (response.warning) {
           console.warn(response.warning);
-          if (overlay) {
-            overlay.remove();
-            bookmark.classList.remove('disable-events');
-          }
-          // reject();
-          // return the promise even if it was not possible to make a thumbnail, to continue generating the folder thumbnails
-          resolve();
-          return false;
         }
-
-        image.className = 'bookmark__img';
-        image.style.backgroundImage = `url('${response}?refresh=${Date.now()}')`;
-        bookmark.classList.remove('disable-events');
-
-        const obj = JSON.parse(localStorage.getItem('custom_dials'));
-        obj[idBookmark] = {
-          image: response,
-          custom: false
-        };
-        localStorage.setItem('custom_dials', JSON.stringify(obj));
-
-        if (overlay) {
-          overlay.remove();
-        }
-        resolve();
+        resolve(response);
       });
-
     });
+  }
 
+  async function createScreen(bookmark, idBookmark, captureUrl) {
+    if (!bookmark) return;
+
+    const overlay = Helpers.createElement('div', {
+      class: 'bookmark__overlay'
+    }, {
+      innerHTML: SVGLoading
+    });
+    bookmark.appendChild(overlay);
+    bookmark.classList.add('disable-events');
+    const image = bookmark.querySelector('.bookmark__img');
+    const response = await captureScreen(captureUrl, idBookmark);
+
+    if (!response.warning) {
+      image.className = 'bookmark__img';
+      image.style.backgroundImage = `url('${response}?refresh=${Date.now()}')`;
+      bookmark.classList.remove('disable-events');
+      updateStorageCustomDials(idBookmark, response);
+    }
+
+    overlay.remove();
+    bookmark.classList.remove('disable-events');
   }
 
   function search(evt) {
@@ -573,8 +624,6 @@ const Bookmarks = (() => {
     }
     hash.parentId = container.getAttribute('data-folder');
 
-    // const result = await create(hash).catch(err => console.warn(err));
-    // if (!result) return false;
     create(hash)
       .then(result => {
         let html;
