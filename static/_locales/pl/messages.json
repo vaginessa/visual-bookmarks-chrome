@@ -266,6 +266,17 @@
   "google_services": {
     "message": "Usługi Google"
   },
+  "thumbnails_creation": {
+    "message": "Tworzenie miniaturek: $start$ na $total$",
+    "placeholders": {
+      "start": {
+        "content": "$1"
+      },
+      "total": {
+        "content": "$2"
+      }
+    }
+  },
   "thumbnails_update_warn": {
     "message": "Aktualizacja miniatur może wpłynąć na wydajność (zależy od liczby zakładek w folderze i wydajności komputera)"
   },

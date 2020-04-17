@@ -266,6 +266,17 @@
   "google_services": {
     "message": "Сервисы Google"
   },
+  "thumbnails_creation": {
+    "message": "Создание миниатюр: $start$ из $total$",
+    "placeholders": {
+      "start": {
+        "content": "$1"
+      },
+      "total": {
+        "content": "$2"
+      }
+    }
+  },
   "thumbnails_update_warn": {
     "message": "Обновление миниатюр может сказываться на производительности (зависит от количества закладок в папке и производительности компьютера)"
   },
