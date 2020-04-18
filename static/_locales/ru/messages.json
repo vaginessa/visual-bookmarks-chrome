@@ -8,8 +8,17 @@
   "default_title": {
     "message": "Визуальные закладки"
   },
+  "color_theme": {
+    "message": "Цветовая тема"
+  },
   "dark_theme": {
-    "message": "Тёмная тема"
+    "message": "Тёмная"
+  },
+  "light_theme": {
+    "message": "Светлая"
+  },
+  "os_theme": {
+    "message": "Тема ОС"
   },
   "placeholder_input_customstyle": {
     "message": "Стили пользователя CSS(Для продвинутых пользователей)"

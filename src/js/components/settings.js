@@ -1,5 +1,5 @@
 const DEFAULTS = {
-  dark_theme: false,
+  color_theme: 'os',
   background_image: 'background_noimage',
   background_external: '',
   default_folder_id: 1,

@@ -8,8 +8,17 @@
   "default_title": {
     "message": "Visual bookmarks"
   },
+  "color_theme": {
+    "message": "Color theme"
+  },
   "dark_theme": {
-    "message": "Dark theme"
+    "message": "Dark"
+  },
+  "light_theme": {
+    "message": "Light"
+  },
+  "os_theme": {
+    "message": "OS theme"
   },
   "placeholder_input_customstyle": {
     "message": "Enter your custom CSS(For advanced users)"

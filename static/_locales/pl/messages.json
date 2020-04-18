@@ -8,8 +8,17 @@
   "default_title": {
     "message": "Wizualne zakładki"
   },
+  "color_theme": {
+    "message": "Motyw kolorystyczny"
+  },
   "dark_theme": {
-    "message": "Ciemny motyw"
+    "message": "Ciemny"
+  },
+  "light_theme": {
+    "message": "Światło"
+  },
+  "os_theme": {
+    "message": "Motyw systemu operacyjnego"
   },
   "placeholder_input_customstyle": {
     "message": "Wprowadź swój niestandardowy CSS(Dla zaawansowanych użytkowników)"

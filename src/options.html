@@ -12,8 +12,6 @@
 
     <div class="settings-container">
 
-      <!-- <h1 class="text-center" data-locale-message="options">Options</h1> -->
-
       <div class="tabs">
         <div class="tabs__bar">
           <div class="tabs__controls md-ripple" data-locale-message="view_setting" data-ripple-color="rgba(0,0,0,.3)">View</div>
@@ -53,13 +51,14 @@
             </div>
             <div class="tbl">
               <div class="tbl__setting">
-                <div data-locale-message="dark_theme">Dark theme</div>
+                <div data-locale-message="color_theme">Color theme</div>
               </div>
               <div class="tbl__value">
-                <div class="switch">
-                  <input type="checkbox" class="switch__input js-change" name="theme" id="dark_theme">
-                  <label class="switch__label" for="dark_theme"></label>
-                </div>
+                <select name="color-theme" id="color_theme" class="form-control js-change">
+                  <option value="dark" data-locale-message="dark_theme">Dark</option>
+                  <option value="light" data-locale-message="light_theme">Light</option>
+                  <option value="os" data-locale-message="os_theme">OS theme</option>
+                </select>
               </div>
             </div>
             <div class="tbl">

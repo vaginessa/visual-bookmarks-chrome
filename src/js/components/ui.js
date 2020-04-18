@@ -1,10 +1,19 @@
 import Helpers from './helpers';
 
+const colorScheme = window.matchMedia('(prefers-color-scheme: dark)');
+const colorTheme = () => document.documentElement.classList.toggle('dark', colorScheme.matches);
+
 export default {
   toggleTheme() {
-    const hasDark = (localStorage.getItem('dark_theme') === 'true');
+    const theme = localStorage.getItem('color_theme');
+    if (theme === 'os') {
+      colorScheme.removeListener(colorTheme);
+      colorTheme();
+      colorScheme.addListener(colorTheme);
+      return true;
+    }
 
-    if (hasDark) {
+    if (theme === 'dark') {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');

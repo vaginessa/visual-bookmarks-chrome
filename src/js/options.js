@@ -168,7 +168,7 @@ const Options = (() => {
     }
 
     // dark theme
-    if (target.id === 'dark_theme') {
+    if (target.id === 'color_theme') {
       UI.toggleTheme();
     }
 
@@ -290,7 +290,10 @@ const Options = (() => {
       chrome.storage.sync.getBytesInUse(null, bytes => {
         if (bytes > 0) {
           if (confirm(chrome.i18n.getMessage('confirm_sync_remote_settings'), '')) {
-            Settings.restoreFromSync(getOptions);
+            Settings.restoreFromSync(() => {
+              getOptions();
+              UI.toggleTheme();
+            });
             // window.location.reload();
           } else {
             this.checked = false;
