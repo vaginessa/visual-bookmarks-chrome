@@ -52,11 +52,6 @@ export default {
     if (arr.indexOf(localStorage.getItem('thumbnailing_service')) > -1) {
       localStorage.setItem('thumbnailing_service', DEFAULTS['thumbnailing_service']);
     }
-
-    // TODO: experiment service object
-    if (localStorage.getItem('google_services_list') === null) {
-      localStorage.setItem('google_services_list', JSON.stringify(GOOGLE_SERVICES));
-    }
   },
   restoreFromSync(cb) {
     chrome.storage.sync.get(function(sync_object) {
