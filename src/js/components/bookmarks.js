@@ -6,7 +6,6 @@ import Helpers from './helpers';
 import {
   getFolders,
   move,
-  getChildren,
   getSubTree,
   search as searchBookmarks,
   remove,
@@ -610,7 +609,7 @@ const Bookmarks = (() => {
     }
     // Chrome won't create bookmarks without HTTP
     if (!Helpers.isValidUrl(url) && url.length) {
-      url = 'http://' + url;
+      url = `http://${url}`;
     }
 
     return { title, url };
