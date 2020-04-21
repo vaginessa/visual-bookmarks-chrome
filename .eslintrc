@@ -4,6 +4,7 @@
       "es6": true
   },
   "extends": "eslint:recommended",
+  "parser": "babel-eslint",
   "parserOptions": {
       "ecmaVersion": 2020,
       "sourceType": "module"
@@ -12,6 +13,7 @@
     "chrome": true
   },
   "rules": {
+    "strict": 0,
     "indent": [
       "error",
       2,
@@ -77,15 +79,5 @@
     "arrow-spacing": "error",
     "no-var": "error",
     "no-duplicate-imports": "error"
-  },
-  "overrides": [
-    {
-      "files": ["src/js/newtab.js"],
-      "parser": "babel-eslint",
-      "parserOptions": {
-        "sourceType": "module",
-        "allowImportExportEverywhere": true
-      }
-    }
-  ]
+  }
 }
