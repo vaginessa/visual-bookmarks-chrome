@@ -34,6 +34,7 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: [/node_modules/],
+        // include: path.resolve(__dirname, 'src/js/components'),
         use: [{
           loader: 'babel-loader',
           options: { presets: ['@babel/env'] }
@@ -73,25 +74,17 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: 'css/[name].css'
     }),
-    new HtmlWebpackPlugin({
-      template: './src/newtab.html',
-      filename: 'newtab.html',
-      minify: {
-        collapseWhitespace: true,
-        removeComments: true,
-        removeScriptTypeAttributes: true
-      },
-      chunks: ['newtab']
-    }),
-    new HtmlWebpackPlugin({
-      template: './src/options.html',
-      filename: 'options.html',
-      minify: {
-        collapseWhitespace: true,
-        removeComments: true,
-        removeScriptTypeAttributes: true
-      },
-      chunks: ['options']
+    ...['newtab', 'options'].map(name => {
+      return new HtmlWebpackPlugin({
+        template: `./src/${name}.html`,
+        filename: `${name}.html`,
+        minify: {
+          collapseWhitespace: true,
+          removeComments: true,
+          removeScriptTypeAttributes: true
+        },
+        chunks: [name]
+      })
     })
   ]
 };
