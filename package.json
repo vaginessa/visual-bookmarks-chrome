@@ -7,7 +7,7 @@
     "lint:css": "stylelint src/css/**;  exit 0",
     "lint:html": "htmlhint src/*.html; exit 0",
     "lint": "npm run lint:es && npm run lint:css && npm run lint:html",
-    "start": "webpack --mode=production --watch --progress --hide-modules",
+    "start": "webpack --mode=development --watch --progress --hide-modules",
     "build": "webpack --mode=production --progress --hide-modules",
     "zip": "bestzip extension.zip extension/*",
     "release": "npm run build && npm run zip"

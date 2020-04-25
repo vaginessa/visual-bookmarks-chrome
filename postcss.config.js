@@ -1,9 +1,9 @@
-module.exports = {
-  plugins: [
-    require('postcss-import'),
-    require('postcss-nesting'),
-    require('autoprefixer'),
-    require("css-mqpacker"),
-    require('postcss-csso')
-  ]
-};
+module.exports = ({ webpack }) => ({
+  plugins: {
+    'postcss-import': {},
+    'postcss-nesting': {},
+    'autoprefixer': {},
+    'css-mqpacker': {},
+    'postcss-csso': webpack.mode === 'production' ? {} : false
+  }
+});
