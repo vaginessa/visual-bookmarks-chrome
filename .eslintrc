@@ -78,6 +78,7 @@
     "space-infix-ops": ["error", { "int32Hint": false }],
     "arrow-spacing": "error",
     "no-var": "error",
-    "no-duplicate-imports": "error"
+    "no-duplicate-imports": "error",
+    "no-unneeded-ternary": "error"
   }
 }
