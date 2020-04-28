@@ -1,4 +1,4 @@
-import Helpers from './helpers';
+import { $customTrigger } from './helpers';
 
 class ContextMenu {
 
@@ -206,7 +206,7 @@ class ContextMenu {
   select(action) {
     if (action && !action.classList.contains('disabled')) {
 
-      Helpers.customTrigger('contextMenuSelection', this.menu, {
+      $customTrigger('contextMenuSelection', this.menu, {
         detail: {
           selection: action.dataset.action,
           trigger: this.trigger
@@ -223,7 +223,7 @@ class ContextMenu {
     this.state = true;
     this.menu.classList.add('context-menu--open');
 
-    Helpers.customTrigger('contextMenuOpen', this.menu, {
+    $customTrigger('contextMenuOpen', this.menu, {
       detail: {
         trigger: this.trigger
       }
@@ -243,7 +243,7 @@ class ContextMenu {
     }
     this.currentIndex = -1;
 
-    Helpers.customTrigger('contextMenuClose', this.menu, {
+    $customTrigger('contextMenuClose', this.menu, {
       detail: {
         trigger: this.trigger
       }

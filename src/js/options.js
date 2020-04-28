@@ -1,15 +1,15 @@
 import '../css/options.css';
 
 import TabsSlider from 'tabs-slider';
-import { getFolders } from './api/bookmark';
 import FS from './api/fs';
 import Settings from './components/settings';
 import UI from './components/ui';
 import Localization from './components/localization';
 import Ripple from './components/ripple';
-import Helpers from './components/helpers';
 import AutosizeTextarea from './components/autosizeTextarea';
 import Toast from './components/toast';
+import { getFolders } from './api/bookmark';
+import { $notifications, $trigger } from './components/helpers';
 
 // Set lang attr
 // Replacement underscore on the dash because underscore is not a valid language subtag
@@ -79,7 +79,7 @@ const Options = (() => {
           Object.keys(settings).forEach(setting => {
             localStorage.setItem(setting, settings[setting]);
           });
-          Helpers.notifications(
+          $notifications(
             chrome.i18n.getMessage('import_settings_success')
           );
           setTimeout(() => {
@@ -131,7 +131,7 @@ const Options = (() => {
     options.forEach((item) => {
       if (item.value === localStorage.getItem('background_image')) {
         item.selected = true;
-        Helpers.trigger('change', optionBg);
+        $trigger('change', optionBg);
         return;
       }
     });
@@ -148,7 +148,7 @@ const Options = (() => {
         elOption.value = localStorage.getItem(id);
         // Triggering event at program input to the textarea(for autosize textarea)
         if (elOption === textarea.el) {
-          Helpers.trigger('input', textarea.el);
+          $trigger('input', textarea.el);
         }
       }
     }

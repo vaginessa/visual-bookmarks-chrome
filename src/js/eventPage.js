@@ -1,9 +1,17 @@
 /* eslint-disable no-console */
 import Settings from './components/settings';
 import FS from './api/fs';
-import Helpers from './components/helpers';
 import browserContextMenu from './components/browserContextMenu';
-import { create, search } from './api/bookmark';
+import {
+  $notifications,
+  $resizeScreen,
+  $base64ToBlob,
+  $getDomain
+} from './components/helpers';
+import {
+  create,
+  search
+} from './api/bookmark';
 
 FS.init(500);
 Settings.init();
@@ -106,7 +114,7 @@ function handlerCreateBookmark(data) {
     const isExist = matches.some(match => match.url === data.pageUrl);
     if (isExist) {
       // Bookmarks exist
-      Helpers.notifications(chrome.i18n.getMessage('notice_bookmark_exist'));
+      $notifications(chrome.i18n.getMessage('notice_bookmark_exist'));
     } else {
       const parentId =
         (data.menuItemId !== 'current_folder') ?
@@ -123,11 +131,11 @@ function handlerCreateBookmark(data) {
       // do not generate a thumbnail if you could not create a bookmark or the auto-generation option is turned off
       if (!response || localStorage.getItem('auto_generate_thumbnail') !== 'true') return;
 
-      Helpers.notifications(chrome.i18n.getMessage('notice_bookmark_created'));
+      $notifications(chrome.i18n.getMessage('notice_bookmark_created'));
       captureScreen(response.url, async function(data) {
-        const image = await Helpers.resizeScreen(data.capture);
-        const blob = Helpers.base64ToBlob(image, 'image/jpg');
-        const name = `${Helpers.getDomain(response.url)}_${response.id}.jpg`;
+        const image = await $resizeScreen(data.capture);
+        const blob = $base64ToBlob(image, 'image/jpg');
+        const name = `${$getDomain(response.url)}_${response.id}.jpg`;
 
         const dirEntry = await FS.createDir('images').catch(err => console.log(err));
         const fileEntry = await FS.createFile(`${dirEntry.fullPath}/${name}`, {
@@ -173,6 +181,7 @@ chrome.runtime.onInstalled.addListener(function() {
 });
 chrome.contextMenus.onClicked.addListener(handlerCreateBookmark);
 chrome.browserAction.onClicked.addListener(browserActionHandler);
+chrome.notifications.onClicked.addListener(browserActionHandler);
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if (request.captureUrl) {
@@ -194,9 +203,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         return false;
       }
 
-      const image = await Helpers.resizeScreen(data.capture);
-      const blob = Helpers.base64ToBlob(image, 'image/jpg');
-      const name = `${Helpers.getDomain(request.captureUrl)}_${request.id}.jpg`;
+      const image = await $resizeScreen(data.capture);
+      const blob = $base64ToBlob(image, 'image/jpg');
+      const name = `${$getDomain(request.captureUrl)}_${request.id}.jpg`;
 
       const dirEntry = await FS.createDir('images');
       const fileEntry = await FS.createFile(`${dirEntry.fullPath}/${name}`, { file: blob, fileType: blob.type });

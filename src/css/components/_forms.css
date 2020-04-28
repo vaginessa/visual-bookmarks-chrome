@@ -20,9 +20,9 @@
   }
 }
 
-select {
+select,
+select.form-control {
   padding-right: 28px;
-  width: auto;
   background-image: var(--select-icon);
   background-size: 18px;
   background-repeat: no-repeat;

@@ -1,4 +1,5 @@
-import Helpers from './helpers';
+import { $imageLoaded } from './helpers';
+
 
 const colorScheme = window.matchMedia('(prefers-color-scheme: dark)');
 const colorTheme = () => document.documentElement.classList.toggle('dark', colorScheme.matches);
@@ -37,7 +38,7 @@ export default {
     const resource = localStorage.getItem(bgState);
 
     if (resource && resource !== '') {
-      Helpers.imageLoaded(resource, {
+      $imageLoaded(resource, {
         done(data) {
           document.body.classList.add('has-image');
           bgEl.style.backgroundImage = `url('${data}')`;

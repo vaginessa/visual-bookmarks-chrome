@@ -1,13 +1,21 @@
 import '../css/newtab.css';
 import Gmodal from 'glory-modal';
-import Helpers from './components/helpers';
 import Settings from './components/settings';
 import Bookmarks from './components/bookmarks';
 import Localization from './components/localization';
 import UI from './components/ui';
 import ContextMenu from './components/contextmenu';
 import Ripple from './components/ripple';
-import { get, getChildren } from './api/bookmark';
+import {
+  get,
+  getChildren
+} from './api/bookmark';
+import {
+  $getDomain,
+  $imageLoaded,
+  $copyStr,
+  $unescapeHtml
+} from './components/helpers';
 
 const NewTab = (() => {
   const container = document.getElementById('bookmarks');
@@ -30,7 +38,7 @@ const NewTab = (() => {
   let ctxMenu;
   let generateThumbsBtn = null;
 
-  function init() {
+  async function init() {
     modalApi = new Gmodal(modal, {
       stickySelectors: ['.sticky'],
       closeBackdrop: false
@@ -54,7 +62,8 @@ const NewTab = (() => {
 
     modal.addEventListener('gmodal:close', modalAfterClose);
 
-    Bookmarks.generateFolderList(foldersList);
+    const folderOptions = await Bookmarks.generateFolderList(foldersList);
+    foldersList.innerHTML = folderOptions.join('');
 
     // If thumbnail generation button
     if (localStorage.getItem('thumbnails_update_button') === 'true') {
@@ -134,7 +143,7 @@ const NewTab = (() => {
   function storageUpdate(e) {
     // If several tabs are open, on the rest of them we will update the attribute at the button
     if (e.key === 'update_thumbnails') {
-      generateThumbsBtn.disabled = !e.newValue ? false : true;
+      generateThumbsBtn.disabled = !!e.newValue;
     }
   }
 
@@ -229,7 +238,7 @@ const NewTab = (() => {
         modalApi.open();
         break;
       case 'copy_link':
-        Helpers.copyStr(target.href);
+        $copyStr(target.href);
         break;
       case 'capture': {
         const idBookmark = target.getAttribute('data-id');
@@ -240,7 +249,7 @@ const NewTab = (() => {
       case 'upload': {
         upload.dataset.id = props.id;
         if (!isFolder) {
-          upload.dataset.site = Helpers.getDomain(target.href);
+          upload.dataset.site = $getDomain(target.href);
         }
         upload.click();
         break;
@@ -274,7 +283,7 @@ const NewTab = (() => {
       chrome.windows.create({
         url: url,
         state: 'maximized',
-        incognito: (action === 'new_window_incognito') ? true : false
+        incognito: (action === 'new_window_incognito')
       });
     } catch (e) {}
   }
@@ -340,9 +349,8 @@ const NewTab = (() => {
           bookmarkImg.classList.add('bookmark__img--folder');
         }
       } else {
-        // const bookmark = await get(props.id);
-        const url = localStorage.getItem('thumbnailing_service').replace('[URL]', Helpers.getDomain(bookmark.href));
-        Helpers.imageLoaded(url, {
+        const url = localStorage.getItem('thumbnailing_service').replace('[URL]', $getDomain(bookmark.href));
+        $imageLoaded(url, {
           done() {
             bookmarkImg.style.backgroundImage = `url(${url})`;
             bookmarkImg.classList.add('bookmark__img--external');
@@ -356,7 +364,6 @@ const NewTab = (() => {
 
       bookmark.removeAttribute('data-screen');
       target.closest('#customScreen').style.display = '';
-      // Helpers.notifications(chrome.i18n.getMessage('notice_image_removed'));
     });
   }
 
@@ -368,13 +375,14 @@ const NewTab = (() => {
       if (!bookmarkNode) return;
 
       const { id, url, parentId } = bookmarkNode[0];
-      const title = Helpers.unescapeHtml(bookmarkNode[0].title);
+      const title = $unescapeHtml(bookmarkNode[0].title);
 
       const screen = Bookmarks.getCustomDial(id);
       const { image } = screen || {};
 
       // generate bookmark folder list
-      Bookmarks.generateFolderList(foldersList, parentId, id);
+      const folderOptions = await Bookmarks.generateFolderList(parentId, id);
+      foldersList.innerHTML = folderOptions.join('');
 
       if (image) {
         customScreen.style.display = 'block';

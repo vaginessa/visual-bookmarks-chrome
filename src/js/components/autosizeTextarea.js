@@ -1,4 +1,4 @@
-import Helpers from './helpers';
+import { $customTrigger } from './helpers';
 
 class AutosizeTextarea {
   constructor(el, maxHeight = 300) {
@@ -47,7 +47,7 @@ class AutosizeTextarea {
     }
 
     this.el.style.height = newHeight + 'px';
-    Helpers.customTrigger('textarea-autosize', this.el, {
+    $customTrigger('textarea-autosize', this.el, {
       height: newHeight
     });
   }
