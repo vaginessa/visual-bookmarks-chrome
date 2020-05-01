@@ -5,11 +5,10 @@
   padding: var(--btn-padding);
   line-height: normal;
   vertical-align: middle;
-  font-size: 0.9em;
+  font-size: 1em;
   font-family: inherit;
   font-weight: 500;
   letter-spacing: 0.05rem;
-  text-transform: uppercase;
   cursor: pointer;
   user-select: none;
   color: var(--btn-color);
