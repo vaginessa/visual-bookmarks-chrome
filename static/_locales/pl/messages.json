@@ -224,6 +224,9 @@
   "show_create_column": {
     "message": "Pokaż przycisk dodaj do zakładek"
   },
+  "show_bookmark_title": {
+    "message": "Pokaż tytuł zakładki"
+  },
   "show_favicon": {
     "message": "Pokaż ikonę ulubionych obok tytułu"
   },

@@ -224,6 +224,9 @@
   "show_create_column": {
     "message": "Show column for adding a bookmark"
   },
+  "show_bookmark_title": {
+    "message": "Show bookmark title"
+  },
   "show_favicon": {
     "message": "Show the Favicon next to the title"
   },

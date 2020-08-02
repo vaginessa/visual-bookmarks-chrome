@@ -177,25 +177,11 @@ const Bookmarks = (() => {
   }
 
   function genBookmark(bookmark) {
-
-    const hasFavicon = (localStorage.getItem('show_favicon') === 'true')
-      ? `<img class="bookmark__favicon" width="16" height="16" src="chrome://favicon/%url%" alt="">`
-      : ``;
-
     const screen = getCustomDial(bookmark.id);
     // key screen destructuring
     // the old key does not contain nested properties(image, custom), so we assign the key value to the variable image
     // the key may be undefined,in this case we are trying to work with an empty object
     const { image = screen, custom = false } = screen || {};
-    const thumbContainer = (image)
-      ?
-      `<div class="bookmark__img${custom ? ' bookmark__img--contain' : ''}" style="background-image: url('${image}');"></div>`
-      :
-      `<div class="bookmark__img bookmark__img--external"
-        data-fail-thumb="/img/broken-image.svg"
-        data-external-thumb="%thumbnailing_service%">
-      </div>`;
-
     const tpl =
       `<a class="bookmark"
         data-id="%id%"
@@ -203,13 +189,30 @@ const Bookmarks = (() => {
         ${(localStorage.getItem('open_link_newtab') === 'true') ? `target="_blank" rel="noopener noreferrer"` : ``}>
         <div class="bookmark__wrap">
           <button class="bookmark__action"></button>
-          ${thumbContainer}
-          <div class="bookmark__caption">
-            ${hasFavicon}
-            <span class="bookmark__title">%title%</span>
-          </div>
+          ${
+            // bookmark img
+            (image)
+              ? `<div class="bookmark__img${custom ? ' bookmark__img--contain' : ''}" style="background-image: url('${image}');"></div>`
+              : `<div class="bookmark__img bookmark__img--external"
+                  data-fail-thumb="/img/broken-image.svg"
+                  data-external-thumb="%thumbnailing_service%">
+                </div>`
+          }
+          ${
+            // bookmark title
+            (localStorage.getItem('show_bookmark_title') === 'true')
+              ? `<div class="bookmark__caption">
+                  ${
+                    (localStorage.getItem('show_favicon') === 'true')
+                      ? `<img class="bookmark__favicon" width="16" height="16" src="chrome://favicon/%url%" alt="">`
+                      : ``
+                  }
+                  <span class="bookmark__title">%title%</span>
+                </div>`
+              : ``
+          }
         </div>
-        </a>`;
+      </a>`;
 
     return $templater(tpl, {
       id: bookmark.id,
@@ -222,7 +225,7 @@ const Bookmarks = (() => {
   }
 
   function genFolder(bookmark) {
-    let imgLayout;
+    let imgLayout = '';
     const screen = getCustomDial(bookmark.id);
 
     if (localStorage.getItem('folder_preview') === 'true') {
@@ -249,10 +252,15 @@ const Bookmarks = (() => {
       <div class="bookmark__wrap">
         <button class="bookmark__action"></button>
         ${imgLayout}
-        <div class="bookmark__caption">
-          <img src="/img/folder.svg" class="bookmark__favicon" width="16" height="16" alt="">
-          <span class="bookmark__title">%title%</span>
-        </div>
+        ${
+          // bookmark title
+          (localStorage.getItem('show_bookmark_title') === 'true')
+            ? `<div class="bookmark__caption">
+                <img src="/img/folder.svg" class="bookmark__favicon" width="16" height="16" alt="">
+                <span class="bookmark__title">%title%</span>
+              </div>`
+            : ``
+        }
       </div>
       </a>`;
 
@@ -303,9 +311,7 @@ const Bookmarks = (() => {
     });
 
     isCreate && arr.push(
-      `<button class="bookmark--create bookmark--nosort md-ripple" id="add" data-create="New">
-        <div class="bookmark__img--add"></div>
-      </button>`
+      `<button class="bookmark--create bookmark--nosort md-ripple" id="add" data-create="New"></button>`
     );
 
     container.innerHTML = arr.join('');
@@ -680,7 +686,10 @@ const Bookmarks = (() => {
           // else update bookmark view
           bookmark.href = result.url ? result.url : `#${result.id}`;
           bookmark.title = result.title;
-          bookmark.querySelector('.bookmark__title').textContent = result.title;
+          const title = bookmark.querySelector('.bookmark__title');
+          if (title) {
+            title.textContent = result.title;
+          }
           // if it is a folder update folderList
           if (!result.url) {
             $customTrigger('updateFolderList', container, {
