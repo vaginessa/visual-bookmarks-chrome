@@ -9,7 +9,7 @@ import Ripple from './components/ripple';
 import AutosizeTextarea from './components/autosizeTextarea';
 import Toast from './components/toast';
 import { getFolders } from './api/bookmark';
-import { $notifications, $trigger } from './components/helpers';
+import { $notifications, $trigger, $throttle } from './components/helpers';
 
 // Set lang attr
 // Replacement underscore on the dash because underscore is not a valid language subtag
@@ -54,6 +54,12 @@ const Options = (() => {
 
     // Delegate change settings
     document.querySelector('.tabs').addEventListener('change', setOptions);
+    document.querySelector('#dial_width').addEventListener('input', setRangeWidth);
+    document.querySelector('#dial_width').addEventListener('blur', () => {
+      if (localStorage.getItem('enable_sync') === 'true') {
+        Settings.syncSingleToStorage('dial_width');
+      }
+    });
 
     // actions with a local picture
     document.getElementById('bgFile').addEventListener('change', uploadFile, false);
@@ -146,6 +152,9 @@ const Options = (() => {
         elOption.checked = localStorage.getItem(id) === 'true';
       } else {
         elOption.value = localStorage.getItem(id);
+        if (elOption.id === 'dial_width') {
+          document.getElementById('dial_width_value').textContent = elOption.value;
+        }
         // Triggering event at program input to the textarea(for autosize textarea)
         if (elOption === textarea.el) {
           $trigger('input', textarea.el);
@@ -164,7 +173,6 @@ const Options = (() => {
       localStorage.setItem(id, target.checked);
     } else {
       localStorage.setItem(id, target.value);
-
     }
 
     // dark theme
@@ -180,6 +188,12 @@ const Options = (() => {
     if (localStorage.getItem('enable_sync') === 'true' && id !== 'enable_sync') {
       Settings.syncToStorage();
     }
+  }
+
+  function setRangeWidth() {
+    const { id, value } = this;
+    localStorage.setItem(id, value);
+    document.getElementById('dial_width_value').textContent = value;
   }
 
   async function uploadFile() {

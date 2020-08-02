@@ -1,0 +1,28 @@
+.range {
+  appearance: none;
+  display: block;
+  height: 20px;
+  margin: 0;
+  outline: 0;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+.range::-webkit-slider-runnable-track {
+  height: 8px;
+  background-color: var(--switch-active-bar);
+  border-radius: 10px;
+}
+
+.range::-webkit-slider-thumb {
+  position: relative;
+  top: -4px;
+  width: var(--switch-circle-size);
+  height: var(--switch-circle-size);
+  border: none;
+  appearance: none;
+  background-color: var(--switch-active-circle);
+  border-radius: 50%;
+  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.6);
+  transition: 0.5s all ease;
+}

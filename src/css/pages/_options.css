@@ -75,6 +75,23 @@
   width: 50%;
 }
 
+.tbl__sub {
+  display: flex;
+  align-items: center;
+}
+
+.tbl__sub .range {
+  flex-grow: 1;
+  flex-shrink: 1;
+  margin-right: 15px;
+}
+
+.tbl__sub span {
+  &::after {
+    content: "%";
+  }
+}
+
 .inline-middle {
   display: inline-block;
   vertical-align: middle;

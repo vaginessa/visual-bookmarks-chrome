@@ -3,6 +3,7 @@
 @import "./pages/_options.css";
 @import "./components/_tabs.css";
 @import "./components/_forms.css";
+@import "./components/_range.css";
 @import "./components/_buttons.css";
 @import "./components/_c-upload.css";
 @import "./components/_ripple.css";
