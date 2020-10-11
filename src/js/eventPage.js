@@ -65,9 +65,7 @@ function captureScreen(link, callback) {
 
     chrome.windows.update(w.id, {
       width: 1170,
-      height: 720,
-      top: 1e5,
-      left: 1e5
+      height: 720
     }, function() {
       checkerStatus();
     });
