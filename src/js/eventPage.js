@@ -1,13 +1,13 @@
 /* eslint-disable no-console */
-import Settings from './components/settings';
+import Settings from './settings';
 import FS from './api/fs';
-import browserContextMenu from './components/browserContextMenu';
+import browserContextMenu from './plugins/browserContextMenu';
 import {
   $notifications,
   $resizeScreen,
   $base64ToBlob,
   $getDomain
-} from './components/helpers';
+} from './utils';
 import {
   create,
   search

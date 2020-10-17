@@ -2,14 +2,14 @@ import '../css/options.css';
 
 import TabsSlider from 'tabs-slider';
 import FS from './api/fs';
-import Settings from './components/settings';
+import Settings from './settings';
 import UI from './components/ui';
-import Localization from './components/localization';
+import Localization from './plugins/localization';
 import Ripple from './components/ripple';
 import AutosizeTextarea from './components/autosizeTextarea';
 import Toast from './components/toast';
 import { getFolders } from './api/bookmark';
-import { $notifications, $trigger, $throttle } from './components/helpers';
+import { $notifications, $trigger } from './utils';
 
 // Set lang attr
 // Replacement underscore on the dash because underscore is not a valid language subtag

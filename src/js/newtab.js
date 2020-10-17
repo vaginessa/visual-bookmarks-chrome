@@ -1,8 +1,8 @@
 import '../css/newtab.css';
 import Gmodal from 'glory-modal';
-import Settings from './components/settings';
+import Settings from './settings';
 import Bookmarks from './components/bookmarks';
-import Localization from './components/localization';
+import Localization from './plugins/localization';
 import UI from './components/ui';
 import ContextMenu from './components/contextmenu';
 import Ripple from './components/ripple';
@@ -15,7 +15,7 @@ import {
   $imageLoaded,
   $copyStr,
   $unescapeHtml
-} from './components/helpers';
+} from './utils';
 
 const NewTab = (() => {
   const container = document.getElementById('bookmarks');

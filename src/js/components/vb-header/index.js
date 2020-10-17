@@ -1,5 +1,5 @@
 import html from './template.html';
-import { $createElement } from '../helpers';
+import { $createElement } from '../../utils';
 
 class VbHeader extends HTMLElement {
   connectedCallback() {

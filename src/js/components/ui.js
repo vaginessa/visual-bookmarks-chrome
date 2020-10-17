@@ -1,4 +1,4 @@
-import { $imageLoaded } from './helpers';
+import { $imageLoaded } from '../utils';
 
 
 const colorScheme = window.matchMedia('(prefers-color-scheme: dark)');

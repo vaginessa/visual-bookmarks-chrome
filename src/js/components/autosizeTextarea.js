@@ -1,4 +1,4 @@
-import { $customTrigger } from './helpers';
+import { $customTrigger } from '../utils';
 
 class AutosizeTextarea {
   constructor(el, maxHeight = 300) {

@@ -25,7 +25,7 @@ import {
   $resizeScreen,
   $base64ToBlob,
   $isValidUrl
-} from './helpers';
+} from '../utils';
 
 /**
  * Bookmarks module
