@@ -69,7 +69,7 @@ export function $templater(tpl, data) {
 }
 
 export function $escapeHtmlToText(unsafe) {
-  const escape = this.escapeHtml(unsafe);
+  const escape = $escapeHtml(unsafe);
   const div = document.createElement('div');
   div.textContent = escape;
   return div.innerHTML;
