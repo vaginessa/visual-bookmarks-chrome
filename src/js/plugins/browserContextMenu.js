@@ -1,6 +1,21 @@
-import { getThree } from '../api/bookmark';
+import { getFolders } from '../api/bookmark';
 
 const id = 'visual-bookmarks';
+
+const flatRecursiveFolders = (folders, parentId) => {
+  return folders.reduce((accum, current) => {
+    accum.push({
+      id: current.id,
+      title: current.title,
+      contexts: ['page'],
+      parentId
+    });
+    if (current.children && parentId) {
+      accum.push(...flatRecursiveFolders(current.children, current.id));
+    }
+    return accum;
+  }, []);
+};
 
 const browserContextMenu = {
   init() {
@@ -15,7 +30,7 @@ const browserContextMenu = {
     });
   },
   async create() {
-    const rootFolders = await getThree();
+    const foldersThree = await getFolders();
     const linkItems = [
       {
         id,
@@ -35,14 +50,9 @@ const browserContextMenu = {
         parentId: id
       }
     ];
-    rootFolders.forEach(folder => {
-      linkItems.push({
-        id: folder.id,
-        title: folder.title,
-        contexts: ['page'],
-        parentId: id
-      });
-    });
+
+    const folders = flatRecursiveFolders(foldersThree, id);
+    linkItems.push(...folders);
 
     for (let item of linkItems) {
       chrome.contextMenus.create(item, () => {
