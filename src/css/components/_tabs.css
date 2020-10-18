@@ -8,6 +8,46 @@
   box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);
 }
 
+.tabs__bar-wrap {
+  position: relative;
+  &.has-left-overflow {
+    &::before {
+      content: "";
+      position: absolute;
+      z-index: 10;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 30px;
+      pointer-events: none;
+      background:
+        linear-gradient(
+          -90deg,
+          var(--tabs-control-gradient-bg-transparent) 0%,
+          var(--tabs-control-gradient-bg) 100%
+        );
+    }
+  }
+  &.has-right-overflow {
+    &::after {
+      content: "";
+      position: absolute;
+      z-index: 10;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      width: 30px;
+      pointer-events: none;
+      background:
+        linear-gradient(
+          90deg,
+          var(--tabs-control-gradient-bg-transparent) 0%,
+          var(--tabs-control-gradient-bg) 100%
+        );
+    }
+  }
+}
+
 .tabs__bar {
   position: relative;
   display: flex;
@@ -31,6 +71,7 @@
 
 .tabs__controls {
   flex: 1;
+  min-width: 150px;
   padding: 15px 10px;
   text-align: center;
   overflow: hidden;

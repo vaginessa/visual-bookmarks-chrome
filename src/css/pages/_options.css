@@ -1,5 +1,4 @@
 .options {
-  min-width: 400px;
   background-color: var(--options-bg);
   color: var(--theme-text-color);
 }
@@ -15,6 +14,16 @@
 
 .settings-container {
   padding-top: 50px;
+}
+
+.options .tabs__section {
+  padding: 15px;
+}
+
+@media (min-width: 450px) {
+  .options .tabs__section {
+    padding: 30px;
+  }
 }
 
 .footer {
@@ -60,19 +69,23 @@
 
 .tbl__setting,
 .tbl__value {
-  display: table-cell;
-  vertical-align: middle;
   padding: 10px;
 }
 
-.tbl__setting {
-  width: 50%;
-  text-align: right;
-  font-weight: 600;
+@media (min-width: 450px) {
+  .tbl__setting,
+  .tbl__value {
+    display: table-cell;
+    vertical-align: middle;
+    width: 50%;
+  }
+  .tbl__setting {
+    text-align: right;
+  }
 }
 
-.tbl__value {
-  width: 50%;
+.tbl__setting {
+  font-weight: 600;
 }
 
 .tbl__sub {
