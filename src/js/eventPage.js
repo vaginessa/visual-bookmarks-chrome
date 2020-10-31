@@ -114,10 +114,16 @@ function handlerCreateBookmark(data) {
       // Bookmarks exist
       $notifications(chrome.i18n.getMessage('notice_bookmark_exist'));
     } else {
+      // ID of the item for subfolders starts with 'save-{parentId}'
+      // to get a valid ID, remove the extra characters from the string
+      // extra characters will be found in subfolders in the add item
+      const menuItemId = data.menuItemId.replace('save-', '');
+
       const parentId =
-        (data.menuItemId !== 'current_folder') ?
-          data.menuItemId :
-          window.localStorage.getItem('default_folder_id');
+        (menuItemId === 'current_folder') ?
+          window.localStorage.getItem('default_folder_id') :
+          menuItemId;
+
       // Create
       const response = await create({
         parentId,

@@ -10,8 +10,10 @@ const flatRecursiveFolders = (folders, parentId) => {
       contexts: ['page'],
       parentId
     });
-    if (current.children && parentId) {
-      accum.push(...flatRecursiveFolders(current.children, current.id));
+    if (current.children?.length && parentId) {
+      accum.push(
+        ...flatRecursiveFolders(current.children, current.id)
+      );
     }
     return accum;
   }, []);
@@ -51,7 +53,41 @@ const browserContextMenu = {
       }
     ];
 
-    const folders = flatRecursiveFolders(foldersThree, id);
+    const flatFolders = flatRecursiveFolders(foldersThree, id);
+
+    // fix for https://github.com/k-ivan/visual-bookmarks-chrome/issues/55
+    // auxiliary array with parent ids
+    const parentIds = [id];
+    const translateItemTitle = chrome.i18n.getMessage('btn_save');
+    // add an item to the context menu
+    // to save the bookmark inside the folder item
+    const folders = flatFolders.reduce((accum, current) => {
+      // walk through a flat array of folders
+      if (!parentIds.includes(current.parentId)) {
+        // if the current item has not yet been written to the auxiliary array
+        // then add the save items and separator to the child items
+        accum.push(
+          {
+            id: `save-${current.parentId}`,
+            title: translateItemTitle,
+            contexts: ['page'],
+            parentId: current.parentId
+          },
+          {
+            id: `separator-${current.parentId}`,
+            type: 'separator',
+            contexts: ['page'],
+            parentId: current.parentId
+          }
+        );
+      }
+      // write the property to an auxiliary array
+      parentIds.push(current.parentId);
+      // fill the array
+      accum.push(current);
+      return accum;
+    }, []);
+
     linkItems.push(...folders);
 
     for (let item of linkItems) {
