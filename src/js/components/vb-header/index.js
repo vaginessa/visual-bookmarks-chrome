@@ -91,7 +91,6 @@ class VbHeader extends HTMLElement {
 
   _back() {
     window.history.back();
-    window.dispatchEvent(new Event('hashchange'));
   }
 
   _reset() {
