@@ -51,7 +51,7 @@
   },
   "dependencies": {
     "glory-modal": "^2.0.0",
-    "sortablejs": "1.8.1",
+    "sortablejs": "1.8.4",
     "tabs-slider": "^3.0.1"
   }
 }

@@ -33,6 +33,10 @@
   --bookmark-caption-color: #333;
   --bookmark-outline-color: hsla(217, 89%, 61%, 0.4);
   --bookmark-image-fill: var(--filter-invert-image);
+  --bookmark-dropzone-border: 2px dashed #555;
+  --bookmark-dropzone-background: hsl(300deg, 3%, 92%);
+  --bookmark-dropzone-background-active: var(--theme-bg-200);
+  --bookmark-dropzone-icon-invert: none;
 
   /* Options */
   --df-width: 600px;
@@ -127,6 +131,10 @@
   --bookmark-caption-after-transparent: rgba(48, 48, 48, 0);
   --bookmark-caption-color: rgba(255, 255, 255, 0.8);
   --bookmark-image-fill: var(--filter-invert-image);
+  --bookmark-dropzone-border: 2px dashed #999;
+  --bookmark-dropzone-background: var(--theme-bg-300);
+  --bookmark-dropzone-background-active: var(--theme-bg-200);
+  --bookmark-dropzone-icon-invert: invert(1);
 
   /* Forms  dark theme */
   --header-input-color-controls: #fff;

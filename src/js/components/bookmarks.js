@@ -42,8 +42,8 @@ const Bookmarks = (() => {
       `</defs>` +
       `<circle class="path" fill="none" stroke="url(#%id%)" stroke-width="8" stroke-linecap="round" cx="50" cy="50" r="40"></circle>` +
     `</svg>`;
-  let sort = null;
   let isGeneratedThumbs = false;
+  let dragEls = [];
 
   async function init() {
     if (!container) return;
@@ -73,28 +73,7 @@ const Bookmarks = (() => {
 
     // Dragging option
     if (localStorage.getItem('drag_and_drop') === 'true') {
-      sort = Sortable.create(container, {
-        animation: 200,
-        filter: '.bookmark__action',
-        draggable: '.bookmark',
-        ghostClass: 'bookmark--ghost',
-        chosenClass: 'bookmark--chosen',
-        preventOnFilter: false,
-        onMove(evt) {
-          // do not sort create column
-          if (evt.related.classList.contains('bookmark--nosort')) {
-            return false;
-          }
-        },
-        onUpdate() {
-          Array.from(container.querySelectorAll('.bookmark')).forEach(async(item, index) => {
-            await move(item.getAttribute('data-id'), {
-              'parentId': container.getAttribute('data-folder'),
-              'index': index
-            }).catch(err => console.warn(err));
-          });
-        }
-      });
+      initDrag(container);
     }
 
     // Search bookmarks if toolbar enable
@@ -112,9 +91,6 @@ const Bookmarks = (() => {
       }, 500);
       const searchResetHandler = () => {
         createSpeedDial(startFolder());
-        if (localStorage.getItem('drag_and_drop') === 'true') {
-          sort.option('disabled', false);
-        }
       };
 
       vbHeader.addEventListener('vb:search', searchHandler);
@@ -140,6 +116,118 @@ const Bookmarks = (() => {
         vbHeader.folders = await generateFolderList();
       }
     });
+  }
+
+  // helper to turn on the dropzone lighting
+  function showDropzone(target) {
+    [...container.querySelectorAll('.bookmark__dropzone')]
+      .forEach(el => {
+        const bookmark = el.closest('.bookmark');
+        if (bookmark.dataset.id !== target.dataset.id) {
+          el.classList.add('is-activate');
+        }
+      });
+  }
+
+  // helper to turn off the dropzone backlight
+  function hideDropzone() {
+    [...container.querySelectorAll('.is-activate')]
+      .forEach(el => el.classList.remove('is-activate'));
+  }
+
+  function initDrag(el) {
+    el.sortInstance = Sortable.create(el, {
+      group: {
+        name: 'shared',
+        pull: 'clone'
+      },
+      animation: 200,
+      fallbackOnBody: true,
+      filter: '.bookmark__action',
+      draggable: '.bookmark',
+      removeCloneOnHide: false,
+      ghostClass: 'bookmark--ghost',
+      chosenClass: 'bookmark--chosen',
+      preventOnFilter: false,
+      onStart(evt) {
+        showDropzone(evt.item);
+      },
+      onEnd(evt) {
+        if (!evt.pullMode) {
+          hideDropzone();
+        }
+      },
+      onMove({ to, related }) {
+        container.querySelector('.has-highlight')?.classList.remove('has-highlight');
+        if (to.matches('.bookmark__dropzone')) {
+          to.classList.add('has-highlight');
+        }
+        // do not sort create column
+        if (related.classList.contains('bookmark--nosort')) {
+          return false;
+        }
+      },
+      onAdd({ item, clone, target }) {
+        const isFolder = (item.dataset.folder !== undefined);
+        const id = item.dataset.id;
+        const parentId = target.dataset.id;
+        // remove clone bookmark
+        clone.remove();
+        // preparation for animation
+        item.style.transformOrigin = 'center bottom';
+        // animation of moving a bookmark to a folder(Web Animations API)
+        let itemAnimation = item.animate([
+          {
+            opacity: 1,
+            transform: 'scale3d(0.475, 0.475, 0.475) translate3d(0, -20px, 0)',
+            animationTimingFunction: 'cubic-bezier(0.55, 0.055, 0.675, 0.19)',
+            offset: 0.4
+          },
+          {
+            opacity: 0,
+            transform: 'scale3d(0.1, 0.1, 0.1) translate3d(0, 100px, 0)',
+            animationTimingFunction: 'cubic-bezier(0.175, 0.885, 0.32, 1)'
+          }
+        ], 550);
+          // waiting animationend
+        itemAnimation.onfinish = () => {
+          // remove instance if it folder
+          destroyDnDInstance(item);
+          // remove bookmark node from DOM
+          item.remove();
+          // hide highlight dropzone
+          hideDropzone();
+          // move the bookmark to the target folder
+          move(id, { parentId })
+            .then(() => {
+              // if the folder run the updateFolderList trigger
+              isFolder && $customTrigger('updateFolderList', container, {
+                detail: {
+                  isFolder: true
+                }
+              });
+            });
+        };
+      },
+      onUpdate() {
+        Array.from(container.querySelectorAll('.bookmark')).forEach(async(item, index) => {
+          await move(item.getAttribute('data-id'), {
+            'parentId': container.getAttribute('data-folder'),
+            'index': index
+          }).catch(err => console.warn(err));
+        });
+      }
+    });
+  }
+
+  function destroyDnDInstance(el) {
+    const dz = el.querySelector('.bookmark__dropzone');
+    if (dz) {
+      // remove the dropzone from the array of zones
+      dragEls.splice(dragEls.indexOf(dz), 1);
+      // and destroy the instance
+      dz.sortInstance?.destroy();
+    }
   }
 
   function startFolder() {
@@ -245,7 +333,7 @@ const Bookmarks = (() => {
     }
 
     const tpl =
-    `<a class="bookmark"
+    `<a class="bookmark bookmark--folder"
       data-id="%id%"
       href="#%url%" title="%title%"
       data-folder>
@@ -261,12 +349,18 @@ const Bookmarks = (() => {
               </div>`
             : ``
         }
+        ${
+          // if dnd create a dropzone
+          (localStorage.getItem('drag_and_drop') === 'true')
+            ? `<div class="bookmark__dropzone" data-id="%id%"></div>`
+            : ``
+        }
       </div>
       </a>`;
 
     return $templater(tpl, {
       id: bookmark.id,
-      parentId: bookmark.parentId,
+      // parentId: bookmark.parentId,
       url: bookmark.id,
       title: $escapeHtml(bookmark.title),
     });
@@ -333,10 +427,24 @@ const Bookmarks = (() => {
   }
 
   function createSpeedDial(id) {
+    const dnd = (localStorage.getItem('drag_and_drop') === 'true');
+    if (dnd) {
+      // if dnd instance exist and disabled(after search) turn it on
+      if (container.sortInstance?.options?.disabled) {
+        container.sortInstance?.option('disabled', false);
+      }
+      // if there are nested dnd instances, destroy them
+      if (dragEls.length) {
+        dragEls.forEach(dragEl => dragEl.sortInstance?.destroy());
+        dragEls.length = 0;
+      }
+    }
+
     container.innerHTML = '';
+
     const hasCreate = (localStorage.getItem('show_create_column') === 'true');
 
-    getSubTree(id)
+    return getSubTree(id)
       .then(item => {
         // folder by id exists
         if (!container.classList.contains('grid')) {
@@ -344,6 +452,12 @@ const Bookmarks = (() => {
         }
         render(item[0].children, hasCreate);
         container.setAttribute('data-folder', id);
+
+        if (dnd) {
+          // if dnd find nested lists and initialize sorting
+          dragEls = [...container.querySelectorAll('.bookmark__dropzone')];
+          dragEls.forEach(initDrag);
+        }
       })
       .catch(() => {
         Toast.show(chrome.i18n.getMessage('notice_cant_find_id'));
@@ -536,18 +650,18 @@ const Bookmarks = (() => {
   }
 
   function search(query) {
-    const isdnd = localStorage.getItem('drag_and_drop') === 'true';
+    const dnd = localStorage.getItem('drag_and_drop') === 'true';
     searchBookmarks(query)
       .then(match => {
         if (match.length > 0) {
-          if (isdnd) {
-            sort.option('disabled', true);
+          if (dnd) {
+            // if dnd we turn off sorting and destroy nested instances
+            container.sortInstance?.option('disabled', true);
+            dragEls.forEach(el => el.sortInstance?.destroy());
+            dragEls.length = 0;
           }
           render(match);
         } else {
-          if (isdnd) {
-            sort.option('disabled', false);
-          }
           createSpeedDial(startFolder());
         }
       });
@@ -570,6 +684,7 @@ const Bookmarks = (() => {
       const id = bookmark.getAttribute('data-id');
       removeTree(id)
         .then(() => {
+          destroyDnDInstance(bookmark);
           bookmark.remove();
           rmCustomScreen(id);
           $customTrigger('updateFolderList', container, {
@@ -642,6 +757,13 @@ const Bookmarks = (() => {
             });
           }
         } else {
+          if (localStorage.getItem('drag_and_drop') === 'true') {
+            const dz = bookmark.querySelector('.bookmark__dropzone');
+            // if we create a folder, initiate sorting
+            initDrag(dz);
+            // add to the array of nested sheets
+            dragEls.push(dz);
+          }
           $customTrigger('updateFolderList', container, {
             detail: {
               isFolder: true
@@ -669,18 +791,18 @@ const Bookmarks = (() => {
       .then(result => {
         // if the bookmark is moved to another folder
         if (moveId !== id && moveId !== result.parentId) {
-
           move(id, { parentId: moveId })
             .then(() => {
-              bookmark.remove();
               // if it is a folder update folderList
               if (!result.url) {
+                destroyDnDInstance(bookmark);
                 $customTrigger('updateFolderList', container, {
                   detail: {
                     isFolder: true
                   }
                 });
               }
+              bookmark.remove();
             });
         } else {
           // else update bookmark view
