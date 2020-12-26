@@ -22,6 +22,7 @@
 
 select,
 select.form-control {
+  --scrollbar-width: 7px;
   padding-right: 28px;
   background-image: var(--select-icon);
   background-size: 18px;
