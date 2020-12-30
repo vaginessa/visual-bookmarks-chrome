@@ -106,7 +106,7 @@
 
 .bookmark__img--folder {
   /* background-image: url(../img/folder.svg); */
-  background-image: url(/img/folder.svg);
+  background-image: url("/img/folder.svg");
 }
 
 .bookmark__img--contain {
@@ -208,9 +208,9 @@
   border: var(--bookmark-dropzone-border);
   background-color: var(--bookmark-dropzone-background);
   z-index: 1;
-  transition: opacity .15s linear, visibility .15s linear;
+  transition: opacity 0.15s linear, visibility 0.15s linear;
   &:empty::after {
-    content: '';
+    content: "";
     background-image: url(/img/folder-open.svg);
     position: absolute;
     left: 0;
