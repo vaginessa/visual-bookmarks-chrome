@@ -310,6 +310,15 @@ const NewTab = (() => {
       evt.preventDefault();
       evt.stopPropagation();
       ctxMenu.handlerTrigger(evt);
+    } else if (evt.target.closest('.bookmark')) {
+      const url = evt.target.closest('.bookmark').href;
+
+      if (url.startsWith('file:///')) {
+        evt.preventDefault();
+        chrome.tabs.update({
+          url
+        });
+      }
     }
   }
 
