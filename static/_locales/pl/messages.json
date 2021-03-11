@@ -21,7 +21,7 @@
     "message": "Motyw systemu operacyjnego"
   },
   "placeholder_input_customstyle": {
-    "message": "Wprowadź swój niestandardowy CSS(Dla zaawansowanych użytkowników)"
+    "message": "Wprowadź swój własny CSS (dla zaawansowanych użytkowników)"
   },
   "placeholder_input_search": {
     "message": "Wyszukaj w zakładkach"
@@ -192,7 +192,7 @@
     "message": "Wyśrodkowanie pionowe"
   },
   "default_folder_show": {
-    "message": "Folder do wyświetlenia"
+    "message": "Pokaż folder"
   },
   "background": {
     "message": "Tło"
@@ -219,7 +219,7 @@
     "message": "Pokaż ikonę ustawień"
   },
   "show_header_bar": {
-    "message": "Pokaż pasek wyszukiwania i folderu"
+    "message": "Pokaż pasek wyszukiwania i foldery"
   },
   "show_create_column": {
     "message": "Pokaż przycisk dodaj do zakładek"
@@ -252,7 +252,7 @@
     "message": "Usługa miniatur"
   },
   "thumbnail_help": {
-    "message": "[URL] Token zostanie zastąpiony przez adres URL"
+    "message": "Token [URL] zostanie zastąpiony przez adres URL"
   },
   "careful_change": {
     "message": "Bądź ostrożny, jeśli chcesz zmienić tę opcję"
@@ -261,7 +261,7 @@
     "message": "Wyczyść folder z lokalnymi obrazami"
   },
   "reset_local_default": {
-    "message": "Zresetuj ustawienia lokalne do wartości domyślnych"
+    "message": "Przywróć ustawienia lokalne do wartości domyślnych"
   },
   "reset_sync_text": {
     "message": "Usuń zsynchronizowane dane z serwera"
@@ -270,7 +270,7 @@
     "message": "Opcja nie jest synchronizowana"
   },
   "option_customstyle": {
-    "message": "Niestandardowe CSS"
+    "message": "Niestandardowy CSS"
   },
   "version": {
     "message": "Wersja"
