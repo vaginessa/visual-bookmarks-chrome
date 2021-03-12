@@ -16,7 +16,7 @@ body.gmodal-open {
     transition: opacity 0.15s linear;
     will-change: opacity;
     opacity: 0;
-    &.is-show {
+    &.is-shown {
       opacity: 1;
     }
   }
@@ -50,7 +50,7 @@ body.gmodal-open {
     transition-duration: 150ms;
     transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
   }
-  &.has-animate.is-show .gmodal__container {
+  &.has-animate.is-shown .gmodal__container {
     opacity: 1;
     transform: none;
     transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
