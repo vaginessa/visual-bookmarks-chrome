@@ -5,10 +5,14 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+const WebpackBar = require('webpackbar');
 
 module.exports = (env, arg) => {
   return {
     mode: arg.mode,
+    stats: {
+      assets: false
+    },
     devtool: arg.mode === 'development' ? 'eval-source-map' : false,
     entry: {
       newtab: './src/js/newtab.js',
@@ -48,7 +52,12 @@ module.exports = (env, arg) => {
           exclude: [/node_modules/],
           use: [
             MiniCssExtractPlugin.loader,
-            'css-loader',
+            {
+              loader: 'css-loader',
+              options: {
+                url: false
+              }
+            },
             'postcss-loader'
           ]
         }
@@ -68,22 +77,26 @@ module.exports = (env, arg) => {
       ]
     },
     plugins: [
+      new WebpackBar(),
       new CleanWebpackPlugin({
+        verbose: false,
         cleanStaleWebpackAssets: false
       }),
-      new CopyWebpackPlugin([
-        {
-          from: 'static',
-          transform(content, path) {
-            if (path.includes('manifest.json') && arg.mode === 'development') {
-              const manifest = JSON.parse(content.toString());
-              manifest.content_security_policy = `script-src 'self' 'unsafe-eval'; object-src 'self'`
-              return JSON.stringify(manifest, null, 2);
+      new CopyWebpackPlugin({
+        patterns: [
+          {
+            from: 'static',
+            transform(content, path) {
+              if (path.includes('manifest.json') && arg.mode === 'development') {
+                const manifest = JSON.parse(content.toString());
+                manifest.content_security_policy = `script-src 'self' 'unsafe-eval'; object-src 'self'`
+                return JSON.stringify(manifest, null, 2);
+              }
+              return content
             }
-            return content
           }
-        }
-      ]),
+        ]
+      }),
       new MiniCssExtractPlugin({
         filename: 'css/[name].css'
       }),
@@ -91,6 +104,7 @@ module.exports = (env, arg) => {
         return new HtmlWebpackPlugin({
           template: `./src/${name}.html`,
           filename: `${name}.html`,
+          scriptLoading: 'blocking',
           minify: {
             collapseWhitespace: true,
             removeComments: true,
