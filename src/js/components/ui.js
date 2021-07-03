@@ -36,12 +36,12 @@ export default {
       return;
     }
     const resource = localStorage.getItem(bgState);
+    bgEl.style.backgroundImage = `url('${resource}')`;
 
     if (resource && resource !== '') {
       $imageLoaded(resource, {
-        done(data) {
+        done() {
           document.body.classList.add('has-image');
-          bgEl.style.backgroundImage = `url('${data}')`;
           bgEl.style.opacity = 1;
         },
         fail(e) {
