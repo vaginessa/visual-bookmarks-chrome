@@ -152,8 +152,8 @@
   position: relative;
   height: var(--bookmark-caption-height);
   line-height: var(--bookmark-caption-height);
-  padding-left: 15px;
-  padding-right: 15px;
+  padding-left: 7px;
+  padding-right: 7px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;

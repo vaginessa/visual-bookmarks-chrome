@@ -80,8 +80,8 @@
 
   /* Grid */
   --container-width: 100%;
-  --grid-column-width: 120px;
-  --grid-row-height: 90px;
+  --grid-column-width: 80px;
+  --grid-row-height: 60px;
   --grid-gap: 10px;
   --grid-columns: auto-fit;
 

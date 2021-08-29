@@ -68,8 +68,8 @@ export default {
     const colWidth = Math.floor((grid.offsetWidth - ((columns - 1) * gap)) / columns);
     const colHeight = Math.floor(colWidth / ratio);
 
-    // if column width less than 120px do not update styles
-    if (colWidth < 120) {
+    // if column width less than 80px do not update styles
+    if (colWidth < 80) {
       doc.style.setProperty('--grid-column-width', '');
       doc.style.setProperty('--grid-row-height', '');
       doc.style.setProperty('--grid-columns', '');

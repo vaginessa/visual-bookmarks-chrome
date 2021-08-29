@@ -35,67 +35,61 @@
  * Helpers
  */
 .circ-btn {
-  display: none;
+  position: fixed;
+  z-index: 9999;
+  display: block;
+  width: 30px;
+  height: 30px;
+  text-decoration: none;
+  border: 0;
+  padding: 0;
+  background: rgba(33, 33, 33, 0.5);
+  border-radius: 50%;
+  opacity: 0.3;
+  transition: opacity 3s linear;
+  overflow: hidden;
+  cursor: pointer;
+  outline: 0;
+  &:hover,
+  &:focus {
+    transition: opacity 0.3s linear;
+    opacity: 1;
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 20px;
+    transition: transform 0.3s ease;
+  }
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
 }
 
-@media (min-width: 768px) {
-  .circ-btn {
-    position: fixed;
-    z-index: 9999;
-    display: block;
-    width: 30px;
-    height: 30px;
-    text-decoration: none;
-    border: 0;
-    padding: 0;
-    background: rgba(33, 33, 33, 0.5);
-    border-radius: 50%;
-    opacity: 0.3;
-    transition: opacity 3s linear;
-    overflow: hidden;
-    cursor: pointer;
-    outline: 0;
-    &:hover,
-    &:focus {
-      transition: opacity 0.3s linear;
-      opacity: 1;
-    }
-    &::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: 20px;
-      transition: transform 0.3s ease;
-    }
-    &:disabled {
-      cursor: not-allowed;
-      opacity: 0.5;
-    }
+.settings-link {
+  top: 12px;
+  left: 10px;
+  &::after {
+    background-image: url(/img/cog.svg);
   }
-
-  .settings-link {
-    top: 12px;
-    left: 10px;
-    &::after {
-      background-image: url(/img/cog.svg);
-    }
-    &:hover::after {
-      transform: rotate(30deg);
-    }
+  &:hover::after {
+    transform: rotate(30deg);
   }
+}
 
-  .update-thumbnails {
-    bottom: 12px;
-    left: 10px;
-    top: auto;
-    &::after {
-      background-image: url(/img/camera.svg);
-    }
+.update-thumbnails {
+  bottom: 12px;
+  left: 10px;
+  top: auto;
+  &::after {
+    background-image: url(/img/camera.svg);
   }
 }
 
