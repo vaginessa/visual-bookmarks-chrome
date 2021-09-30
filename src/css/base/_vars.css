@@ -1,9 +1,10 @@
 :root {
   /* Theme */
   --theme-bg: #f8f9fa;
-  --theme-bg-200: var(--theme-bg);
+  --theme-bg-200: #fff;
   --theme-bg-300: var(--theme-bg);
   --theme-bg-300-transparent: rgba(255, 255, 255, 0);
+  --theme-bg-200-transparent-900: rgb(235, 234, 234, 0.65);
   --theme-text-color: #000;
 
   /* Colors */
@@ -24,13 +25,14 @@
   --spinner-color: var(--color-primary);
 
   /* Bookmark */
+  --bookmark-logo-size: 32px;
   --bookmark-radius: var(--base-radius);
-  --bookmark-bg: hsla(0, 4%, 92%, 0.9);
+  --bookmark-bg: var(--theme-bg-200-transparent-900);
   --bookmark-overlay-bg: rgba(255, 255, 255, 0.95);
   --bookmark-caption-height: 30px;
-  --bookmark-caption-bg: rgba(255, 255, 255, 1);
+  --bookmark-caption-bg: var(--theme-bg-200);
   --bookmark-caption-after-transparent: rgba(255, 255, 255, 0);
-  --bookmark-caption-color: #333;
+  --bookmark-caption-color: var(--theme-text-color);
   --bookmark-outline-color: hsla(217, 89%, 61%, 0.4);
   --bookmark-image-fill: var(--filter-invert-image);
   --bookmark-dropzone-border: 2px dashed #555;
@@ -51,7 +53,7 @@
   --input-shadow: 0 0 7px 2px var(--input-shadow-color);
   --input-placeholder-color: hsl(0, 0%, 66%);
   --input-placeholder-focus-color: hsla(0, 0%, 80%);
-  --input-bg: #fff;
+  --input-bg: var(--theme-bg-200);
   --input-text-color: inherit;
   --select-icon: url(/img/select-arrow.svg);
   --input-radius: var(--base-radius);
@@ -106,15 +108,16 @@
   --notfound-icon-filter: var(--filter-invert-image);
 
   /* Context menu */
-  --context-menu-bg: #fff;
-  --context-menu-color: #555;
+  --context-menu-bg: var(--theme-bg-300);
+  --context-menu-color: var(-theme-text-color);
   --context-menu-divider: rgba(0, 0, 0, 0.1);
 }
 
 .dark {
-  --theme-bg: hsl(0, 0%, 13%);
-  --theme-bg-200: hsl(0, 0%, 19%);
-  --theme-bg-300: hsl(0, 0%, 25%);
+  --theme-bg: rgb(33 33 33);
+  --theme-bg-200: rgb(48 48 48);
+  --theme-bg-300: rgb(64 64 64);
+  --theme-bg-200-transparent-900: rgb(48, 48, 48, 0.7);
   --theme-text-color: #fff;
 
   /* Colors */
@@ -125,11 +128,9 @@
   --scrollbar-hover-color: #666;
 
   /* bookmark  dark theme */
-  --bookmark-bg: hsla(0, 0%, 25%, 0.9);
+  --bookmark-bg: var(--theme-bg-200-transparent-900);
   --bookmark-overlay-bg: var(--theme-bg-300);
-  --bookmark-caption-bg: rgba(48, 48, 48, 0.95);
   --bookmark-caption-after-transparent: rgba(48, 48, 48, 0);
-  --bookmark-caption-color: rgba(255, 255, 255, 0.8);
   --bookmark-image-fill: var(--filter-invert-image);
   --bookmark-dropzone-border: 2px dashed #999;
   --bookmark-dropzone-background: var(--theme-bg-300);
@@ -139,7 +140,6 @@
   /* Forms  dark theme */
   --header-input-color-controls: #fff;
   --search-reset-btn-color: #fff;
-  --input-bg: var(--theme-bg-200);
   --input-text-color: rgba(255, 255, 255, 0.8);
   --input-placeholder-color: hsl(0, 0%, 50%);
   --input-placeholder-focus-color: hsla(0, 0%, 50%, 0.7);
@@ -168,7 +168,5 @@
   --notfound-icon-filter: var(--filter-invert-image);
 
   /* Context menu */
-  --context-menu-bg: var(--theme-bg-300);
-  --context-menu-color: var(--theme-text-color);
   --context-menu-divider: rgba(255, 255, 255, 0.1);
 }
