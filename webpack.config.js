@@ -8,12 +8,13 @@ const TerserPlugin = require('terser-webpack-plugin');
 const WebpackBar = require('webpackbar');
 
 module.exports = (env, arg) => {
+  const isDev = arg.mode === 'development'
   return {
     mode: arg.mode,
     stats: {
       assets: false
     },
-    devtool: arg.mode === 'development' ? 'eval-source-map' : false,
+    devtool: arg.mode === 'development' ? 'inline-source-map' : false,
     entry: {
       newtab: './src/js/newtab.js',
       options: './src/js/options.js',
