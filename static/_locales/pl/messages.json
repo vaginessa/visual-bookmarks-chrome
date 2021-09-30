@@ -323,5 +323,11 @@
   },
   "import_settings_failed": {
     "message": "Nie można przeanalizować pliku ustawień"
+  },
+  "sort_by_newest": {
+    "message": "Sortuj według najnowszych"
+  },
+  "sort_by_newest_warning": {
+    "message": "Sortowanie metodą „przeciągnij i upuść” będzie wyłączone, gdy ta opcja jest włączona"
   }
 }

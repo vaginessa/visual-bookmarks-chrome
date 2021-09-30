@@ -323,5 +323,11 @@
   },
   "import_settings_failed": {
     "message": "Failed to parse settings file"
+  },
+  "sort_by_newest": {
+    "message": "Sort by newest"
+  },
+  "sort_by_newest_warning": {
+    "message": "The drag-and-drop sort will be disabled while this option is enabled"
   }
 }

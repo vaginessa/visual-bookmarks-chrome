@@ -323,5 +323,11 @@
   },
   "import_settings_failed": {
     "message": "Nem sikerült elemezni a beállításfájlt!"
+  },
+  "sort_by_newest": {
+    "message": "Rendezés a legújabbak szerint"
+  },
+  "sort_by_newest_warning": {
+    "message": "A húzás és ejtés rendezése le lesz tiltva, amíg ez az opció engedélyezve van"
   }
 }
