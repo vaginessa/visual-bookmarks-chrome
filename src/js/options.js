@@ -171,6 +171,19 @@ const Options = (() => {
 
     if (/checkbox|radio/.test(target.type)) {
       localStorage.setItem(id, target.checked);
+
+      // Settings that depend on each other.
+      // When enabling one setting, the related setting must be disabled
+      if (target.dataset.relationToggleId) {
+        const id = target.dataset.relationToggleId;
+        const relationEl = document.getElementById(id);
+        // disable the related option only if it was initially enabled
+        if (relationEl.checked) {
+          relationEl.checked = !target.checked;
+          localStorage.setItem(id, !target.checked);
+        }
+      }
+
     } else {
       localStorage.setItem(id, target.value);
     }

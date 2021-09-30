@@ -6,6 +6,7 @@ const DEFAULTS = {
   dial_columns: 7,
   dial_width: 70, // value in percent (50,60,70,80,90)
   vertical_center: false,
+  sort_by_newest: false,
   drag_and_drop: true,
   auto_generate_thumbnail: true,
   enable_sync: false,

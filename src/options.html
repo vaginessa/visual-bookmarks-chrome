@@ -237,10 +237,23 @@
             </div>
 
             <div class="tbl">
+              <div class="tbl__setting">
+                <div data-locale-message="sort_by_newest" data-locale-message="sort_by_newest">Sort by newest</div>
+                <small class="text-muted" data-locale-message="sort_by_newest_warning">The drag-and-drop sort will be disabled while this option is enabled</small>
+              </div>
+              <div class="tbl__value">
+                <div class="switch">
+                  <input type="checkbox" class="switch__input js-change" name="sort_by_newest" id="sort_by_newest" data-relation-toggle-id="drag_and_drop">
+                  <label class="switch__label" for="sort_by_newest"></label>
+                </div>
+              </div>
+            </div>
+
+            <div class="tbl">
               <div class="tbl__setting" data-locale-message="drag_and_drop">Enable Drag &amp; Drop</div>
               <div class="tbl__value">
                 <div class="switch">
-                  <input type="checkbox" class="switch__input js-change" name="dnd" id="drag_and_drop">
+                  <input type="checkbox" class="switch__input js-change" name="dnd" id="drag_and_drop" data-relation-toggle-id="sort_by_newest">
                   <label class="switch__label" for="drag_and_drop"></label>
                 </div>
               </div>
@@ -279,17 +292,6 @@
           </div>
           <!-- Section advanced -->
           <div class="tabs__section">
-
-            <div class="tbl">
-              <div class="tbl__setting">
-                <span data-locale-message="thumbnail_service">Thumbnail service</span>
-                <small class="text-muted" data-locale-message="thumbnail_help">[URL] token will be replaced by the speed dial URL</small>
-              </div>
-              <div class="tbl__value">
-                <input type="text" id="thumbnailing_service" class="form-control js-change" name="thumbnailing_service" spellcheck="false">
-                <small class="text-warning" data-locale-message="careful_change">Be careful if you want to change this option</small>
-              </div>
-            </div>
 
             <div class="tbl">
               <div class="tbl__setting" data-locale-message="clear_local_images">Clear folder with local images</div>
