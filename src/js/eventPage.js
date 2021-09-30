@@ -14,30 +14,26 @@ import {
 } from './api/bookmark';
 
 FS.init(500);
-Settings.init();
-
 
 function captureScreen(link, callback) {
-  let windowParam = {
-      url: link,
-      focused: false,
-      left: 1e5,
-      top: 1e5,
-      width: 1,
-      height: 1,
-      type: 'popup'
-    },
-    tab,
-    stop = false;
+  chrome.windows.create({
+    url: link,
+    focused: false,
+    left: 1e5,
+    top: 1e5,
+    width: 1,
+    height: 1,
+    type: 'popup'
+  }, function(w) {
 
-  chrome.windows.create(windowParam, function(w) {
     if (!w.tabs || !w.tabs.length) {
       chrome.windows.remove(w.id);
       console.error('not found page');
       return false;
     }
 
-    tab = w.tabs[0];
+    let tab = w.tabs[0];
+    let stop = false;
 
     chrome.tabs.update(tab.id, {
       muted: true
@@ -63,37 +59,38 @@ function captureScreen(link, callback) {
       stop = true;
     }, 25000);
 
-    chrome.windows.update(w.id, {
-      width: 1170,
-      height: 720
-    }, function() {
-      checkerStatus();
-    });
+    checkerStatus();
 
     function checkerStatus() {
-      if (stop == true) {
+      if (stop) {
         clearTimeout(closeWindow);
         return false;
       }
 
       chrome.tabs.get(tab.id, function(tabInfo) {
-        if (tabInfo.status == 'complete') {
-          setTimeout(function() {
-            chrome.tabs.captureVisibleTab(w.id, function(dataUrl) {
-              callback({
-                capture: dataUrl,
-                title: tabInfo.title
+        if (tabInfo.status === 'complete') {
+          chrome.windows.update(w.id, {
+            width: 1170,
+            height: 720
+          }, function(win) {
+            setTimeout(() => {
+              chrome.tabs.captureVisibleTab(win.id, function(dataUrl) {
+                callback({
+                  capture: dataUrl,
+                  title: tabInfo.title
+                });
+                try {
+                  chrome.windows.remove(win.id, () => {
+                    clearTimeout(closeWindow);
+                  });
+                } catch (e) {}
               });
-              clearTimeout(closeWindow);
-              try {
-                chrome.windows.remove(w.id);
-              } catch (e) {}
-            });
-          }, 300);
+            }, 500);
+          });
         } else {
-          setTimeout(function() {
+          setTimeout(() => {
             checkerStatus();
-          }, 500);
+          }, 300);
         }
       });
     }
@@ -102,10 +99,6 @@ function captureScreen(link, callback) {
 
 function handlerCreateBookmark(data) {
   chrome.tabs.query({active: true, currentWindow: true}, async function(tabs){
-    // const searchQuery = {
-    //   url: data.pageUrl,
-    //   title: tabs[0].title
-    // }
     const matches = await search(data.pageUrl);
     if (!matches) return;
 
@@ -176,13 +169,21 @@ function browserActionHandler() {
   });
 }
 
-// chrome.runtime.onStartup.addListener(() => {
-//   ContextMenu.init();
-// });
-chrome.runtime.onInstalled.addListener(function() {
-  // if (callback.reason === 'update') {}
+function initContextMenu() {
   browserContextMenu.init();
+}
+
+chrome.runtime.onInstalled.addListener(() => {
+  // if (callback.reason === 'update') {}
+  Settings.init();
+  initContextMenu();
 });
+
+chrome.bookmarks.onCreated.addListener(initContextMenu);
+chrome.bookmarks.onChanged.addListener(initContextMenu);
+chrome.bookmarks.onRemoved.addListener(initContextMenu);
+chrome.bookmarks.onMoved.addListener(initContextMenu);
+
 chrome.contextMenus.onClicked.addListener(handlerCreateBookmark);
 chrome.browserAction.onClicked.addListener(browserActionHandler);
 chrome.notifications.onClicked.addListener(browserActionHandler);
