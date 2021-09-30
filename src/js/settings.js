@@ -16,7 +16,6 @@ const DEFAULTS = {
   show_bookmark_title: true,
   show_favicon: true,
   open_link_newtab: false,
-  thumbnailing_service: 'https://logo.clearbit.com/[URL]',
   thumbnails_update_button: true,
   thumbnails_update_recursive: false,
   custom_style: '',

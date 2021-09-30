@@ -12,7 +12,7 @@ import {
 } from './api/bookmark';
 import {
   $getDomain,
-  $imageLoaded,
+  $createElement,
   $copyStr,
   $unescapeHtml
 } from './utils';
@@ -68,8 +68,11 @@ const NewTab = (() => {
     // If thumbnail generation button
     if (localStorage.getItem('thumbnails_update_button') === 'true') {
 
-      generateThumbsBtn = Object.assign(document.createElement('button'), {
-        className: 'circ-btn update-thumbnails'
+      // generateThumbsBtn = Object.assign(document.createElement('button'), {
+      //   className: 'circ-btn update-thumbnails'
+      // });
+      generateThumbsBtn = $createElement('button', {
+        class: 'circ-btn update-thumbnails'
       });
       document.body.appendChild(generateThumbsBtn);
 
@@ -196,9 +199,8 @@ const NewTab = (() => {
 
   function ctxMenuOpen(evt) {
     const bookmark = evt.detail.trigger;
-    const isFolder = bookmark.dataset.folder !== undefined;
 
-    if (isFolder) {
+    if (bookmark.isFolder) {
       ctxToggleItems.forEach(item => {
         item.classList.remove('is-disabled');
         if (item.classList.contains('is-bookmark')) {
@@ -218,8 +220,6 @@ const NewTab = (() => {
   async function controlsHandler(evt) {
     const target = evt.detail.trigger;
     const action = evt.detail.selection;
-    const props = target.dataset;
-    const isFolder = props.folder !== undefined;
 
     switch (action) {
       case 'new_window':
@@ -228,34 +228,34 @@ const NewTab = (() => {
         break;
       case 'open_all':
       case 'open_all_window':
-        openAll(props, action);
+        openAll(target.id, action);
         break;
       case 'new_tab':
         openTab(target.href);
         break;
       case 'edit':
-        modalBeforeOpen(props);
+        modalBeforeOpen(target);
         modalApi.open();
         break;
       case 'copy_link':
         $copyStr(target.href);
         break;
       case 'capture': {
-        const idBookmark = target.getAttribute('data-id');
+        const idBookmark = target.id;
         const captureUrl = target.href;
         Bookmarks.createScreen(target, idBookmark, captureUrl);
         break;
       }
       case 'upload': {
-        upload.dataset.id = props.id;
-        if (!isFolder) {
+        upload.dataset.id = target.id;
+        if (!target.isFolder) {
           upload.dataset.site = $getDomain(target.href);
         }
         upload.click();
         break;
       }
       case 'remove': {
-        (isFolder)
+        (target.isFolder)
           ? Bookmarks.removeFolder(target)
           : Bookmarks.removeBookmark(target);
         break;
@@ -263,8 +263,8 @@ const NewTab = (() => {
     }
   }
 
-  function openAll(props, action) {
-    getChildren(props.id)
+  function openAll(id, action) {
+    getChildren(id)
       .then(childrens => {
         if (action === 'open_all_window') {
           chrome.windows.create({
@@ -345,42 +345,17 @@ const NewTab = (() => {
     const id = target.getAttribute('data-bookmark');
 
     Bookmarks.rmCustomScreen(id, function() {
-      const bookmark = container.querySelector(`[data-id="${id}"]`);
-      const bookmarkImg = bookmark.querySelector('.bookmark__img');
-      // if folder: selector exists if folder_preview option is off
-      // update view only if folder_preview option is off
-      bookmarkImg && bookmarkImg.classList.remove('bookmark__img--contain');
-
-      if (bookmark.dataset.folder !== undefined) {
-        // update view only if folder_preview option is off
-        if (bookmarkImg) {
-          bookmarkImg.style.backgroundImage = '';
-          bookmarkImg.classList.add('bookmark__img--folder');
-        }
-      } else {
-        const url = localStorage.getItem('thumbnailing_service').replace('[URL]', $getDomain(bookmark.href));
-        $imageLoaded(url, {
-          done() {
-            bookmarkImg.style.backgroundImage = `url(${url})`;
-            bookmarkImg.classList.add('bookmark__img--external');
-          },
-          fail() {
-            bookmarkImg.style.backgroundImage = 'url(/img/broken-image.svg)';
-            bookmarkImg.classList.add('bookmark__img--broken');
-          }
-        });
-      }
-
-      bookmark.removeAttribute('data-screen');
+      const bookmark = document.getElementById(id);
+      bookmark.image = null;
       target.closest('#customScreen').style.display = '';
     });
   }
 
-  async function modalBeforeOpen(props) {
-    if (props) {
+  async function modalBeforeOpen(target) {
+    if (target) {
       modal.classList.add('has-edit');
 
-      const bookmarkNode = await get(props.id).catch(err => console.warn(err));
+      const bookmarkNode = await get(target.id).catch(err => console.warn(err));
       if (!bookmarkNode) return;
 
       const { id, url, parentId } = bookmarkNode[0];

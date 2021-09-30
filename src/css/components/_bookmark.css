@@ -54,22 +54,6 @@
   padding: 4px;
 }
 
-.bookmark__childrens {
-  width: calc(40% - 4px);
-  margin: 2px;
-  border-radius: 2px;
-  background-color: rgba(0, 0, 0, 0.1);
-  background-position: center;
-  background-size: contain;
-  background-repeat: no-repeat;
-  &:only-child,
-  &:first-child:nth-last-child(2),
-  &:first-child:nth-last-child(2) ~ .bookmark__childrens {
-    align-self: center;
-    padding-bottom: 26%;
-  }
-}
-
 .bookmark.disable-events {
   pointer-events: none;
 }
@@ -86,37 +70,46 @@
   overflow: hidden;
 }
 
-.bookmark__img,
-.bookmark__img--folder {
+.bookmark__img {
   flex-grow: 1;
   background-repeat: no-repeat;
-}
-
-.bookmark__img {
   background-position: center top;
   background-size: cover;
 }
 
-.bookmark__img--external,
-.bookmark__img--broken,
-.bookmark__img--folder {
-  background-size: 50% auto;
+.bookmark__img--logo {
+  background-size: var(--bookmark-logo-size);
   background-position: center;
+}
+
+.bookmark__img--children {
+  flex-grow: 0;
+  width: calc(40% - 4px);
+  margin: 2px;
+  border-radius: 2px;
+  background-color: rgba(0, 0, 0, 0.1);
+  background-position: center;
+  background-size: min(30%, var(--bookmark-logo-size));
+  background-repeat: no-repeat;
+  &:only-child,
+  &:first-child:nth-last-child(2),
+  &:first-child:nth-last-child(2) ~ .bookmark__img--children {
+    align-self: center;
+    padding-bottom: 30%;
+  }
 }
 
 .bookmark__img--folder {
   /* background-image: url(../img/folder.svg); */
+  background-size: 50% auto;
+  background-position: center;
   background-image: url(/img/folder.svg);
+  filter: var(--bookmark-image-fill);
 }
 
 .bookmark__img--contain {
   background-size: contain;
-  background-position: 50% 50%;
-}
-
-.bookmark__img--broken,
-.bookmark__img--folder {
-  filter: var(--bookmark-image-fill);
+  background-position: center;
 }
 
 .bookmark__action {
@@ -204,7 +197,7 @@
   bottom: 30px;
   left: 0;
   right: 0;
-  padding: 5px;
+  padding: 3px;
   border: var(--bookmark-dropzone-border);
   background-color: var(--bookmark-dropzone-background);
   z-index: 1;
@@ -233,11 +226,11 @@
 }
 
 .bookmark__dropzone .bookmark {
-  position: absolute !important;
-  width: 50px;
-  height: 40px;
-  top: calc(50% - 20px);
-  left: calc(50% - 25px);
+  pointer-events: none;
+}
+
+.bookmark__dropzone .bookmark .bookmark__img--logo {
+  background-size: min(30%, var(--bookmark-logo-size));
 }
 
 .bookmark__dropzone .bookmark__action,

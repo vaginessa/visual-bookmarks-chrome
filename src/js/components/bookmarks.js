@@ -1,4 +1,3 @@
-// import '../img/broken-image.svg';
 import Sortable from 'sortablejs';
 import Toast from './toast';
 import FS from '../api/fs';
@@ -15,35 +14,23 @@ import {
 import {
   $debounce,
   $customTrigger,
-  $templater,
-  $getDomain,
   $escapeHtml,
   $shuffle,
-  $imageLoaded,
   $createElement,
   $notifications,
   $resizeScreen,
   $base64ToBlob,
   $isValidUrl
 } from '../utils';
+import { SVG_LOADER } from '../constants';
+import './vb-bookmark';
 
 /**
  * Bookmarks module
  */
 const Bookmarks = (() => {
   const container = document.getElementById('bookmarks');
-  const SVGLoading =
-    `<svg class="loading" id="loading" viewBox="0 0 100 100">` +
-      `<defs>` +
-        `<linearGradient id="%id%">` +
-          `<stop offset="5%" stop-color="#4285f4"></stop>` +
-          `<stop offset="95%" stop-color="#b96bd6"></stop>` +
-        `</linearGradient>` +
-      `</defs>` +
-      `<circle class="path" fill="none" stroke="url(#%id%)" stroke-width="8" stroke-linecap="round" cx="50" cy="50" r="40"></circle>` +
-    `</svg>`;
   let isGeneratedThumbs = false;
-  let dragEls = [];
 
   async function init() {
     if (!container) return;
@@ -72,7 +59,11 @@ const Bookmarks = (() => {
     }
 
     // Dragging option
-    if (localStorage.getItem('drag_and_drop') === 'true') {
+    if (
+      localStorage.getItem('drag_and_drop') === 'true' &&
+      localStorage.getItem('sort_by_newest') !== 'true'
+    ) {
+      observerDropzone();
       initDrag(container);
     }
 
@@ -118,6 +109,34 @@ const Bookmarks = (() => {
     });
   }
 
+  function observerDropzone() {
+    const observer = new MutationObserver((mutations) => {
+      for (let mutation of mutations) {
+        for (let node of mutation.addedNodes) {
+          if (!(node instanceof HTMLElement)) continue;
+
+          const dropzone = node.querySelector('.bookmark__dropzone');
+          if (!dropzone) continue;
+          initDrag(dropzone);
+        }
+
+        for (let node of mutation.removedNodes) {
+          if (!(node instanceof HTMLElement)) continue;
+
+          const dropzone = node.querySelector('.bookmark__dropzone');
+          if (!dropzone) continue;
+
+          dropzone.sortInstance?.destroy();
+          delete dropzone.sortInstance;
+        }
+      }
+    });
+
+    observer.observe(container, {
+      childList: true
+    });
+  }
+
   // helper to turn on the dropzone lighting
   function showDropzone(target) {
     [...container.querySelectorAll('.bookmark__dropzone')]
@@ -157,6 +176,12 @@ const Bookmarks = (() => {
           hideDropzone();
         }
       },
+      /**
+       * Sortable onMove event
+       * @param {Object} event - sortablejs event
+       * @param {HTMLElement} event.to - HTMLElement target list
+       * @param {HTMLElement} event.related - HTMLElement on which have guided
+       */
       onMove({ to, related }) {
         container.querySelector('.has-highlight')?.classList.remove('has-highlight');
         if (to.matches('.bookmark__dropzone')) {
@@ -167,12 +192,18 @@ const Bookmarks = (() => {
           return false;
         }
       },
+      /**
+       * Sortable onAdd event
+       * @param {Object} event -sortablejs event
+       * @param {HTMLElement} event.item - dragging element
+       * @param {HTMLElement} event.clone -clone for dragging element
+       * @param {HTMLElement} event.target - dropzone element
+       *
+       */
       onAdd({ item, clone, target }) {
-        const isFolder = (item.dataset.folder !== undefined);
         const id = item.dataset.id;
         const parentId = target.dataset.id;
-        // remove clone bookmark
-        clone.remove();
+
         // preparation for animation
         item.style.transformOrigin = 'center bottom';
         // animation of moving a bookmark to a folder(Web Animations API)
@@ -189,10 +220,10 @@ const Bookmarks = (() => {
             animationTimingFunction: 'cubic-bezier(0.175, 0.885, 0.32, 1)'
           }
         ], 550);
-          // waiting animationend
+        // waiting animationend
         itemAnimation.onfinish = () => {
-          // remove instance if it folder
-          destroyDnDInstance(item);
+          // remove clone bookmark
+          clone.remove();
           // remove bookmark node from DOM
           item.remove();
           // hide highlight dropzone
@@ -200,6 +231,7 @@ const Bookmarks = (() => {
           // move the bookmark to the target folder
           move(id, { parentId })
             .then(() => {
+              const isFolder = item.hasAttribute('is-folder');
               // if the folder run the updateFolderList trigger
               isFolder && $customTrigger('updateFolderList', container, {
                 detail: {
@@ -212,22 +244,12 @@ const Bookmarks = (() => {
       onUpdate() {
         Array.from(container.querySelectorAll('.bookmark')).forEach(async(item, index) => {
           await move(item.getAttribute('data-id'), {
-            'parentId': container.getAttribute('data-folder'),
+            'parentId': container.dataset.folder,
             'index': index
           }).catch(err => console.warn(err));
         });
       }
     });
-  }
-
-  function destroyDnDInstance(el) {
-    const dz = el.querySelector('.bookmark__dropzone');
-    if (dz) {
-      // remove the dropzone from the array of zones
-      dragEls.splice(dragEls.indexOf(dz), 1);
-      // and destroy the instance
-      dz.sortInstance?.destroy();
-    }
   }
 
   function startFolder() {
@@ -238,6 +260,12 @@ const Bookmarks = (() => {
     return folderId;
   }
 
+  /**
+   * Generate folder list
+   * @param {string} [activeFolder=null] - parent folder id
+   * @param {string} [itemId=null] - bookmark id
+   * @returns
+   */
   async function generateFolderList(activeFolder = null, itemId = null) {
     const folders = await getFolders().catch(err => console.warn(err));
     if (!folders) return;
@@ -270,160 +298,111 @@ const Bookmarks = (() => {
     // the old key does not contain nested properties(image, custom), so we assign the key value to the variable image
     // the key may be undefined,in this case we are trying to work with an empty object
     const { image = screen, custom = false } = screen || {};
-    const tpl =
-      `<a class="bookmark"
-        data-id="%id%"
-        href="%url%" title="%title%"
-        ${(localStorage.getItem('open_link_newtab') === 'true') ? `target="_blank" rel="noopener noreferrer"` : ``}>
-        <div class="bookmark__wrap">
-          <button class="bookmark__action"></button>
-          ${
-            // bookmark img
-            (image)
-              ? `<div class="bookmark__img${custom ? ' bookmark__img--contain' : ''}" style="background-image: url('${image}');"></div>`
-              : `<div class="bookmark__img bookmark__img--external"
-                  data-fail-thumb="/img/broken-image.svg"
-                  data-external-thumb="%thumbnailing_service%">
-                </div>`
-          }
-          ${
-            // bookmark title
-            (localStorage.getItem('show_bookmark_title') === 'true')
-              ? `<div class="bookmark__caption">
-                  ${
-                    (localStorage.getItem('show_favicon') === 'true')
-                      ? `<img class="bookmark__favicon" width="16" height="16" src="chrome://favicon/%url%" alt="">`
-                      : ``
-                  }
-                  <span class="bookmark__title">%title%</span>
-                </div>`
-              : ``
-          }
-        </div>
-      </a>`;
-
-    return $templater(tpl, {
+    const vbBookmark = document.createElement('a', {is: 'vb-bookmark'});
+    Object.assign(vbBookmark, {
       id: bookmark.id,
       url: bookmark.url,
-      site: $getDomain(bookmark.url),
-      // localStorage.getItem('thumbnailing_service').replace('[URL]', encodeURIComponent(bookmark.url)),
-      thumbnailing_service: localStorage.getItem('thumbnailing_service').replace('[URL]', $getDomain(bookmark.url)),
-      title: $escapeHtml(bookmark.title)
+      title: $escapeHtml(bookmark.title),
+      image,
+      isCustomImage: custom,
+      openNewTab: localStorage.getItem('open_link_newtab') === 'true',
+      hasTitle: localStorage.getItem('show_bookmark_title') === 'true',
+      hasFavicon: localStorage.getItem('show_favicon') === 'true'
     });
+    return vbBookmark;
   }
 
   function genFolder(bookmark) {
-    let imgLayout = '';
+    let image;
     const screen = getCustomDial(bookmark.id);
+    const folderPreview = localStorage.getItem('folder_preview') === 'true';
 
-    if (localStorage.getItem('folder_preview') === 'true') {
-      const folderChildren = renderFolderChildren(bookmark);
-      imgLayout = folderChildren ? folderChildren : `<div class="bookmark__img bookmark__img--folder"></div>`;
-    } else {
-      // key screen destructuring
-      // the old key does not contain nested properties(image, custom), so we assign the key value to the variable image
-      // the key may be undefined,in this case we are trying to work with an empty object
-      const { image = screen } = screen || {};
-
-      if (image) {
-        imgLayout = `<div class="bookmark__img bookmark__img--contain" style="background-image: url(${image})"></div>`;
-      } else {
-        imgLayout = `<div class="bookmark__img bookmark__img--folder"></div>`;
-      }
+    if (!folderPreview) {
+      image = screen?.image;
     }
 
-    const tpl =
-    `<a class="bookmark bookmark--folder"
-      data-id="%id%"
-      href="#%url%" title="%title%"
-      data-folder>
-      <div class="bookmark__wrap">
-        <button class="bookmark__action"></button>
-        ${imgLayout}
-        ${
-          // bookmark title
-          (localStorage.getItem('show_bookmark_title') === 'true')
-            ? `<div class="bookmark__caption">
-                <img src="/img/folder.svg" class="bookmark__favicon" width="16" height="16" alt="">
-                <span class="bookmark__title">%title%</span>
-              </div>`
-            : ``
-        }
-        ${
-          // if dnd create a dropzone
-          (localStorage.getItem('drag_and_drop') === 'true')
-            ? `<div class="bookmark__dropzone" data-id="%id%"></div>`
-            : ``
-        }
-      </div>
-      </a>`;
-
-    return $templater(tpl, {
+    const vbBookmark = document.createElement('a', {is: 'vb-bookmark'});
+    Object.assign(vbBookmark, {
       id: bookmark.id,
-      // parentId: bookmark.parentId,
-      url: bookmark.id,
+      url: `#${bookmark.id}`,
       title: $escapeHtml(bookmark.title),
+      isFolder : true,
+      hasFolderPreview: folderPreview,
+      folderChidlren: folderPreview ? renderFolderChildren(bookmark) : [],
+      image,
+      openNewTab: localStorage.getItem('open_link_newtab') === 'true',
+      hasTitle: localStorage.getItem('show_bookmark_title') === 'true',
+      hasFavicon: localStorage.getItem('show_favicon') === 'true',
+      isDND: localStorage.getItem('drag_and_drop') === 'true'
     });
+    return vbBookmark;
   }
 
   function renderFolderChildren(bookmark) {
     // if the folder is empty or if there are only folders inside the bookmark, display the default icon
-    if (!bookmark.children) return false;
+    if (!bookmark.children) return [];
 
     const subChildrenFolderCount = bookmark.children.reduce((acc, cur) => {
       if (cur.children) acc += 1;
       return acc;
     }, 0);
 
-    if (!bookmark.children.length || subChildrenFolderCount === bookmark.children.length) {
-      return false;
+    if (
+      !bookmark.children.length ||
+      subChildrenFolderCount === bookmark.children.length
+    ) {
+      return [];
     }
 
-    const shuffleChildren = $shuffle(bookmark.children.filter(item => !item.children)).slice(0, 4);
-    const thumbnailingService = localStorage.getItem('thumbnailing_service');
-
-    const childs = shuffleChildren.map(child => {
-      let { image = null } = getCustomDial(child.id) || {};
-      return image
-        ? `<div class="bookmark__childrens" style="background-image: url(${image})"></div>`
-        : `<div class="bookmark__childrens bookmark__img--external"
-            data-fail-thumb="/img/broken-image.svg"
-            data-external-thumb="${thumbnailingService.replace('[URL]', $getDomain(child.url))}">
-          </div>`;
-    }).join('');
-    return `<div class="bookmark__summary-folder">${childs}</div>`;
+    const shuffleChildren = $shuffle(
+      bookmark.children
+        .filter(item => !item.children)
+        .map(item => {
+          // key screen destructuring
+          // the old key does not contain nested properties(image, custom), so we assign the key value to the variable image
+          // the key may be undefined,in this case we are trying to work with an empty object
+          let { image = null } = getCustomDial(item.id) || {};
+          item.image = image;
+          return item;
+        })
+    ).slice(0, 4);
+    return shuffleChildren;
   }
 
-  function render(_array, isCreate = false) {
-    let arr = _array.map(function(bookmark) {
-      if (bookmark.url !== undefined) {
-        return genBookmark(bookmark);
-      }
-      if (bookmark.children !== undefined) {
-        return genFolder(bookmark);
+  function clearContainer() {
+    if (!container.firstChild) return;
+
+    while (container.firstChild) {
+      container.firstChild.remove();
+    }
+  }
+
+  /**
+   * Render bookmarks
+   * @param {Array.<BookmarkTreeNode>} arr - array of bookmarks
+   * @param {boolean} [isCreate=false] - show add bookmark button
+   */
+  function render(arr, isCreate = false) {
+    clearContainer();
+
+    const fragment = document.createDocumentFragment();
+    arr.forEach(bookmark => {
+      if (bookmark.url) {
+        fragment.appendChild(genBookmark(bookmark));
+      } else {
+        fragment.appendChild(genFolder(bookmark));
       }
     });
 
-    isCreate && arr.push(
-      `<button class="bookmark--create bookmark--nosort md-ripple" id="add" data-create="New"></button>`
+    container.appendChild(fragment);
+
+    isCreate && container.appendChild(
+      $createElement('button', {
+        id: 'add',
+        class: 'bookmark--create bookmark--nosort md-ripple',
+        'data-create': 'New'
+      })
     );
-
-    container.innerHTML = arr.join('');
-
-    // loaded external images
-    const thumbs = container.querySelectorAll('.bookmark__img--external');
-    for (let img of thumbs) {
-      $imageLoaded(img.dataset.externalThumb, {
-        done(data) {
-          img.style.backgroundImage = `url(${data})`;
-        },
-        fail() {
-          img.classList.remove('bookmark__img--external');
-          img.classList.add('bookmark__img--broken');
-          img.style.backgroundImage = `url(${img.dataset.failThumb})`;
-        }
-      });
-    }
   }
 
   function createSpeedDial(id) {
@@ -433,14 +412,9 @@ const Bookmarks = (() => {
       if (container.sortInstance?.options?.disabled) {
         container.sortInstance?.option('disabled', false);
       }
-      // if there are nested dnd instances, destroy them
-      if (dragEls.length) {
-        dragEls.forEach(dragEl => dragEl.sortInstance?.destroy());
-        dragEls.length = 0;
-      }
     }
 
-    container.innerHTML = '';
+    clearContainer();
 
     const hasCreate = (localStorage.getItem('show_create_column') === 'true');
 
@@ -450,14 +424,12 @@ const Bookmarks = (() => {
         if (!container.classList.contains('grid')) {
           container.classList.add('grid');
         }
+        // sort by newest
+        if (localStorage.getItem('sort_by_newest') === 'true') {
+          item[0].children.sort((a, b) => b.dateAdded - a.dateAdded);
+        }
         render(item[0].children, hasCreate);
         container.setAttribute('data-folder', id);
-
-        if (dnd) {
-          // if dnd find nested lists and initialize sorting
-          dragEls = [...container.querySelectorAll('.bookmark__dropzone')];
-          dragEls.forEach(initDrag);
-        }
       })
       .catch(() => {
         Toast.show(chrome.i18n.getMessage('notice_cant_find_id'));
@@ -481,14 +453,20 @@ const Bookmarks = (() => {
   }
 
   function renderProgressToast(sum) {
-    const i18n = chrome.i18n.getMessage('thumbnails_creation', ['<strong id="progress-text">0</strong>', sum]);
+    const i18n = chrome.i18n.getMessage(
+      'thumbnails_creation',
+      [
+        '<strong id="progress-text">0</strong>',
+        sum
+      ]
+    );
     const progressToast = $createElement(
       'div', {
         class: 'progress-toast'
       },
       {
         innerHTML:
-          `<div class="progress-toast__icon">${SVGLoading.replace(/%id%/g, Date.now())}</div>` +
+          `<div class="progress-toast__icon">${SVG_LOADER}</div>` +
           `<div class="progress-toast__text">${i18n}</div>`
       }
     );
@@ -504,7 +482,6 @@ const Bookmarks = (() => {
   function autoUpdateThumb() {
     if (isGeneratedThumbs) return;
     const id = startFolder();
-    // getChildren(id)
     getSubTree(id)
       .then(async(items) => {
         // check recursively or not
@@ -513,6 +490,11 @@ const Bookmarks = (() => {
           ? flattenArrayBookmarks(items[0].children)
           // only first level bookmarks without folders
           : items[0].children.filter(item => item.url);
+
+        // sort by newest
+        if (localStorage.getItem('sort_by_newest') === 'true') {
+          children.sort((a, b) => b.dateAdded - a.dateAdded);
+        }
 
         // create notification toast
         const progressToast = renderProgressToast(children.length);
@@ -533,10 +515,8 @@ const Bookmarks = (() => {
           updateStorageCustomDials(b.id, response, false);
           try {
             // if we can, then update the bookmark in the DOM
-            const bookmark = container.querySelector(`[data-id="${b.id}"]`);
-            const image = bookmark.querySelector('.bookmark__img');
-            image.className = 'bookmark__img';
-            image.style.backgroundImage = `url('${response}?refresh=${Date.now()}')`;
+            const bookmark = document.getElementById(b.id);
+            bookmark.image = `${response}?refresh=${Date.now()}`;
           } catch (err) {}
         }
 
@@ -559,6 +539,13 @@ const Bookmarks = (() => {
     return obj;
   }
 
+  /**
+   * Upload user image for thumbnail
+   * @param {Object} data
+   * @param {HTMLInputElement} data.target - input file
+   * @param {string} data.id
+   * @param {(string|undefined)} data.site - domain
+   */
   function uploadScreen(data) {
     const folderPreviewOff = localStorage.getItem('folder_preview') !== 'true';
     const { target, id, site } = data;
@@ -570,13 +557,8 @@ const Bookmarks = (() => {
     }
     target.value = '';
 
-    const bookmark = document.querySelector(`[data-id="${id}"]`);
-    const overlay = $createElement('div', {
-      class: 'bookmark__overlay'
-    }, {
-      innerHTML: SVGLoading.replace(/%id%/g, Date.now())
-    });
-    bookmark.appendChild(overlay);
+    const bookmark = document.getElementById(id);
+    bookmark.hasOverlay = true;
 
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -593,18 +575,11 @@ const Bookmarks = (() => {
 
       // update view only if folder_preview option is off or if the tab is not a folder
       if (folderPreviewOff || data.site) {
-        const imgEl = bookmark.querySelector('.bookmark__img');
-        if (data.site) {
-          imgEl.classList.remove('bookmark__img--external', 'bookmark__img--broken');
-        } else {
-          imgEl.classList.remove('bookmark__img--folder');
-        }
-        imgEl.classList.add('bookmark__img--contain');
-
-        imgEl.style.backgroundImage = `url('${fileEntry.toURL()}?refresh=${Date.now()}')`;
+        bookmark.isCustomImage = true;
+        bookmark.image = `${fileEntry.toURL()}?refresh=${Date.now()}`;
       }
 
-      overlay.remove();
+      bookmark.hasOverlay = false;
       Toast.show(chrome.i18n.getMessage('notice_thumb_image_updated'));
     };
 
@@ -628,25 +603,16 @@ const Bookmarks = (() => {
   async function createScreen(bookmark, idBookmark, captureUrl) {
     if (!bookmark) return;
 
-    const overlay = $createElement('div', {
-      class: 'bookmark__overlay'
-    }, {
-      innerHTML: SVGLoading
-    });
-    bookmark.appendChild(overlay);
-    bookmark.classList.add('disable-events');
-    const image = bookmark.querySelector('.bookmark__img');
+    bookmark.hasOverlay = true;
     const response = await captureScreen(captureUrl, idBookmark);
 
     if (!response.warning) {
-      image.className = 'bookmark__img';
-      image.style.backgroundImage = `url('${response}?refresh=${Date.now()}')`;
-      bookmark.classList.remove('disable-events');
+      bookmark.isCustomImage = false;
+      bookmark.image = `${response}?refresh=${Date.now()}`;
       updateStorageCustomDials(idBookmark, response);
     }
 
-    overlay.remove();
-    bookmark.classList.remove('disable-events');
+    bookmark.hasOverlay = false;
   }
 
   function search(query) {
@@ -657,8 +623,6 @@ const Bookmarks = (() => {
           if (dnd) {
             // if dnd we turn off sorting and destroy nested instances
             container.sortInstance?.option('disabled', true);
-            dragEls.forEach(el => el.sortInstance?.destroy());
-            dragEls.length = 0;
           }
           render(match);
         } else {
@@ -681,10 +645,9 @@ const Bookmarks = (() => {
 
   function removeFolder(bookmark) {
     if (confirm(chrome.i18n.getMessage('confirm_delete_folder'), '')) {
-      const id = bookmark.getAttribute('data-id');
+      const { id } = bookmark;
       removeTree(id)
         .then(() => {
-          destroyDnDInstance(bookmark);
           bookmark.remove();
           rmCustomScreen(id);
           $customTrigger('updateFolderList', container, {
@@ -732,38 +695,19 @@ const Bookmarks = (() => {
 
     create(hash)
       .then(result => {
-        let html;
+        let bookmark;
         if (result.url) {
-          html = genBookmark(result);
+          bookmark = genBookmark(result);
         } else {
-          html = genFolder(result);
+          bookmark = genFolder(result);
         }
-        container.querySelector('.bookmark--nosort').insertAdjacentHTML('beforeBegin', html);
-        const bookmark = container.querySelector(`[data-id="${result.id}"]`);
+        container.querySelector('.bookmark--nosort').insertAdjacentElement('beforeBegin', bookmark);
 
         if (result.url) {
           if (localStorage.getItem('auto_generate_thumbnail') === 'true') {
             createScreen(bookmark, result.id, result.url);
-          } else {
-            const image = bookmark.querySelector('.bookmark__img');
-            image.classList.add('bookmark__img--external');
-            $imageLoaded(image.dataset.externalThumb, {
-              done(data) {
-                image.style.backgroundImage = `url(${data})`;
-              },
-              fail() {
-                image.style.backgroundImage = image.dataset.failThumb;
-              }
-            });
           }
         } else {
-          if (localStorage.getItem('drag_and_drop') === 'true') {
-            const dz = bookmark.querySelector('.bookmark__dropzone');
-            // if we create a folder, initiate sorting
-            initDrag(dz);
-            // add to the array of nested sheets
-            dragEls.push(dz);
-          }
           $customTrigger('updateFolderList', container, {
             detail: {
               isFolder: true
@@ -776,7 +720,7 @@ const Bookmarks = (() => {
 
   function updateBookmark(id, title, url, moveId) {
     let hash = buildBookmarkHash(title, url);
-    const bookmark = container.querySelector(`[data-id="${id}"]`);
+    const bookmark = document.getElementById(id);
     // Actually make sure the URL being modified is valid instead of always
     // prepending http:// to it creating new valid+invalid bookmark
     if (url.length !== 0 && !$isValidUrl(url)) {
@@ -795,7 +739,6 @@ const Bookmarks = (() => {
             .then(() => {
               // if it is a folder update folderList
               if (!result.url) {
-                destroyDnDInstance(bookmark);
                 $customTrigger('updateFolderList', container, {
                   detail: {
                     isFolder: true
@@ -805,13 +748,6 @@ const Bookmarks = (() => {
               bookmark.remove();
             });
         } else {
-          // else update bookmark view
-          bookmark.href = result.url ? result.url : `#${result.id}`;
-          bookmark.title = result.title;
-          const title = bookmark.querySelector('.bookmark__title');
-          if (title) {
-            title.textContent = result.title;
-          }
           // if it is a folder update folderList
           if (!result.url) {
             $customTrigger('updateFolderList', container, {
@@ -820,6 +756,9 @@ const Bookmarks = (() => {
               }
             });
           }
+          // else update bookmark view
+          bookmark.title = result.title;
+          bookmark.url = result.url ? result.url : `#${result.id}`;
         }
         Toast.show(chrome.i18n.getMessage('notice_bookmark_updated'));
       });
