@@ -35,7 +35,7 @@ body {
   font-size: var(--font-size-base);
   overflow-y: scroll;
   overflow-x: hidden;
-  background-color: var(--theme-bg);
+  background-color: var(--body-background);
   color: var(--theme-text-color);
 }
 

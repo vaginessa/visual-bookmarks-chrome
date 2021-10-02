@@ -1,8 +1,8 @@
 <style>
 :host {
-  --popup-bg: #fff;
-  --popup-color: #333;
-  --item-border-color: #ddd;
+  --popup-background: var(--theme-background);
+  --popup-color: var(--theme-color-text);
+  --popup-item-background-hover: var(--theme-background-3);
 
   position: fixed;
   z-index: 999;
@@ -12,9 +12,9 @@
   height: 30px;
 }
 :host-context(.dark) {
-  --popup-bg: hsl(0, 0%, 19%);
-  --popup-color: hsl(0, 0%, 19%);
-  --item-border-color: rgba(255, 255, 255, 0.1);
+  --popup-background: var(--theme-background-2);
+  --popup-color: var(--theme-color-text);
+  --popup-item-background-hover: var(--theme-background-3);
 }
 .trigger {
   display: flex;
@@ -53,8 +53,8 @@
   right: -5px;
   width: 300px;
   border-radius: 4px;
-  border: 1px solid var(--popup-bg);
-  background-color: var(--popup-bg);
+  border: 1px solid var(--popup-background);
+  background-color: var(--popup-background);
   pointer-events: none;
   opacity: 0;
   visibility: hidden;
@@ -73,7 +73,7 @@
   width: 10px;
   height: 10px;
   transform: rotate(45deg);
-  background-color: var(--popup-bg);
+  background-color: var(--popup-background);
   box-shadow: -1px -1px 0 rgba(0, 0, 0, 0.1);
 }
 .popup.is-open {
@@ -92,13 +92,13 @@
 }
 .item {
   text-align: center;
-  border-radius: 4px;
+  border-radius: var(--base-radius);
   cursor: pointer;
   text-decoration: none;
   color: var(--popup-text-color);
 }
 .item:hover {
-  box-shadow: 0 0 0 1px var(--item-border-color);
+  background-color: var(--popup-item-background-hover);
 }
 .item-logo {
   margin: auto;

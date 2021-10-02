@@ -1,5 +1,5 @@
 .options {
-  background-color: var(--options-bg);
+  background-color: var(--options-background);
   color: var(--theme-text-color);
 }
 
@@ -31,7 +31,7 @@
   max-width: 600px;
   margin: 0 auto;
   margin-bottom: 10px;
-  background: var(--theme-bg-200);
+  background: var(--theme-background-3);
   height: 50px;
   line-height: 50px;
   padding: 0 15px;

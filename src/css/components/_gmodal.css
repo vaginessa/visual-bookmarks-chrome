@@ -81,7 +81,7 @@ body.gmodal-open {
   position: absolute;
   min-height: 100vh;
   width: 100%;
-  background-color: var(--theme-bg-300);
+  background-color: var(--modal-background);
   border-radius: var(--base-radius);
 }
 
@@ -124,6 +124,10 @@ body.gmodal-open {
   background-color: transparent;
   outline: none;
   cursor: pointer;
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
   & > svg {
     width: 20px;
     height: 20px;
@@ -183,9 +187,9 @@ body.gmodal-open {
   position: relative;
   padding: 10px;
   margin-bottom: 15px;
-  background-color: var(--modal-custom-image-bg);
+  background-color: var(--modal-custom-image-background);
   border-radius: var(--base-radius);
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1); */
   & img {
     display: block;
     height: 120px;
@@ -212,6 +216,10 @@ body.gmodal-open {
   filter: var(--modal-custom-image-filter);
   opacity: 0.5;
   transition: opacity 0.3s ease;
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
 
   @nest .gmodal__custom-image:hover & {
     opacity: 0.7;

@@ -1,17 +1,25 @@
 :root {
-  /* Theme */
-  --theme-bg: #f8f9fa;
-  --theme-bg-200: #fff;
-  --theme-bg-300: var(--theme-bg);
-  --theme-bg-300-transparent: rgba(255, 255, 255, 0);
-  --theme-bg-200-transparent-900: rgb(235, 234, 234, 0.65);
-  --theme-text-color: #000;
-
   /* Colors */
-  --color-primary: hsl(217, 89%, 61%);
-  --color-primary-dark: hsl(217, 69%, 50%);
+  --color-primary: rgb(67, 135, 244);
+  --color-primary-dark: rgb(40, 107, 215);
+  --color-primary-alpha-40: rgba(40, 107, 215, 0.4);
   --color-muted: hsl(0, 0%, 66%);
   --color-warning: #dd4b39;
+
+  /* Theme */
+  --theme-background: rgb(255, 255, 255);
+  --theme-background-alpha-0: rgba(255, 255, 255, 0);
+  --theme-background-2: rgb(248, 249, 250);
+  --theme-background-3: rgb(242, 242, 242);
+  --theme-background-3-alpha-0: rgba(242, 242, 242, 0);
+  --theme-background-3-alpha-65: rgba(242, 242, 242, 0.65);
+  --theme-background-3-alpha-95: rgba(242, 242, 242, 0.95);
+  --theme-background-input: var(--theme-background);
+  --theme-text-color: #000;
+  --theme-invert-alpha-50: rgba(0, 0, 0, 0.5);
+
+  /* body */
+  --body-background: var(--theme-background);
   --filter-invert-image: none;
 
   /* Base */
@@ -27,17 +35,18 @@
   /* Bookmark */
   --bookmark-logo-size: 32px;
   --bookmark-radius: var(--base-radius);
-  --bookmark-bg: var(--theme-bg-200-transparent-900);
-  --bookmark-overlay-bg: rgba(255, 255, 255, 0.95);
+  --bookmark-bg: var(--theme-background-3-alpha-65);
+  --bookmark-overlay-bg: var(--theme-background-3-alpha-95);
   --bookmark-caption-height: 30px;
-  --bookmark-caption-bg: var(--theme-bg-200);
-  --bookmark-caption-after-transparent: rgba(255, 255, 255, 0);
+  --bookmark-caption-bg: var(--theme-background-3);
+  --bookmark-caption-after-transparent: var(--theme-background-3-alpha-0);
   --bookmark-caption-color: var(--theme-text-color);
-  --bookmark-outline-color: hsla(217, 89%, 61%, 0.4);
+  --bookmark-outline-color: var(--color-primary-alpha-40);
   --bookmark-image-fill: var(--filter-invert-image);
-  --bookmark-dropzone-border: 2px dashed #555;
-  --bookmark-dropzone-background: hsl(300deg, 3%, 92%);
-  --bookmark-dropzone-background-active: var(--theme-bg-200);
+  --bookmark-dropzone-outline-width: 2px;
+  --bookmark-dropzone-outline: var(--bookmark-dropzone-outline-width) dashed var(--theme-invert-alpha-50);
+  --bookmark-dropzone-background: var(--theme-background-2);
+  --bookmark-dropzone-background-active: var(--theme-background-3);
   --bookmark-dropzone-icon-invert: none;
 
   /* Options */
@@ -53,7 +62,7 @@
   --input-shadow: 0 0 7px 2px var(--input-shadow-color);
   --input-placeholder-color: hsl(0, 0%, 66%);
   --input-placeholder-focus-color: hsla(0, 0%, 80%);
-  --input-bg: var(--theme-bg-200);
+  --input-bg: var(--theme-background-input);
   --input-text-color: inherit;
   --select-icon: url(/img/select-arrow.svg);
   --input-radius: var(--base-radius);
@@ -88,37 +97,45 @@
   --grid-columns: auto-fit;
 
   /* Modal */
+  --modal-background: var(--theme-background-2);
+  --modal-custom-image-background: var(--theme-background-3);
   --modal-header-border-color: #ddd;
   --modal-close-fill: #000;
   --modal-custom-image-filter: invert(1);
 
   /* options */
-  --options-bg: #f8f9fa;
-  --options-footer-bg: #f9f9f9;
-  --option-controls: #f9f9f9;
-  --tabs-bar-bg: #f9f9f9;
-  --tabs-content-bg: #fff;
-  --tabs-control-gradient-bg-transparent: rgba(249, 249, 249, 0);
-  --tabs-control-gradient-bg: rgba(249, 249, 249, 0.95);
+  --options-background: #f8f9fa;
   --option-tbl-hover-bg: #f7f7f7;
+  --tabs-control-background: var(--theme-background-3);
+  --tabs-control-gradient-background-alpha-0: rgba(249, 249, 249, 0);
+  --tabs-control-gradient-background: rgba(249, 249, 249, 0.95);
+  --tabs-content-background: var(--theme-background);
 
   /* not found */
-  --notfound-bg: hsla(0, 0%, 100%, 0.75);
+  --notfound-bg: var(--theme-background-2-alpha-65);
   --notfound-color: var(--theme-text-color);
   --notfound-icon-filter: var(--filter-invert-image);
 
   /* Context menu */
-  --context-menu-bg: var(--theme-bg-300);
+  --context-menu-bg: var(--theme-background-3);
   --context-menu-color: var(-theme-text-color);
   --context-menu-divider: rgba(0, 0, 0, 0.1);
 }
 
 .dark {
-  --theme-bg: rgb(33 33 33);
-  --theme-bg-200: rgb(48 48 48);
-  --theme-bg-300: rgb(64 64 64);
-  --theme-bg-200-transparent-900: rgb(48, 48, 48, 0.7);
-  --theme-text-color: #fff;
+  --theme-background: rgb(33, 33, 33);
+  --theme-background-alpha-0: rgba(33, 33, 33, 0);
+  --theme-background-2: rgb(48, 48, 48);
+  --theme-background-3: rgb(64, 64, 64);
+  --theme-background-3-alpha-0: rgba(64, 64, 64, 0);
+  --theme-background-3-alpha-65: rgba(64, 64, 64, 0.65);
+  --theme-background-3-alpha-95: rgba(64, 64, 64, 0.95);
+  --theme-background-input: var(--theme-background-3);
+  --theme-invert-alpha-50: rgba(255, 255, 255, 0.5);
+
+  /* body */
+  --body-background: var(--theme-background);
+  --theme-text-color: #eee;
 
   /* Colors */
   --filter-invert-image: invert(1);
@@ -128,13 +145,8 @@
   --scrollbar-hover-color: #666;
 
   /* bookmark  dark theme */
-  --bookmark-bg: var(--theme-bg-200-transparent-900);
-  --bookmark-overlay-bg: var(--theme-bg-300);
-  --bookmark-caption-after-transparent: rgba(48, 48, 48, 0);
   --bookmark-image-fill: var(--filter-invert-image);
   --bookmark-dropzone-border: 2px dashed #999;
-  --bookmark-dropzone-background: var(--theme-bg-300);
-  --bookmark-dropzone-background-active: var(--theme-bg-200);
   --bookmark-dropzone-icon-invert: invert(1);
 
   /* Forms  dark theme */
@@ -147,14 +159,11 @@
   --select-icon: url(/img/select-arrow-light.svg);
 
   /* Options  dark theme */
-  --options-bg: var(--theme-bg);
-  --options-footer-bg: var(--theme-bg-200);
-  --option-controls: var(--theme-bg-200);
+  --options-background: var(--theme-background);
   --option-tbl-hover-bg: hsla(0, 0%, 0%, 0.07);
-  --tabs-bar-bg: var(--theme-bg-200);
-  --tabs-content-bg: var(--theme-bg-300);
-  --tabs-control-gradient-bg-transparent: hsla(0, 0%, 13%, 0);
-  --tabs-control-gradient-bg: hsla(0, 0%, 13%, 0.95);
+  --tabs-content-background: var(--theme-background-2);
+  --tabs-control-gradient-background-alpha: var(--theme-background-alpha-0);
+  --tabs-control-gradient-background: hsla(0, 0%, 13%, 0.95);
 
   /* Modal dark theme */
   --modal-header-border-color: rgb(220, 220, 220, 0.1);
@@ -163,7 +172,6 @@
   --modal-custom-image-filter: none;
 
   /* notfound dark theme */
-  --notfound-bg: hsla(0, 0%, 13%, 0.95);
   --notfound-color: var(--theme-text-color);
   --notfound-icon-filter: var(--filter-invert-image);
 

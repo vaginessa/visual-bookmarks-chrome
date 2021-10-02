@@ -23,7 +23,7 @@
   display: none;
   &.is-initial {
     right: -20px;
-    background-color: var(--theme-bg);
+    background-color: var(--theme-background);
 
     @nest .has-image & {
       background-color: transparent;

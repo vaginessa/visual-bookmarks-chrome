@@ -8,7 +8,7 @@
   text-decoration: none;
   border-radius: var(--bookmark-radius);
   outline: none;
-  &:focus {
+  &:focus-visible {
     box-shadow: 0 0 0 3px var(--bookmark-outline-color);
   }
 }
@@ -127,12 +127,14 @@
   background-repeat: no-repeat;
   background-position: center;
   background-size: 18px;
-  outline: 0;
+  outline: none;
   opacity: 0;
   transition: opacity 0.25s;
   cursor: pointer;
   &:focus {
     opacity: 1;
+  }
+  &:focus-visible {
     box-shadow: 0 0 0 3px var(--bookmark-outline-color);
   }
 }
@@ -197,8 +199,9 @@
   bottom: 30px;
   left: 0;
   right: 0;
-  padding: 3px;
-  border: var(--bookmark-dropzone-border);
+  padding: var(--bookmark-dropzone-outline-width);
+  outline: var(--bookmark-dropzone-outline);
+  outline-offset: calc(var(--bookmark-dropzone-outline-width) * -1);
   background-color: var(--bookmark-dropzone-background);
   z-index: 1;
   transition: opacity 0.15s linear, visibility 0.15s linear;
@@ -216,7 +219,8 @@
     filter: var(--bookmark-dropzone-icon-invert);
   }
   &.has-highlight {
-    border-color: var(--color-primary);
+    outline-color: var(--color-primary);
+    outline-style: solid;
     background-color: var(--bookmark-dropzone-background-active);
   }
   &.is-activate {
