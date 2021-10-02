@@ -91,7 +91,7 @@ const browserContextMenu = {
     for (let item of linkItems) {
       chrome.contextMenus.create(item, () => {
         if (chrome.runtime.lastError) {
-          console.warn(chrome.runtime.lastError);
+          console.warn(chrome.runtime.lastError?.message);
         }
       });
     }
