@@ -355,6 +355,37 @@
   </div>
   <!--end wrap-->
 
+  <div class="gmodal" id="modal">
+    <div class="gmodal__container has-center">
+      <div class="gmodal__dialog">
+        <div class="gmodal__header">
+          <div class="gmodal__title">What's new</div>
+          <button type="button" class="gmodal__close md-ripple" data-gmodal="dismiss" data-ripple-center>
+            <svg version="1.1" width="24" height="24" viewBox="0 0 24 24" fill="#000">
+              <path d="M18.984 6.422l-5.578 5.578 5.578 5.578-1.406 1.406-5.578-5.578-5.578 5.578-1.406-1.406 5.578-5.578-5.578-5.578 1.406-1.406 5.578 5.578 5.578-5.578z"></path>
+            </svg>
+          </button>
+        </div>
+        <div class="gmodal__body whats-new">
+          <img src="/icons/icon128.png" alt="Visual Bookmarks Logo">
+          <h3 class="text-center">Version <span id="modal_changelog_version">3.18.0</span></h3>
+          <ul>
+            <li>
+              <p>Logos from the <a><strong>logo.clearbit.com</strong></a> service have been replaced with native favicons(as an experiment)</p>
+              <p>Option <code>thumbnail_service</code> has been removed from the settings(as an experiment)</p>
+            </li>
+            <li>Added sorting of bookmarks by date (newest first)</li>
+            <li>Added an option that removes popups with confirmations for user actions</li>
+            <li>Fixed a bug when the folder structure was not updated in the context menu</li>
+            <li>Reworking theme styles(if you used custom styles, you may need to change some of the variable names)</li>
+          </ul>
+
+          <p style="margin-top: 50px;">In addition.<br>At the moment, there may be problems with generating thumbnails. I am aware of the problem, but I do not see the correct solution for this problem yet.</p>
+          <p></p>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 
 </html>

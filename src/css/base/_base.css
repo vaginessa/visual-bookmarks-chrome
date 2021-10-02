@@ -54,3 +54,11 @@ h1 {
 p {
   margin: 0 0 15px;
 }
+
+a {
+  color: var(--color-primary);
+
+  &:not([href]) {
+    cursor: default;
+  }
+}

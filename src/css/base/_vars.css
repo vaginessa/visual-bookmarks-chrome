@@ -3,12 +3,13 @@
   --color-primary: rgb(67, 135, 244);
   --color-primary-dark: rgb(40, 107, 215);
   --color-primary-alpha-40: rgba(40, 107, 215, 0.4);
-  --color-muted: hsl(0, 0%, 66%);
+  --color-muted: rgb(168, 168, 168);
   --color-warning: #dd4b39;
 
   /* Theme */
   --theme-background: rgb(255, 255, 255);
   --theme-background-alpha-0: rgba(255, 255, 255, 0);
+  --theme-background-alpha-95: rgb(255, 255, 255, 0.95);
   --theme-background-2: rgb(248, 249, 250);
   --theme-background-3: rgb(242, 242, 242);
   --theme-background-3-alpha-0: rgba(242, 242, 242, 0);
@@ -125,6 +126,7 @@
 .dark {
   --theme-background: rgb(33, 33, 33);
   --theme-background-alpha-0: rgba(33, 33, 33, 0);
+  --theme-background-alpha-95: rgba(33, 33, 33, 0.95);
   --theme-background-2: rgb(48, 48, 48);
   --theme-background-3: rgb(64, 64, 64);
   --theme-background-3-alpha-0: rgba(64, 64, 64, 0);

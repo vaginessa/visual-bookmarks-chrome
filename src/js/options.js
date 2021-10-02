@@ -1,5 +1,5 @@
 import '../css/options.css';
-
+import Gmodal from 'glory-modal';
 import TabsSlider from 'tabs-slider';
 import FS from './api/fs';
 import Settings from './settings';
@@ -39,6 +39,8 @@ textarea.el.addEventListener('textarea-autosize', function() {
 
 const Options = (() => {
 
+  let modal = null;
+
   async function init() {
 
     await FS.init(500);
@@ -72,6 +74,21 @@ const Options = (() => {
 
     document.getElementById('export').addEventListener('click', exportSettings, false);
     document.getElementById('import').addEventListener('change', importSettings, false);
+
+    modal = new Gmodal(document.getElementById('modal'), {
+      closeBackdrop: false
+    });
+    modal.element.addEventListener('gmodal:beforeopen', () => {
+      document.getElementById('modal_changelog_version').textContent = manifest.version;
+    });
+    window.addEventListener('hashchange', hashHandler);
+    setTimeout(hashHandler, 500);
+  }
+
+  function hashHandler() {
+    if (location.hash === '#updated') {
+      modal.open();
+    }
   }
 
   function importSettings(e) {

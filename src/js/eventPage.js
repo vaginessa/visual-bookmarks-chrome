@@ -173,10 +173,14 @@ function initContextMenu() {
   browserContextMenu.init();
 }
 
-chrome.runtime.onInstalled.addListener(() => {
+chrome.runtime.onInstalled.addListener((evt) => {
   // if (callback.reason === 'update') {}
   Settings.init();
   initContextMenu();
+
+  if (evt.reason === 'update') {
+    chrome.tabs.create({ url: chrome.extension.getURL('options.html#updated') });
+  }
 });
 
 chrome.bookmarks.onCreated.addListener(initContextMenu);

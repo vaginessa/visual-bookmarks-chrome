@@ -1,6 +1,13 @@
 .options {
   background-color: var(--options-background);
   color: var(--theme-text-color);
+
+  & .gmodal__title {
+    font-size: 18px;
+  }
+  & .gmodal-backdrop {
+    background-color: var(--theme-background-alpha-95);
+  }
 }
 
 .wrap {
@@ -120,4 +127,63 @@
   border-radius: 2px;
   color: #333;
   background: #e4dcdc;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+ul {
+  margin-top: 0;
+  padding-left: 30px;
+}
+
+li:not(:last-child) {
+  margin-bottom: 12px;
+}
+
+code,
+kbd {
+  font-family: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  padding: 0.2em 0.45em;
+  font-size: 85%;
+}
+
+code {
+  color: rgb(67, 135, 244);
+  background-color: rgb(40 107 215 / 16%);
+  border: 1px solid rgba(67, 135, 244, 0.15);
+}
+
+code,
+kbd,
+pre {
+  border-radius: 0.2rem;
+}
+
+pre {
+  display: block;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  padding: 0.45rem 0.75rem;
+  text-align: left;
+  text-shadow: none;
+  white-space: pre;
+  color: #333;
+  border: 1px solid #ddd;
+  background-color: #f7f7f7;
+  overflow: auto;
+}
+
+.whats-new {
+  font-size: 1rem;
+  line-height: 1.5;
+
+  & img {
+    display: block;
+    margin: auto;
+    max-width: 100%;
+    height: auto;
+  }
 }
