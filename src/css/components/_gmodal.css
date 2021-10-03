@@ -55,6 +55,32 @@ body.gmodal-open {
     transform: none;
     transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
   }
+  &.is-hidden {
+    z-index: 9997;
+  }
+}
+
+.gmodal--popup .gmodal__container--popup {
+  width: 100%;
+  max-width: 400px;
+  min-height: auto;
+  margin: 30px auto;
+  padding-left: 15px;
+  padding-right: 15px;
+  &.has-center {
+    display: flex;
+    align-items: center;
+    min-height: calc(100vh - 60px);
+    &::before {
+      content: "";
+      display: block;
+      height: calc(100vh - 60px);
+    }
+  }
+}
+.gmodal--popup {
+  --modal-header-border-color: transparent;
+  --modal-footer-border-color: transparent;
 }
 
 @media (min-width: 480px) {
@@ -64,6 +90,8 @@ body.gmodal-open {
     width: 100%;
     margin: 30px auto;
     min-height: auto;
+    padding-left: 15px;
+    padding-right: 15px;
     &.has-center {
       display: flex;
       align-items: center;
@@ -77,19 +105,27 @@ body.gmodal-open {
   }
 }
 
+.gmodal--popup .gmodal__dialog {
+  position: relative;
+  min-height: auto;
+  border-radius: var(--base-radius);
+  background-color: var(--modal-background);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
 .gmodal__dialog {
   position: absolute;
   min-height: 100vh;
   width: 100%;
   background-color: var(--modal-background);
-  border-radius: var(--base-radius);
+  border-radius: 0;
 }
 
 @media (min-width: 480px) {
   .gmodal__dialog {
     position: relative;
     min-height: auto;
-    border-radius: 3px;
+    border-radius: var(--base-radius);
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
   }
 }
@@ -106,7 +142,7 @@ body.gmodal-open {
 }
 
 .gmodal__footer {
-  border-top: 1px solid var(--modal-header-border-color);
+  border-top: 1px solid var(--modal-footer-border-color);
 }
 
 .gmodal__close {
@@ -189,7 +225,7 @@ body.gmodal-open {
   margin-bottom: 15px;
   background-color: var(--modal-custom-image-background);
   border-radius: var(--base-radius);
-  /* box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1); */
+
   & img {
     display: block;
     height: 120px;

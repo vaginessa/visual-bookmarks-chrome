@@ -6,6 +6,7 @@ import Localization from './plugins/localization';
 import UI from './components/ui';
 import ContextMenu from './components/contextmenu';
 import Ripple from './components/ripple';
+import confirmPopup from './plugins/confirmPopup.js';
 import {
   get,
   getChildren
@@ -337,10 +338,13 @@ const NewTab = (() => {
     success && modalApi.close();
   }
 
-  function resetThumb(evt) {
-    evt.preventDefault();
-    if (!confirm(chrome.i18n.getMessage('confirm_delete_image'))) return;
+  async function resetThumb(evt) {
+    if (localStorage.getItem('without_confirmation') === 'false') {
+      const confirmAction = await confirmPopup(chrome.i18n.getMessage('confirm_delete_image'));
+      if (!confirmAction) return;
+    }
 
+    evt.preventDefault();
     const target = evt.target;
     const id = target.getAttribute('data-bookmark');
 

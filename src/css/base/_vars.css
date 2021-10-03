@@ -72,7 +72,7 @@
   --btn: var(--color-primary);
   --btn-active: var(--color-primary-dark);
   --btn-color: #fff;
-  --btn-padding: 9px 15px;
+  --btn-padding: 7px 15px;
   --btn-radius: var(--base-radius);
 
   /* Scrollbar */
@@ -101,6 +101,7 @@
   --modal-background: var(--theme-background-2);
   --modal-custom-image-background: var(--theme-background-3);
   --modal-header-border-color: #ddd;
+  --modal-footer-border-color: var(--modal-header-border-color);
   --modal-close-fill: #000;
   --modal-custom-image-filter: invert(1);
 

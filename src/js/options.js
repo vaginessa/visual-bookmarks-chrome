@@ -8,6 +8,7 @@ import Localization from './plugins/localization';
 import Ripple from './components/ripple';
 import AutosizeTextarea from './components/autosizeTextarea';
 import Toast from './components/toast';
+import confirmPopup from './plugins/confirmPopup.js';
 import { getFolders } from './api/bookmark';
 import { $notifications, $trigger } from './utils';
 
@@ -255,7 +256,9 @@ const Options = (() => {
     const target = evt.target.closest('#delete_upload');
     if (!target) return;
 
-    if (!confirm(chrome.i18n.getMessage('confirm_delete_image'), '')) return;
+    // if (!confirm(chrome.i18n.getMessage('confirm_delete_image'), '')) return;
+    const confirmAction = await confirmPopup(chrome.i18n.getMessage('confirm_delete_image'));
+    if (!confirmAction) return;
 
     evt.preventDefault();
     const preview = document.getElementById('preview_upload');
@@ -297,7 +300,9 @@ const Options = (() => {
 
   async function deleteImages(evt) {
     evt.preventDefault();
-    if (!confirm(chrome.i18n.getMessage('confirm_delete_images'), '')) return;
+    // if (!confirm(chrome.i18n.getMessage('confirm_delete_images'), '')) return;
+    const confirmAction = await confirmPopup(chrome.i18n.getMessage('confirm_delete_images'));
+    if (!confirmAction) return;
 
     await FS.purge();
     Toast.show(chrome.i18n.getMessage('notice_images_removed'));
@@ -305,40 +310,42 @@ const Options = (() => {
     localStorage.setItem('custom_dials', '{}');
   }
 
-  function restoreLocalOptions() {
-    if (confirm(chrome.i18n.getMessage('confirm_restore_default_settings'), '')) {
+  async function restoreLocalOptions() {
+    const confirmAction = await confirmPopup(chrome.i18n.getMessage('confirm_restore_default_settings'));
+    if (!confirmAction) return;
 
-      for (let property of Object.keys(localStorage)) {
-        if (property === 'background_local' || property === 'custom_dials') continue;
-        localStorage.removeItem(property);
-      }
-      Settings.init();
-      UI.toggleTheme();
-      getOptions();
-      Toast.show(chrome.i18n.getMessage('notice_reset_default_settings'));
+    for (let property of Object.keys(localStorage)) {
+      if (property === 'background_local' || property === 'custom_dials') continue;
+      localStorage.removeItem(property);
     }
+    Settings.init();
+    UI.toggleTheme();
+    getOptions();
+    Toast.show(chrome.i18n.getMessage('notice_reset_default_settings'));
   }
-  function clearSyncData() {
-    if (confirm(chrome.i18n.getMessage('confirm_clear_sync_settings'), '')) {
-      chrome.storage.sync.clear(() => {
-        Toast.show(chrome.i18n.getMessage('notice_sync_settings_cleared'));
-        // after cleaning, if synch is enabled, force to synch the current settings
-        if (localStorage.getItem('enable_sync') === 'true') {
-          Settings.syncToStorage();
-        }
-      });
-    }
+  async function clearSyncData() {
+    const confirmAction = await confirmPopup(chrome.i18n.getMessage('confirm_clear_sync_settings'));
+    if (!confirmAction) return;
+
+    chrome.storage.sync.clear(() => {
+      Toast.show(chrome.i18n.getMessage('notice_sync_settings_cleared'));
+      // after cleaning, if synch is enabled, force to synch the current settings
+      if (localStorage.getItem('enable_sync') === 'true') {
+        Settings.syncToStorage();
+      }
+    });
   }
   function checkEnableSync() {
     if (this.checked) {
-      chrome.storage.sync.getBytesInUse(null, bytes => {
+      chrome.storage.sync.getBytesInUse(null, async(bytes) => {
         if (bytes > 0) {
-          if (confirm(chrome.i18n.getMessage('confirm_sync_remote_settings'), '')) {
+          const confirmAction = await confirmPopup(chrome.i18n.getMessage('confirm_sync_remote_settings'));
+
+          if (confirmAction) {
             Settings.restoreFromSync(() => {
               getOptions();
               UI.toggleTheme();
             });
-            // window.location.reload();
           } else {
             this.checked = false;
             localStorage.setItem('enable_sync', 'false');

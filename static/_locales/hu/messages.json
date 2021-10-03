@@ -329,5 +329,8 @@
   },
   "sort_by_newest_warning": {
     "message": "A húzás és ejtés rendezése le lesz tiltva, amíg ez az opció engedélyezve van"
+  },
+  "without_confirmation": {
+    "message": "Törléskor ne kérjen megerősítést"
   }
 }

@@ -23,6 +23,7 @@ import {
   $isValidUrl
 } from '../utils';
 import { SVG_LOADER } from '../constants';
+import  confirmPopup from '../plugins/confirmPopup.js';
 import './vb-bookmark';
 
 /**
@@ -631,33 +632,40 @@ const Bookmarks = (() => {
       });
   }
 
-  function removeBookmark(bookmark) {
-    if (confirm(chrome.i18n.getMessage('confirm_delete_bookmark'), '')) {
-      const id = bookmark.getAttribute('data-id');
-      remove(id)
-        .then(() => {
-          bookmark.remove();
-          rmCustomScreen(id);
-          Toast.show(chrome.i18n.getMessage('notice_bookmark_removed'));
-        });
+  async function removeBookmark(bookmark) {
+    if (localStorage.getItem('without_confirmation') === 'false') {
+      const confirmAction = await confirmPopup(chrome.i18n.getMessage('confirm_delete_bookmark'));
+      if (!confirmAction) return;
     }
+
+    const id = bookmark.getAttribute('data-id');
+    remove(id)
+      .then(() => {
+        bookmark.remove();
+        rmCustomScreen(id);
+        Toast.show(chrome.i18n.getMessage('notice_bookmark_removed'));
+      });
   }
 
-  function removeFolder(bookmark) {
-    if (confirm(chrome.i18n.getMessage('confirm_delete_folder'), '')) {
-      const { id } = bookmark;
-      removeTree(id)
-        .then(() => {
-          bookmark.remove();
-          rmCustomScreen(id);
-          $customTrigger('updateFolderList', container, {
-            detail: {
-              isFolder: true
-            }
-          });
-          Toast.show(chrome.i18n.getMessage('notice_folder_removed'));
-        });
+  async function removeFolder(bookmark) {
+    if (localStorage.getItem('without_confirmation') === 'false') {
+      // if (!confirm(chrome.i18n.getMessage('confirm_delete_folder'), '')) return;
+      const confirmAction = await confirmPopup(chrome.i18n.getMessage('confirm_delete_folder'));
+      if (!confirmAction) return;
     }
+
+    const { id } = bookmark;
+    removeTree(id)
+      .then(() => {
+        bookmark.remove();
+        rmCustomScreen(id);
+        $customTrigger('updateFolderList', container, {
+          detail: {
+            isFolder: true
+          }
+        });
+        Toast.show(chrome.i18n.getMessage('notice_folder_removed'));
+      });
   }
 
   async function rmCustomScreen(id, cb) {

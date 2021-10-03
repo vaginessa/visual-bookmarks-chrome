@@ -329,5 +329,8 @@
   },
   "sort_by_newest_warning": {
     "message": "Sortowanie metodą „przeciągnij i upuść” będzie wyłączone, gdy ta opcja jest włączona"
+  },
+  "without_confirmation": {
+    "message": "Nie pytaj o potwierdzenie przy usuwaniu"
   }
 }

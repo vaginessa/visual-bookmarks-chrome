@@ -20,6 +20,7 @@ const DEFAULTS = {
   thumbnails_update_button: true,
   thumbnails_update_recursive: false,
   custom_style: '',
+  without_confirmation: false,
   google_services: false,
   google_services_list: [
     { name: 'youtube', link: 'https://www.youtube.com' },

@@ -294,6 +294,15 @@
           <div class="tabs__section">
 
             <div class="tbl">
+              <div class="tbl__setting" data-locale-message="without_confirmation">without_confirmation</div>
+              <div class="tbl__value">
+                <div class="switch">
+                  <input type="checkbox" class="switch__input js-change" name="confirm" id="without_confirmation">
+                  <label class="switch__label" for="without_confirmation"></label>
+                </div>
+              </div>
+            </div>
+            <div class="tbl">
               <div class="tbl__setting" data-locale-message="clear_local_images">Clear folder with local images</div>
               <div class="tbl__value">
                 <button class="btn md-ripple" id="clear_images" data-locale-message="btn_apply">Clear folder</button>
@@ -375,7 +384,8 @@
               <p>Option <code>thumbnail_service</code> has been removed from the settings(as an experiment)</p>
             </li>
             <li>Added sorting of bookmarks by date (newest first)</li>
-            <li>Added an option that removes popups with confirmations for user actions</li>
+            <li>Reworked popups with confirmations(popups)</li>
+            <li>Added an option that removes popups with confirmations for user actions(popups)</li>
             <li>Fixed a bug when the folder structure was not updated in the context menu</li>
             <li>Reworking theme styles(if you used custom styles, you may need to change some of the variable names)</li>
           </ul>
