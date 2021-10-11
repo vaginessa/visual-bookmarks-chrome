@@ -11,4 +11,4 @@ export const SVG_LOADER =
   `<circle class="path" fill="none" stroke="url(#%id%)" stroke-width="8" stroke-linecap="round" cx="50" cy="50" r="40"></circle>` +
 `</svg>`;
 
-export const SERVICES_COUNT = 6;
+export const SERVICES_COUNT = 20;
