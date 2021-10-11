@@ -25,7 +25,9 @@ const Ripple = function() {
   function showRipple(sel, evt) {
     if (evt.which !== 1) return true;
 
-    const target = evt.target.closest(sel);
+    // console.log(evt.composedPath());
+    // const target = evt.target.closest(sel);
+    const target = evt.composedPath()[0].closest(sel);
 
     if (!target) return;
 

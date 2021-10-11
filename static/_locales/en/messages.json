@@ -275,9 +275,6 @@
   "version": {
     "message": "Version"
   },
-  "google_services": {
-    "message": "Google services"
-  },
   "thumbnails_creation": {
     "message": "Creating thumbnails: $start$ out of $total$",
     "placeholders": {
@@ -332,5 +329,34 @@
   },
   "without_confirmation": {
     "message": "Do not ask for confirmation when deleting"
+  },
+  "services_enable": {
+    "message": "Include a panel with services"
+  },
+  "service_settings_btn": {
+    "message": "Tune"
+  },
+  "services_add_title": {
+    "message": "Add"
+  },
+  "services_limit": {
+    "message": "Maximum number of services: $total$",
+    "placeholders": {
+      "total": {
+        "content": "$1"
+      }
+    }
+  },
+  "service_name": {
+    "message": "Name"
+  },
+  "service_link": {
+    "message": "Link"
+  },
+  "error_input_required": {
+    "message": "Required field"
+  },
+  "error_input_url": {
+    "message": "URL is not valid"
   }
 }

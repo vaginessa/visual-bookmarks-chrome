@@ -1,3 +1,5 @@
+import { $uid } from './utils';
+
 const DEFAULTS = {
   color_theme: 'os',
   background_image: 'background_noimage',
@@ -21,14 +23,14 @@ const DEFAULTS = {
   thumbnails_update_recursive: false,
   custom_style: '',
   without_confirmation: false,
-  google_services: false,
-  google_services_list: [
-    { name: 'youtube', link: 'https://www.youtube.com' },
-    { name: 'search', link: 'https://google.com' },
-    { name: 'translate', link: 'https://translate.google.com' },
-    { name: 'gmail', link: 'https://mail.google.com/mail' },
-    { name: 'drive', link: 'https://drive.google.com/' },
-    { name: 'photos', link: 'https://photos.google.com' }
+  services_enable: false,
+  services_list: [
+    { id: $uid(), name: 'youtube', link: 'https://www.youtube.com' },
+    { id: $uid(), name: 'search', link: 'https://google.com' },
+    { id: $uid(), name: 'translate', link: 'https://translate.google.com' },
+    { id: $uid(), name: 'gmail', link: 'https://mail.google.com/mail' },
+    { id: $uid(), name: 'drive', link: 'https://drive.google.com/' },
+    { id: $uid(), name: 'photos', link: 'https://photos.google.com' }
   ],
   folder_preview: false
 };
@@ -38,7 +40,7 @@ export default {
     // Creates default localStorage values if they don't already exist
     Object.keys(DEFAULTS).forEach(function(name) {
       if (localStorage.getItem(name) === null) {
-        const value = (name === 'google_services_list')
+        const value = (name === 'services_list')
           ? JSON.stringify(DEFAULTS[name])
           : DEFAULTS[name];
 

@@ -332,5 +332,34 @@
   },
   "without_confirmation": {
     "message": "Nie pytaj o potwierdzenie przy usuwaniu"
+  },
+  "services_enable": {
+    "message": "Dołącz panel z usługami"
+  },
+  "service_settings_btn": {
+    "message": "Dostroić"
+  },
+  "services_add_title": {
+    "message": "Dodać"
+  },
+  "services_limit": {
+    "message": "Maksymalna liczba usług: $total$",
+    "placeholders": {
+      "total": {
+        "content": "$1"
+      }
+    }
+  },
+  "service_name": {
+    "message": "Nazwa"
+  },
+  "service_link": {
+    "message": "Połączyć"
+  },
+  "error_input_required": {
+    "message": "Pole wymagane"
+  },
+  "error_input_url": {
+    "message": "URL jest nieprawidłowy"
   }
 }

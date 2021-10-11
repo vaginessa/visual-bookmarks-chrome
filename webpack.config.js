@@ -49,7 +49,21 @@ module.exports = (env, arg) => {
           }]
         },
         {
-          test: /\.css$/,
+          // ccs-loader for web-components
+          test: /vb-.*\/*\.css$/,
+          exclude: [/node_modules/],
+          use: [
+            {
+              loader: 'css-loader',
+              options: {
+                url: false
+              }
+            },
+            'postcss-loader'
+          ]
+        },
+        {
+          test: /(newtab|options)\.css$/,
           exclude: [/node_modules/],
           use: [
             MiniCssExtractPlugin.loader,

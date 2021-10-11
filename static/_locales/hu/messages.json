@@ -332,5 +332,34 @@
   },
   "without_confirmation": {
     "message": "Törléskor ne kérjen megerősítést"
+  },
+  "services_enable": {
+    "message": "Tartalmaz egy panelt a szolgáltatásokkal"
+  },
+  "service_settings_btn": {
+    "message": "Konfigurálni"
+  },
+  "services_add_title": {
+    "message": "Hozzá"
+  },
+  "services_limit": {
+    "message": "Szolgáltatások maximális száma: $total$",
+    "placeholders": {
+      "total": {
+        "content": "$1"
+      }
+    }
+  },
+  "service_name": {
+    "message": "Név"
+  },
+  "service_link": {
+    "message": "Link"
+  },
+  "error_input_required": {
+    "message": "Kötelező mező"
+  },
+  "error_input_url": {
+    "message": "Érvénytelen URL"
   }
 }

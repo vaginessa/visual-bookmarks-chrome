@@ -332,5 +332,34 @@
   },
   "without_confirmation": {
     "message": "Не спрашивать потвержждения при удалении"
+  },
+  "services_enable": {
+    "message": "Включить панель с сервисам"
+  },
+  "service_settings_btn": {
+    "message": "Настроить"
+  },
+  "services_add_title": {
+    "message": "Добавить"
+  },
+  "services_limit": {
+    "message": "Маскимальное количество сервисов: $total$",
+    "placeholders": {
+      "total": {
+        "content": "$1"
+      }
+    }
+  },
+  "service_name": {
+    "message": "Имя"
+  },
+  "service_link": {
+    "message": "Ссылка"
+  },
+  "error_input_required": {
+    "message": "Обязательное поле"
+  },
+  "error_input_url": {
+    "message": "URL не валиден"
   }
 }

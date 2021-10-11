@@ -230,3 +230,7 @@ export function $copyStr(str) {
 
   return success;
 }
+
+export function $uid() {
+  return `id${Math.floor(Math.random() * Date.now()).toString(36)}`;
+}

@@ -50,7 +50,7 @@ const NewTab = (() => {
     });
 
     // TODO: if
-    (localStorage.getItem('google_services') === 'true') && runServices();
+    (localStorage.getItem('services_enable') === 'true') && runServices();
 
     upload.addEventListener('change', uploadScreen);
     container.addEventListener('click', delegateClick);
@@ -170,16 +170,17 @@ const NewTab = (() => {
 
   // TODO: experiment webcomponents
   function runServices() {
-    import(/* webpackChunkName: "webcomponents/gservices" */'./components/g-services').then(() => {
-      const el = document.createElement('g-services');
+    import(/* webpackChunkName: "webcomponents/vb-services" */'./components/vb-services').then(() => {
+      const el = document.createElement('vb-services');
       el.classList.add('sticky');
-      el.setAttribute('data-services', localStorage.google_services_list);
+      el.servicesList = JSON.parse(localStorage.services_list);
+      // el.setAttribute('data-services', localStorage.services_list);
       document.body.append(el);
 
       // update storage after sorting
-      el.addEventListener('sort', e => {
-        localStorage.google_services_list = JSON.stringify(e.detail.services);
-        Settings.syncSingleToStorage('google_services_list');
+      el.addEventListener('update', e => {
+        localStorage.services_list = JSON.stringify(e.detail.services);
+        Settings.syncSingleToStorage('services_list');
       });
     }).catch(err => {
       console.warn(err);

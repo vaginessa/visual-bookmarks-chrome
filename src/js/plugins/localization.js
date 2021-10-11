@@ -1,5 +1,5 @@
-export default function() {
-  const els = document.querySelectorAll('[data-locale-message]');
+export default function(root = null) {
+  const els = (root ? root : document).querySelectorAll('[data-locale-message]');
 
   Array.prototype.slice.call(els).forEach(item => {
     const msg = item.getAttribute('data-locale-message');

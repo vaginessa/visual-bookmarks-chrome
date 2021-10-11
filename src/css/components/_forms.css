@@ -18,6 +18,13 @@
     border-color: var(--color-primary);
     box-shadow: var(--input-shadow);
   }
+
+  @nest .has-error & {
+    border-color: var(--color-warning);
+    &:focus {
+      box-shadow: var(--input-shadow-error);
+    }
+  }
 }
 
 select,
