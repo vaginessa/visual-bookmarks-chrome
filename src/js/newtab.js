@@ -1,5 +1,6 @@
 import '../css/newtab.css';
 import Gmodal from 'glory-modal';
+import Validator from 'form-validation-plugin';
 import Settings from './settings';
 import Bookmarks from './components/bookmarks';
 import Localization from './plugins/localization';
@@ -78,18 +79,31 @@ async function init() {
     scrollContainer: '.app'
   });
 
-  // TODO: if
+  const formBookmarkEl = document.getElementById('formBookmark');
+
+  Validator.i18n = {
+    required: chrome.i18n.getMessage('error_input_required'),
+    url: chrome.i18n.getMessage('error_input_url')
+  };
+
+  Validator.run(formBookmarkEl, {
+    showErrors: true,
+    checkChange: true,
+    checkInput: true,
+    containerSelector: '.group',
+    errorClass: 'has-error',
+    errorHintClass: 'error-hint',
+    onSuccess: handleSubmitForm,
+    onError: handleFormError
+  });
+
   (localStorage.getItem('services_enable') === 'true') && runServices();
 
   upload.addEventListener('change', handleUploadScreen);
   container.addEventListener('click', handleDelegateClick);
-
   ctxMenuEl.addEventListener('contextMenuSelection', handleMenuSelection);
   ctxMenuEl.addEventListener('contextMenuOpen', handleMenuOpen);
-
-  document.getElementById('formBookmark').addEventListener('submit', submitForm);
-  document.getElementById('resetCustomImage').addEventListener('click', resetThumb);
-
+  document.getElementById('resetCustomImage').addEventListener('click', handleResetThumb);
   modal.addEventListener('gmodal:close', handleCloseModal);
 
   const folderOptions = await Bookmarks.generateFolderList(foldersList);
@@ -356,11 +370,13 @@ function openTab(url, options = {}) {
   } catch (e) {}
 }
 
-function submitForm(evt) {
+function handleSubmitForm(evt) {
   evt.preventDefault();
-  const id = this.getAttribute('data-action');
-  const title = document.getElementById('title').value;
-  const url = document.getElementById('url').value;
+  const form = evt.target;
+  const id = form.getAttribute('data-action');
+  const title = form.title.value;
+  const url = form.url.value;
+
   let success = false;
   if (id !== 'New') {
     const newLocation = foldersList.value;
@@ -371,7 +387,16 @@ function submitForm(evt) {
   success && modalApi.close();
 }
 
-async function resetThumb(evt) {
+/**
+ * Form submit error handler
+ * Set focus to the first field in the array of invalid fields
+ * @param {Array<{el: HTMLElement, errors: [string]}>} err
+ */
+function handleFormError(err) {
+  return err[0]?.el?.focus();
+}
+
+async function handleResetThumb(evt) {
   if (localStorage.getItem('without_confirmation') === 'false') {
     const confirmAction = await confirmPopup(chrome.i18n.getMessage('confirm_delete_image'));
     if (!confirmAction) return;

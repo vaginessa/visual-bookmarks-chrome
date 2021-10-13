@@ -62,3 +62,8 @@ a {
     cursor: default;
   }
 }
+
+.error-hint {
+  font-size: 90%;
+  color: var(--color-warning);
+}
