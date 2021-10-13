@@ -172,10 +172,10 @@ function handlePopstate() {
   modalApi.close();
 }
 
-function handleBeforeUnload(e) {
+function handleBeforeUnload(evt) {
   // if generate thumbs exist
   if (localStorage.getItem('update_thumbnails') !== null && isGenerateThumbs)
-    return e.returnValue = '';
+    return evt.returnValue = '';
 }
 
 function handleUnload() {
@@ -319,7 +319,6 @@ function runServices() {
     const el = document.createElement('vb-services');
     el.classList.add('sticky');
     el.servicesList = JSON.parse(localStorage.services_list);
-    // el.setAttribute('data-services', localStorage.services_list);
     document.body.append(el);
 
     // update storage after sorting
@@ -332,6 +331,11 @@ function runServices() {
   });
 }
 
+/**
+ * Open all bookmarks from a folder
+ * @param {string} id - folder id
+ * @param {string} action - action to run
+ */
 function openAll(id, action) {
   getChildren(id)
     .then(childrens => {
@@ -347,6 +351,11 @@ function openAll(id, action) {
     });
 }
 
+/**
+ * Open a bookmark in a new window
+ * @param {string} url - bookmark URL
+ * @param {string} action - action to run
+ */
 function openWindow(url, action) {
   try {
     chrome.windows.create({
@@ -357,6 +366,17 @@ function openWindow(url, action) {
   } catch (e) {}
 }
 
+/**
+ * Open a bookmark in a new tab
+ * @param {string} url - bookmark URL
+ * @param {object} [options={}] - options for creating a tab
+ * @param {boolean} [options.active]
+ * @param {number} [options.index]
+ * @param {number} [options.openerTabId]
+ * @param {boolean} [options.pinned]
+ * @param {string} [options.url]
+ * @param {number} [options.windowId]
+ */
 function openTab(url, options = {}) {
   const defaults = {
     url: url,
