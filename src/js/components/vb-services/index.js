@@ -8,8 +8,7 @@ import {
 } from '../../constants';
 import {
   $escapeHtml,
-  $uid,
-  $isValidUrl
+  $uid
 } from '../../utils';
 import Localization from '../../plugins/localization.js';
 
