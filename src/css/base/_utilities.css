@@ -1,4 +1,4 @@
-/* Utils */
+/* Text */
 .text-center {
   text-align: center;
 }
@@ -13,4 +13,9 @@
 
 .text-warning {
   color: #dd4b39;
+}
+
+/* Display */
+[hidden] {
+  display: none !important;
 }
