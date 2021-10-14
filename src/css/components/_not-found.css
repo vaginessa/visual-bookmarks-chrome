@@ -17,11 +17,10 @@
   width: 100%;
   max-width: 450px;
   color: var(--notfound-color);
-  background-color: none;
   border-radius: 3px;
 
   @nest .has-image & {
-    background-color: var(--notfound-bg);
+    background-color: var(--notfound-background);
   }
 }
 

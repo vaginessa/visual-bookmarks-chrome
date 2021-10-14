@@ -117,13 +117,13 @@
   --tabs-content-background: var(--theme-background);
 
   /* not found */
-  --notfound-bg: var(--theme-background-2-alpha-65);
+  --notfound-background: var(--theme-background-3-alpha-65);
   --notfound-color: var(--theme-text-color);
   --notfound-icon-filter: var(--filter-invert-image);
 
   /* Context menu */
   --context-menu-bg: var(--theme-background-3);
-  --context-menu-color: var(-theme-text-color);
+  --context-menu-color: var(--theme-text-color);
   --context-menu-divider: rgba(0, 0, 0, 0.1);
 }
 
