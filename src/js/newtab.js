@@ -20,23 +20,19 @@ import {
 } from './utils';
 
 const container = document.getElementById('bookmarks');
-const modal         = document.getElementById('modal');
-const form          = document.getElementById('formBookmark');
-const modalHead     = document.getElementById('modalHead');
-const foldersList   = document.getElementById('folderList');
-const titleField    = document.getElementById('title');
-const urlField      = document.getElementById('url');
-const urlWrap       = document.getElementById('urlWrap');
-const customScreen  = document.getElementById('customScreen');
-const ctxMenuEl     = document.getElementById('context-menu');
-const upload        = document.getElementById('upload');
-const ctxToggleItems = [
-  ...document.querySelectorAll('.is-bookmark'),
-  ...document.querySelectorAll('.is-folder')
-];
+const modal = document.getElementById('modal');
+const form = document.getElementById('formBookmark');
+const modalHead = document.getElementById('modalHead');
+const foldersList = document.getElementById('folderList');
+const titleField = document.getElementById('title');
+const urlField = document.getElementById('url');
+const urlWrap = document.getElementById('urlWrap');
+const customScreen = document.getElementById('customScreen');
+const ctxMenuEl = document.getElementById('context-menu');
+const upload = document.getElementById('upload');
 let isGenerateThumbs = false;
 let modalApi;
-let ctxMenu;
+let ctxMenuInstance;
 let generateThumbsBtn = null;
 
 
@@ -74,7 +70,7 @@ async function init() {
     stickySelectors: ['.sticky'],
     closeBackdrop: false
   });
-  ctxMenu = new ContextMenu(ctxMenuEl, {
+  ctxMenuInstance = new ContextMenu(ctxMenuEl, {
     delegateSelector: '.bookmark',
     scrollContainer: '.app'
   });
@@ -168,7 +164,7 @@ async function init() {
 function handlePopstate() {
   // when navigating through the history
   // hide the context menu or the modal window if they are active
-  ctxMenu.close();
+  ctxMenuInstance.close();
   modalApi.close();
 }
 
@@ -216,7 +212,7 @@ function handleDelegateClick(evt) {
   } else if (evt.target.closest('.bookmark__action')) {
     evt.preventDefault();
     evt.stopPropagation();
-    ctxMenu.handlerTrigger(evt);
+    ctxMenuInstance.handlerTrigger(evt);
   } else if (evt.target.closest('.bookmark')) {
     const url = evt.target.closest('.bookmark').href;
 
@@ -243,20 +239,15 @@ function handleUploadScreen(evt) {
 
 function handleMenuOpen(evt) {
   const bookmark = evt.detail.trigger;
+  const menuItems = Array.from(ctxMenuEl.querySelectorAll('[data-action]'));
 
   if (bookmark.isFolder) {
-    ctxToggleItems.forEach(item => {
-      item.classList.remove('is-disabled');
-      if (item.classList.contains('is-bookmark')) {
-        item.classList.add('is-disabled');
-      }
+    menuItems.forEach(item => {
+      item.classList.toggle('is-disabled', item.classList.contains('is-bookmark'));
     });
   } else {
-    ctxToggleItems.forEach(item => {
-      item.classList.remove('is-disabled');
-      if (item.classList.contains('is-folder')) {
-        item.classList.add('is-disabled');
-      }
+    menuItems.forEach(item => {
+      item.classList.toggle('is-disabled', item.classList.contains('is-folder'));
     });
   }
 }
