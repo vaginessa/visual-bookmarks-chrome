@@ -43,11 +43,11 @@ async function init() {
   // textarea autosize
   textareaInstance = new AutosizeTextarea('#custom_style');
 
-  getOptions();
-
   const manifest = chrome.runtime.getManifest();
   document.getElementById('ext_name').textContent = manifest.name;
   document.getElementById('ext_version').textContent = `${chrome.i18n.getMessage('version')} ${manifest.version}`;
+
+  getOptions();
 
   tabs.addEventListener('tabChange', function(evt) {
     localStorage['option_tab_slide'] = evt.detail.currentIndex;
@@ -55,6 +55,7 @@ async function init() {
   textareaInstance.el.addEventListener('textarea-autosize', function() {
     tabsSliderInstance.recalcStyles();
   });
+
   // Delegate change settings
   document.querySelector('.tabs').addEventListener('change', handleSetOptions);
   document.querySelector('#dial_width').addEventListener('input', handleSetRangeWidth);
@@ -64,11 +65,8 @@ async function init() {
     }
   });
 
-  // actions with a local picture
-  document.getElementById('bgFile').addEventListener('change', handleUploadFile);
-  document.getElementById('background_local').addEventListener('click', handleRemoveFile);
   document.getElementById('background_image').addEventListener('change', handleSelectBackground);
-
+  document.getElementById('background_local').addEventListener('click', handleRemoveFile);
   document.getElementById('restore_local').addEventListener('click', handleResetLocalSettings);
   document.getElementById('restore_sync').addEventListener('click', handleResetSyncSettings);
   document.getElementById('enable_sync').addEventListener('change', handleChangeSync);
@@ -76,6 +74,7 @@ async function init() {
 
   document.getElementById('export').addEventListener('click', handleExportSettings);
   document.getElementById('import').addEventListener('change', handleImportSettings);
+  document.getElementById('bgFile').addEventListener('change', handleUploadFile);
 
   modalInstance = new Gmodal(document.getElementById('modal'), {
     closeBackdrop: false
@@ -153,10 +152,11 @@ function getOptions() {
 
   const optionBg = document.getElementById('background_image');
   const options = Array.from(optionBg.querySelectorAll('option'));
+
   options.forEach((item) => {
     if (item.value === localStorage.getItem('background_image')) {
       item.selected = true;
-      $trigger('change', optionBg);
+      toggleBackgroundControls(item.value);
       return;
     }
   });
@@ -180,6 +180,30 @@ function getOptions() {
       }
     }
   }
+}
+
+/**
+ * Toggle background settings
+ * @param {string} value - localStorage background_image value
+ */
+function toggleBackgroundControls(value) {
+  Array.from(document.querySelectorAll('.js-background-settings')).forEach((item) => {
+    item.hidden = true;
+  });
+  if (value === 'background_local') {
+    const imgSrc = localStorage.getItem('background_local');
+    if (imgSrc) {
+      document.querySelector('.c-upload__preview').hidden = false;
+      document.getElementById('preview_upload').innerHTML = `
+          <div class="c-upload__preview-image" style="background-image: url(${imgSrc}?new=${Date.now()});"><div>
+        `;
+    } else {
+      document.querySelector('.c-upload__preview').hidden = true;
+      document.getElementById('preview_upload').innerHTML = '';
+    }
+  }
+  document.getElementById(value).hidden = false;
+  tabsSliderInstance.recalcStyles();
 }
 
 function handleSetOptions(e) {
@@ -242,7 +266,7 @@ async function handleUploadFile() {
   await FS.createDir('images');
   const fileEntry = await FS.createFile('/images/' + fileName, { file: file, fileType: file.type }).catch(err => err);
 
-  document.querySelector('.c-upload__preview').style.display = '';
+  document.querySelector('.c-upload__preview').hidden = false;
   document.getElementById('preview_upload').innerHTML = `
           <div class="c-upload__preview-image"
             style="background-image: url(${fileEntry.toURL()}?new=${Date.now()});">
@@ -274,29 +298,12 @@ async function handleRemoveFile(evt) {
   Toast.show(chrome.i18n.getMessage('notice_image_removed'));
   localStorage.removeItem('background_local');
   preview.innerHTML = '';
-  previewParent.style.display = 'none';
+  previewParent.hidden = true;
   tabsSliderInstance.recalcStyles();
 }
 
 function handleSelectBackground() {
-  Array.from(document.querySelectorAll('.tbl__option')).forEach((item) => {
-    item.style.display = '';
-  });
-
-  if (this.value === 'background_local') {
-    const imgSrc = localStorage.getItem('background_local');
-    if (imgSrc) {
-      document.querySelector('.c-upload__preview').style.display = '';
-      document.getElementById('preview_upload').innerHTML = `
-          <div class="c-upload__preview-image" style="background-image: url(${imgSrc}?new=${Date.now()});"><div>
-        `;
-    } else {
-      document.querySelector('.c-upload__preview').style.display = 'none';
-      document.getElementById('preview_upload').innerHTML = '';
-    }
-  }
-  document.getElementById(this.value).style.display = 'block';
-  tabsSliderInstance.recalcStyles();
+  toggleBackgroundControls(this.value);
 }
 
 async function handleDeleteImages(evt) {

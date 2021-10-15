@@ -82,8 +82,8 @@
                   <option value="background_external" data-locale-message="url_image">Image from URL</option>
                   <option value="background_local" data-locale-message="local_image">Image from Computer</option>
                 </select>
-                <div id="background_noimage" class="tbl__option js-change text-muted" data-locale-message="no_image_text">Тема без фона</div>
-                <div id="background_local" class="tbl__option">
+                <div id="background_noimage" class="tbl__option js-background-settings js-change text-muted" data-locale-message="no_image_text" hidden></div>
+                <div id="background_local" class="tbl__option js-background-settings" hidden>
                   <div class="c-upload">
                     <form action="#0" method="post">
                       <input type="file" name="upload" id="bgFile" class="c-upload__input" accept=".jpg, .jpeg, .png">
@@ -102,8 +102,8 @@
                     </div>
                   </div>
                 </div>
-                <input type="url" id="background_external" name="external" class="form-control js-change tbl__option" placeholder="https://source.unsplash.com/1920x1080/daily?landscape"
-                  spellcheck="false">
+                <input type="url" id="background_external" name="external" class="form-control js-change tbl__option js-background-settings" placeholder="https://source.unsplash.com/1920x1080/daily?landscape"
+                  spellcheck="false" hidden>
               </div>
             </div>
 
