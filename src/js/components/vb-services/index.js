@@ -191,7 +191,7 @@ class VBServices extends HTMLElement {
     }
   }
 
-  show() {
+  #show() {
     this.trigger.classList.add('is-active');
     this.popup.classList.add('is-open');
     this.isActive = true;
@@ -209,12 +209,15 @@ class VBServices extends HTMLElement {
       bubbles: true,
       cancelable: true
     });
-    this.#hideSettings();
+    // TODO: better use event(transitionend)
+    setTimeout(() => {
+      this.#hideSettings();
+    }, 150);
   }
 
   #toggle() {
     !this.isActive
-      ? this.show()
+      ? this.#show()
       : this.#hide();
   }
 
@@ -234,14 +237,14 @@ class VBServices extends HTMLElement {
         </div>
         <div class="item-name">${nameText}</div>
         <button class="item-remove" data-id="${id}">
-          <svg height="14" viewBox="0 0 24 24" width="14">
-            <path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 13H5v-2h14v2z"/>
+          <svg height="14" width="14">
+            <use xlink:href="/img/symbol.svg#minus"/>
           </svg>
         </button>
       </a>`;
   }
 
-  _render() {
+  #render() {
     const htmlList = this.services.map(this.#templateItem).join('');
     this.grid.innerHTML = htmlList;
     this.#toggleListEmpty();
@@ -249,7 +252,7 @@ class VBServices extends HTMLElement {
 
   connectedCallback() {
     // render component
-    this._render();
+    this.#render();
 
     Localization(this.popup);
 
@@ -289,6 +292,9 @@ class VBServices extends HTMLElement {
       onSuccess: (event) => {
         event.preventDefault();
         this.#addService();
+      },
+      onError: (err) => {
+        err[0].el.focus();
       }
     });
   }

@@ -64,11 +64,11 @@
   background-color: var(--popup-background);
   pointer-events: none;
   opacity: 0;
+  transform: translateY(10px);
   visibility: hidden;
-  transform: translateY(5px);
   transition-property: visibility, opacity, transform;
   transition-duration: 0.15s, 0.15s, 0.15s;
-  transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  transition-timing-function: ease-in-out;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   z-index: 0;
 }
@@ -89,7 +89,6 @@
   visibility: visible;
   pointer-events: auto;
   transform: none;
-  transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
 }
 .list {
   display: grid;
@@ -222,6 +221,7 @@
   cursor: pointer;
   transition: background-color 0.25s ease;
 }
+.settings-trigger:focus-visible,
 .settings-trigger:hover {
   background-color: var(--theme-background-3);
 }
@@ -279,9 +279,12 @@
   color: #fff;
   border: none;
   border-radius: 0 0 var(--base-radius) var(--base-radius);
-  background-color: transparent;
   background-color: var(--color-primary);
   cursor: pointer;
+  outline: none;
+}
+.settings-save:focus-visible {
+  background-color: var(--color-primary-dark);
 }
 .error-hint {
   color: #ef5350;
