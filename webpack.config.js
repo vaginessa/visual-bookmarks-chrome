@@ -6,6 +6,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const WebpackBar = require('webpackbar');
+const SVGSpritemapPlugin = require('svg-spritemap-webpack-plugin');
 
 module.exports = (env, arg) => {
   const isDev = arg.mode === 'development'
@@ -35,7 +36,8 @@ module.exports = (env, arg) => {
           use: {
             loader: 'html-loader',
             options: {
-              minimize: true
+              minimize: true,
+              sources: false
             }
           }
         },
@@ -111,6 +113,25 @@ module.exports = (env, arg) => {
             }
           }
         ]
+      }),
+      new SVGSpritemapPlugin(`./src/icons/**/*.svg`, {
+        output: {
+          filename: 'img/symbol.svg',
+          svgo: {
+            plugins: [
+              'removeStyleElement',
+              {
+                name: 'removeAttrs',
+                params: {
+                  attrs: 'class|style'
+                }
+              }
+            ]
+          }
+        },
+        sprite: {
+          prefix: false
+        }
       }),
       new MiniCssExtractPlugin({
         filename: 'css/[name].css'

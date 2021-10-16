@@ -8,7 +8,14 @@
 </head>
 
 <body>
-  <a class="circ-btn settings-link" href="options.html" id="settings_icon"></a>
+  <aside class="aside-controls" id="aside_controls">
+    <a class="circ-btn settings-link" href="options.html" id="settings_icon">
+      <svg width="20" height="20">
+        <use xlink:href="/img/symbol.svg#settings"/>
+      </svg>
+    </a>
+  </aside>
+
   <main id="main" class="app">
     <div class="container">
       <header></header>
@@ -36,8 +43,8 @@
           <div class="gmodal__header">
             <div class="gmodal__title" id="modalHead"></div>
             <button type="button" class="gmodal__close md-ripple" data-gmodal="dismiss" data-ripple-center>
-              <svg version="1.1" width="24" height="24" viewBox="0 0 24 24" fill="#000">
-                <path d="M18.984 6.422l-5.578 5.578 5.578 5.578-1.406 1.406-5.578-5.578-5.578 5.578-1.406-1.406 5.578-5.578-5.578-5.578 1.406-1.406 5.578 5.578 5.578-5.578z"></path>
+              <svg width="20" height="20" fill="#000">
+                <use xlink:href="/img/symbol.svg#close"/>
               </svg>
             </button>
           </div>
@@ -61,7 +68,11 @@
             </div>
             <div class="gmodal__custom-image" id="customScreen">
               <img alt="" src="">
-              <button type="button" class="md-ripple gmodal__custom-reset" id="resetCustomImage" data-ripple-center data-ripple-color="rgba(255,255,255,.55)"></button>
+              <button type="button" class="md-ripple gmodal__custom-reset" id="resetCustomImage" data-ripple-center>
+                <svg width="20" height="20" fill="currenColor">
+                  <use xlink:href="/img/symbol.svg#close"/>
+                </svg>
+              </button>
             </div>
           </div>
           <div class="gmodal__footer text-right">
@@ -110,8 +121,8 @@
       <li class="context-menu__item">
         <a href="" class="context-menu__link is-bookmark" data-action="copy_link">
           <span class="context-menu__icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            <svg height="24" width="24" fill="currentColor">
+              <use xlink:href="/img/symbol.svg#copy_outline"/>
             </svg>
           </span>
           <span data-locale-message="contextmenu_copy_link">Copy link address</span>
@@ -120,9 +131,8 @@
       <li class="context-menu__item">
         <a href="" class="context-menu__link" data-action="edit">
           <span class="context-menu__icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"/>
-              <polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon>
+            <svg height="24" width="24" fill="currentColor">
+              <use xlink:href="/img/symbol.svg#edit_outline"/>
             </svg>
           </span>
           <span data-locale-message="contextmenu_edit">Edit</span>
@@ -131,9 +141,8 @@
       <li class="context-menu__item">
         <a href="" class="context-menu__link is-bookmark" data-action="capture">
           <span class="context-menu__icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-              ><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-              <circle cx="12" cy="13" r="4"></circle>
+            <svg height="24" width="24" fill="currentColor">
+              <use xlink:href="/img/symbol.svg#capture_outline"/>
             </svg>
           </span>
           <span data-locale-message="contextmenu_capture">Refresh thumbnail</span>
@@ -142,10 +151,8 @@
       <li class="context-menu__item">
         <a href="" class="context-menu__link" data-action="upload">
           <span class="context-menu__icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-              <polyline points="17 8 12 3 7 8"></polyline>
-              <line x1="12" y1="3" x2="12" y2="15"></line>
+            <svg height="24" width="24" fill="currentColor">
+              <use xlink:href="/img/symbol.svg#upload_outline"/>
             </svg>
           </span>
           <span data-locale-message="contextmenu_upload">Upload from computer</span>
@@ -154,9 +161,8 @@
       <li class="context-menu__item">
         <a href="" class="context-menu__link" data-action="remove">
           <span class="context-menu__icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="3 6 5 6 21 6"></polyline>
-              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            <svg height="24" width="24" fill="currentColor">
+              <use xlink:href="/img/symbol.svg#delete_outline"/>
             </svg>
           </span>
           <span data-locale-message="contextmenu_remove">Remove</span>

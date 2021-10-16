@@ -76,16 +76,9 @@
   cursor: pointer;
   transition: opacity 0.25s linear;
   & > button {
-    display: block;
-    width: 20px;
-    height: 20px;
-    padding: 15px 18px;
+    padding: 5px 7px;
     border: 0;
     background-color: rgba(51, 51, 51, 0.25);
-    background-image: url(/img/close.svg);
-    background-size: 20px;
-    background-repeat: no-repeat;
-    background-position: center;
     cursor: pointer;
     outline: 0;
   }

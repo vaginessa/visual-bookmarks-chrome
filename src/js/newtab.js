@@ -109,8 +109,10 @@ async function init() {
   if (localStorage.getItem('thumbnails_update_button') === 'true') {
     generateThumbsBtn = $createElement('button', {
       class: 'circ-btn update-thumbnails'
+    }, {
+      innerHTML: `<svg width="20" height="20"><use xlink:href="/img/symbol.svg#capture_fill"/></svg>`
     });
-    document.body.appendChild(generateThumbsBtn);
+    document.getElementById('aside_controls').appendChild(generateThumbsBtn);
 
     // Thumbnail generation tracking events
     // Switching the flag in the local storage to prevent multiple launches
