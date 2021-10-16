@@ -416,13 +416,12 @@ async function handleResetThumb(evt) {
   }
 
   evt.preventDefault();
-  const target = evt.target;
-  const id = target.getAttribute('data-bookmark');
+  const id = this.getAttribute('data-bookmark');
 
-  Bookmarks.rmCustomScreen(id, function() {
+  Bookmarks.rmCustomScreen(id, () => {
     const bookmark = document.getElementById(id);
     bookmark.image = null;
-    target.closest('#customScreen').style.display = '';
+    this.closest('#customScreen').style.display = '';
   });
 }
 
