@@ -17,7 +17,7 @@
   --theme-background-3-alpha-65: rgba(242, 242, 242, 0.65);
   --theme-background-3-alpha-95: rgba(242, 242, 242, 0.95);
   --theme-background-input: var(--theme-background);
-  --theme-text-color: #000;
+  --theme-text-color: #212121;
   --theme-invert-alpha-10: rgba(0, 0, 0, 0.1);
   --theme-invert-alpha-50: rgba(0, 0, 0, 0.5);
 

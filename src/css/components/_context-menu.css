@@ -38,7 +38,7 @@
   white-space: nowrap;
   &:not(.is-disabled):hover,
   &.hover {
-    background-color: rgba(0, 0, 0, 0.15);
+    background-color: rgba(0, 0, 0, 0.1);
   }
   &.is-disabled {
     display: none;
