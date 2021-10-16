@@ -45,15 +45,14 @@ body.gmodal-open {
   &.has-animate .gmodal__container {
     will-change: transform, opacity;
     opacity: 0;
-    transform: scale(0.95);
+    transform: scale(0.9);
     transition-property: opacity, transform;
     transition-duration: 150ms;
-    transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
+    transition-timing-function: ease-in-out;
   }
   &.has-animate.is-shown .gmodal__container {
     opacity: 1;
     transform: none;
-    transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
   }
   &.is-hidden {
     z-index: 9997;
