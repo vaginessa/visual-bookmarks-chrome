@@ -91,7 +91,7 @@
   }
   & svg {
     display: block;
-    stroke: currentColor;
+    fill: currentColor;
   }
 }
 

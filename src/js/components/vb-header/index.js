@@ -66,7 +66,7 @@ class VbHeader extends HTMLElement {
             class: 'back'
           },
           {
-            innerHTML: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="1" stroke-linecap="square" stroke-linejoin="arcs"><path d="M19 12H6M12 5l-7 7 7 7"/></svg>`
+            innerHTML: `<svg width="20" height="20"><use xlink:href="/img/symbol.svg#arrow_back"/></svg>`
           }
         );
         this._backHandler = this._back.bind(this);
