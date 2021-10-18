@@ -18,7 +18,7 @@ class VbHeader extends HTMLElement {
     this._resetNode = this.querySelector('#searchReset');
     this._selectNode = this.querySelector('select');
     this._backNode = null;
-
+    this._initialHash = window.location.hash;
     this._inputNode.placeholder = this.getAttribute('placeholder');
     this._folderId = this.getAttribute('folder');
 
@@ -69,14 +69,16 @@ class VbHeader extends HTMLElement {
             innerHTML: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="1" stroke-linecap="square" stroke-linejoin="arcs"><path d="M19 12H6M12 5l-7 7 7 7"/></svg>`
           }
         );
+        this._backHandler = this._back.bind(this);
         this._headerNode.insertAdjacentElement('afterbegin', this._backNode);
-        this._backNode.addEventListener('click', this._back);
+        this._backNode.addEventListener('click', this._backHandler);
       }
     } else {
       if (this._backNode) {
-        this._backNode.removeEventListener('click', this._back);
+        this._backNode.removeEventListener('click', this._backHandler);
         this._backNode.remove();
         this._backNode = null;
+        delete this._backHandler;
       }
     }
 
@@ -90,7 +92,11 @@ class VbHeader extends HTMLElement {
   }
 
   _back() {
-    window.history.back();
+    if (this._initialHash === window.location.hash) {
+      window.location.hash = this._folderId;
+    } else {
+      window.history.back();
+    }
   }
 
   _reset() {
