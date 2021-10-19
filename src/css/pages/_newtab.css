@@ -8,6 +8,7 @@
   position: fixed;
   top: 12px;
   left: 10px;
+  z-index: 999;
   display: grid;
   grid-gap: 10px;
   opacity: 0.3;
