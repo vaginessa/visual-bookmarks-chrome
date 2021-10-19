@@ -53,8 +53,8 @@
   --bookmark-dropzone-icon-invert: none;
 
   /* Options */
-  --df-width: 600px;
-  --transition: 0.35s cubic-bezier(0, 0, 0.2, 1);
+  --options-slider-width: 700px;
+  --options-slider-transition: 0.35s cubic-bezier(0, 0, 0.2, 1);
 
   /* Forms */
   --header-input-color-controls: var(--color-primary-dark);

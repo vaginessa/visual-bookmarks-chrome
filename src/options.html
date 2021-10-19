@@ -16,9 +16,16 @@
       <div class="tabs">
         <div class="tabs__bar-wrap">
           <div class="tabs__bar">
-            <div class="tabs__controls md-ripple" data-locale-message="view_setting" data-ripple-color="rgba(0,0,0,.3)">View</div>
-            <div class="tabs__controls md-ripple" data-locale-message="general_setting" data-ripple-color="rgba(0,0,0,.3)">General</div>
-            <div class="tabs__controls md-ripple" data-locale-message="advanced_setting" data-ripple-color="rgba(0,0,0,.3)">Advanced</div>
+            <div class="tabs__controls md-ripple" data-locale-message="view_setting">View</div>
+            <div class="tabs__controls md-ripple" data-locale-message="general_setting">General</div>
+            <div class="tabs__controls md-ripple" data-locale-message="advanced_setting">Advanced</div>
+            <div class="tabs__info">
+              <button class="info-btn md-ripple" id="info">
+                <svg width="24" height="24">
+                  <use xlink:href="/img/symbol.svg#info_outline"/>
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
         <div class="tabs__content">
@@ -379,10 +386,13 @@
         </div>
         <div class="gmodal__body whats-new">
           <img src="/icons/icon128.png" alt="Visual Bookmarks Logo">
-          <h3 class="text-center">Version <span id="modal_changelog_version">3.20.0</span></h3>
+          <h3 class="text-center">Version <span id="modal_changelog_version">3.21.0</span></h3>
           <ul>
             <li>
               <p>UI/UX fixes</p>
+            </li>
+            <li>
+              <p>Updated translations</p>
             </li>
           </ul>
 

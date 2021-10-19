@@ -178,9 +178,9 @@ chrome.runtime.onInstalled.addListener((evt) => {
   Settings.init();
   initContextMenu();
 
-  if (evt.reason === 'update') {
-    chrome.tabs.create({ url: chrome.extension.getURL('options.html#updated') });
-  }
+  // if (evt.reason === 'update') {
+  //   chrome.tabs.create({ url: chrome.extension.getURL('options.html#updated') });
+  // }
 });
 
 chrome.bookmarks.onCreated.addListener(initContextMenu);

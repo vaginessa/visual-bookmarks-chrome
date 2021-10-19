@@ -43,6 +43,11 @@ async function init() {
   // textarea autosize
   textareaInstance = new AutosizeTextarea('#custom_style');
 
+  // Modal
+  modalInstance = new Gmodal(document.getElementById('modal'), {
+    closeBackdrop: false
+  });
+
   const manifest = chrome.runtime.getManifest();
   document.getElementById('ext_name').textContent = manifest.name;
   document.getElementById('ext_version').textContent = `${chrome.i18n.getMessage('version')} ${manifest.version}`;
@@ -75,21 +80,9 @@ async function init() {
   document.getElementById('export').addEventListener('click', handleExportSettings);
   document.getElementById('import').addEventListener('change', handleImportSettings);
   document.getElementById('bgFile').addEventListener('change', handleUploadFile);
-
-  modalInstance = new Gmodal(document.getElementById('modal'), {
-    closeBackdrop: false
-  });
-  modalInstance.element.addEventListener('gmodal:beforeopen', () => {
-    document.getElementById('modal_changelog_version').textContent = manifest.version;
-  });
-  window.addEventListener('hashchange', handleHashChange);
-  setTimeout(handleHashChange, 500);
-}
-
-function handleHashChange() {
-  if (location.hash === '#updated') {
+  document.querySelector('.info-btn').addEventListener('click', () => {
     modalInstance.open();
-  }
+  });
 }
 
 function handleImportSettings(e) {
