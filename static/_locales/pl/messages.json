@@ -21,7 +21,7 @@
     "message": "Motyw systemu operacyjnego"
   },
   "placeholder_input_customstyle": {
-    "message": "Wprowadź swój własny CSS (dla zaawansowanych użytkowników)"
+    "message": "Wprowadź swój niestandardowy CSS (dla zaawansowanych użytkowników)"
   },
   "placeholder_input_search": {
     "message": "Wyszukaj w zakładkach"
@@ -126,7 +126,7 @@
     "message": "Folder został usunięty"
   },
   "notice_images_removed": {
-    "message": "Wszystkie zdjęcia zostały usunięte"
+    "message": "Wszystkie obrazy zostały usunięte"
   },
   "notice_cant_find_id": {
     "message": "Nie odnaleziono identyfikatora folderu. Być może nie posiadasz zsynchronizowanych zakładek."
@@ -337,10 +337,10 @@
     "message": "Dołącz panel z usługami"
   },
   "service_settings_btn": {
-    "message": "Dostroić"
+    "message": "Dostosuj"
   },
   "services_add_title": {
-    "message": "Dodać"
+    "message": "Dodaj"
   },
   "services_limit": {
     "message": "Maksymalna liczba usług: $total$",
@@ -354,12 +354,12 @@
     "message": "Nazwa"
   },
   "service_link": {
-    "message": "Połączyć"
+    "message": "Link"
   },
   "error_input_required": {
-    "message": "Pole wymagane"
+    "message": "To pole jest wymagane"
   },
   "error_input_url": {
-    "message": "URL jest nieprawidłowy"
+    "message": "Adres URL jest nieprawidłowy"
   }
 }
