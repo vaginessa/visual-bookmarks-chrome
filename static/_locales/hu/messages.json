@@ -318,6 +318,12 @@
   "backup_settings_description": {
     "message": "Biztonsági mentés csak a kiterjesztés beállításairól, kivéve a könyvjelzőket és a képeket"
   },
+  "import": {
+    "message": "Importálás"
+  },
+  "export": {
+    "message": "Exportálás"
+  },
   "import_settings_success": {
     "message": "Importált beállítások."
   },

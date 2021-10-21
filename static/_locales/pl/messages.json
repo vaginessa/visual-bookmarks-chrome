@@ -318,6 +318,12 @@
   "backup_settings_description": {
     "message": "Kopia zapasowa tylko dla ustawień rozszerzeń, z wyłączeniem zakładek i obrazów"
   },
+  "import": {
+    "message": "Import"
+  },
+  "export": {
+    "message": "Eksport"
+  },
   "import_settings_success": {
     "message": "Ustawienia zaimportowane"
   },

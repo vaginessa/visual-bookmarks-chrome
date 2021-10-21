@@ -318,6 +318,12 @@
   "backup_settings_description": {
     "message": "Резервное копирование только для настроек расширения, исключая закладки и изображения"
   },
+  "import": {
+    "message": "Импорт"
+  },
+  "export": {
+    "message": "Экспорт"
+  },
   "import_settings_success": {
     "message": "Настройки импортированы"
   },

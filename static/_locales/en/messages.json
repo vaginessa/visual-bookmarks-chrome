@@ -315,6 +315,12 @@
   "backup_settings_description": {
     "message": "Backup only for extension settings, excluding bookmarks and images"
   },
+  "import": {
+    "message": "Import"
+  },
+  "export": {
+    "message": "Export"
+  },
   "import_settings_success": {
     "message": "Settings imported"
   },
