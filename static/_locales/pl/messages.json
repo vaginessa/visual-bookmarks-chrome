@@ -275,9 +275,6 @@
   "version": {
     "message": "Wersja"
   },
-  "google_services": {
-    "message": "Usługi Google"
-  },
   "thumbnails_creation": {
     "message": "Tworzenie miniaturek: $start$ na $total$",
     "placeholders": {
@@ -316,13 +313,13 @@
     "message": "Ustawienia importu / eksportu"
   },
   "backup_settings_description": {
-    "message": "Kopia zapasowa tylko dla ustawień rozszerzeń, z wyłączeniem zakładek i obrazów"
+    "message": "Kopia zapasowa tylko dla ustawień rozszerzeń z wyłączeniem zakładek i obrazów"
   },
   "import": {
-    "message": "Import"
+    "message": "Importuj"
   },
   "export": {
-    "message": "Eksport"
+    "message": "Eksportuj"
   },
   "import_settings_success": {
     "message": "Ustawienia zaimportowane"
