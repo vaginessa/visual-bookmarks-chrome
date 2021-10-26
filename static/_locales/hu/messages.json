@@ -275,9 +275,6 @@
   "version": {
     "message": "Verzió"
   },
-  "google_services": {
-    "message": "Google szolgáltatások"
-  },
   "thumbnails_creation": {
     "message": "Miniatűrök létrehozása: $start$ a $total$-ból",
     "placeholders": {

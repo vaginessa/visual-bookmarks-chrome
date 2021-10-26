@@ -275,9 +275,6 @@
   "version": {
     "message": "Версия"
   },
-  "google_services": {
-    "message": "Сервисы Google"
-  },
   "thumbnails_creation": {
     "message": "Создание миниатюр: $start$ из $total$",
     "placeholders": {
