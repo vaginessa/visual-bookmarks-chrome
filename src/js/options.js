@@ -251,7 +251,7 @@ async function handleUploadFile() {
 
   this.closest('form').reset();
 
-  if (!/image\/(jpe?g|png)$/.test(file.type)) {
+  if (!/image\/(jpe?g|png|webp)$/.test(file.type)) {
     return alert(chrome.i18n.getMessage('alert_file_type_fail'));
   }
   const fileName = `background.${file.type.replace('image/', '')}`;
