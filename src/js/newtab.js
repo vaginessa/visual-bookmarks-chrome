@@ -284,6 +284,7 @@ async function handleMenuSelection(evt) {
       break;
     }
     case 'upload': {
+      delete upload.dataset.site;
       upload.dataset.id = target.id;
       if (!target.isFolder) {
         upload.dataset.site = $getDomain(target.href);

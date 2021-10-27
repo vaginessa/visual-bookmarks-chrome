@@ -530,6 +530,13 @@ const Bookmarks = (() => {
       });
   }
 
+  /**
+   * Save image to storage
+   * @param {string} id - bookmark id
+   * @param {string} url - bookmark url
+   * @param {boolean} [custom=false] - user image
+   * @returns
+   */
   function updateStorageCustomDials(id, url, custom = false) {
     const obj = JSON.parse(localStorage.getItem('custom_dials'));
     obj[id] = {
@@ -564,18 +571,20 @@ const Bookmarks = (() => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
 
+    const fileExtension = file.type.split('/').pop();
+
     reader.onload = async function() {
       const image = await $resizeScreen(reader.result);
-      const blob = $base64ToBlob(image, 'image/jpg');
-      const name = (site) ? `${site}_${id}.jpg` : `folder-${id}.jpg`;
+      const blob = $base64ToBlob(image, file.type);
+      const name = (site) ? `${site}_${id}.${fileExtension}` : `folder-${id}.${fileExtension}`;
 
       await FS.createDir('images');
-      const fileEntry = await FS.createFile(`/images/${name}`, { file: blob, fileType: 'jpg' });
+      const fileEntry = await FS.createFile(`/images/${name}`, { file: blob, fileType: fileExtension });
 
-      updateStorageCustomDials(id, fileEntry.toURL(), !!site);
+      updateStorageCustomDials(id, fileEntry.toURL(), true);
 
       // update view only if folder_preview option is off or if the tab is not a folder
-      if (folderPreviewOff || data.site) {
+      if (folderPreviewOff || site) {
         bookmark.isCustomImage = true;
         bookmark.image = `${fileEntry.toURL()}?refresh=${Date.now()}`;
       }
