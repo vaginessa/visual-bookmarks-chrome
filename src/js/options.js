@@ -51,6 +51,7 @@ async function init() {
   const manifest = chrome.runtime.getManifest();
   document.getElementById('ext_name').textContent = manifest.name;
   document.getElementById('ext_version').textContent = `${chrome.i18n.getMessage('version')} ${manifest.version}`;
+  document.getElementById('modal_changelog_version').textContent = manifest.version;
 
   getOptions();
 
