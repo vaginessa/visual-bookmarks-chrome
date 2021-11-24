@@ -6,9 +6,9 @@ Simple visual bookmarks extension for browser. The extension includes editing, s
 
 <p align="center">
   <a href="https://chrome.google.com/webstore/detail/visual-bookmarks/jdbgjlehkajddoapdgpdjmlpdalfnenf" title="Google Chrome">
-    <img src="https://user-images.githubusercontent.com/6150895/143011953-655cddc1-5225-4fc5-afc0-5927e45faa61.png" height="58">
+    <img src="https://user-images.githubusercontent.com/6150895/143011953-655cddc1-5225-4fc5-afc0-5927e45faa61.png" height="58" alt="Google Chrome Store">
   </a>
   <a href="https://microsoftedge.microsoft.com/addons/detail/idfbjjfgccflicphjlpbomcklaehplha" title="Microsoft Edge">
-    <img src="https://user-images.githubusercontent.com/6150895/143012373-153cd498-1abc-4524-a76e-e630a7d14deb.png" height="58">
+    <img src="https://user-images.githubusercontent.com/6150895/143012373-153cd498-1abc-4524-a76e-e630a7d14deb.png" height="58" alt="Microsoft Edge Store">
   </a>
 </p>
