@@ -1,4 +1,6 @@
 .range {
+  --range-track-fill: 0%;
+
   appearance: none;
   display: block;
   height: 20px;
@@ -10,7 +12,10 @@
 
 .range::-webkit-slider-runnable-track {
   height: 8px;
-  background-color: var(--switch-active-bar);
+  background-image: linear-gradient(var(--color-primary), var(--color-primary));
+  background-color: rgba(0, 0, 0, 0.15);
+  background-repeat: no-repeat;
+  background-size: var(--range-track-fill) 100%;
   border-radius: 10px;
 }
 
