@@ -26,6 +26,16 @@ function captureScreen(link, callback) {
     type: 'popup'
   }, function(w) {
 
+    // capture timeout
+    let timeout = 25000;
+
+    // delay in milliseconds
+    const captureDelay = (parseFloat(localStorage.getItem('thumbnails_update_delay')) || 0.5) * 1000;
+
+    if (captureDelay > 500) {
+      timeout += captureDelay;
+    }
+
     if (!w.tabs || !w.tabs.length) {
       chrome.windows.remove(w.id);
       console.error('not found page');
@@ -57,7 +67,7 @@ function captureScreen(link, callback) {
       chrome.windows.remove(w.id);
       callback({ error: 'long_load', url: tab.url });
       stop = true;
-    }, 25000);
+    }, timeout);
 
     checkerStatus();
 
@@ -85,7 +95,7 @@ function captureScreen(link, callback) {
                   });
                 } catch (e) {}
               });
-            }, 500);
+            }, captureDelay);
           });
         } else {
           setTimeout(() => {

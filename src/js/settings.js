@@ -21,6 +21,7 @@ const DEFAULTS = {
   open_link_newtab: false,
   thumbnails_update_button: true,
   thumbnails_update_recursive: false,
+  thumbnails_update_delay: 0.5,
   custom_style: '',
   without_confirmation: false,
   services_enable: false,

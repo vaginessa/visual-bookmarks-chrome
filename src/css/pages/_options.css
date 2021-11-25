@@ -119,10 +119,9 @@
   margin-right: 15px;
 }
 
-.tbl__sub span {
-  &::after {
-    content: "%";
-  }
+.tbl__sub :not(input) {
+  min-width: 40px;
+  text-align: center;
 }
 
 .inline-middle {

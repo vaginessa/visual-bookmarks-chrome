@@ -364,5 +364,11 @@
   },
   "error_input_url": {
     "message": "URL is not valid"
+  },
+  "thumbnails_update_delay": {
+    "message": "Delay before creating a thumbnail"
+  },
+  "thumbnails_update_delay_note": {
+    "message": "It can be useful when the page content is loading for a long time. The longer the delay, the longer the wait"
   }
 }

@@ -364,5 +364,11 @@
   },
   "error_input_url": {
     "message": "Adres URL jest nieprawidłowy"
+  },
+  "thumbnails_update_delay": {
+    "message": "Opóźnienie przed utworzeniem miniatury"
+  },
+  "thumbnails_update_delay_note": {
+    "message": "Może być przydatny, gdy zawartość strony ładuje się przez długi czas. Im dłuższe opóźnienie, tym dłuższe oczekiwanie"
   }
 }

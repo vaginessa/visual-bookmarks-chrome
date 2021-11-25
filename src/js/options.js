@@ -14,6 +14,7 @@ import {
   $notifications,
   $trigger
 } from './utils';
+import Range from './components/range';
 
 let modalInstance = null;
 let tabsSliderInstance = null;
@@ -32,6 +33,22 @@ async function init() {
   Localization();
 
   Ripple.init('.md-ripple');
+
+  // range settings
+  Array.from(document.querySelectorAll('.js-range')).forEach(el => {
+    const id = el.id;
+    new Range(el, {
+      value: localStorage.getItem(id),
+      postfix: el.dataset.outputPostfix,
+      onBlur(e) {
+        const { value } = e.target;
+        localStorage.setItem(id, value);
+        if (localStorage.getItem('enable_sync') === 'true') {
+          Settings.syncSingleToStorage(id);
+        }
+      }
+    });
+  });
 
   // Tabs
   const tabs = document.querySelector('.tabs');
@@ -64,12 +81,14 @@ async function init() {
 
   // Delegate change settings
   document.querySelector('.tabs').addEventListener('change', handleSetOptions);
-  document.querySelector('#dial_width').addEventListener('input', handleSetRangeWidth);
-  document.querySelector('#dial_width').addEventListener('blur', () => {
-    if (localStorage.getItem('enable_sync') === 'true') {
-      Settings.syncSingleToStorage('dial_width');
-    }
-  });
+
+  // document.getElementById('dial_width').addEventListener('input', handleSetRange);
+  // document.getElementById('dial_width').addEventListener('change', () => {
+  //   if (localStorage.getItem('enable_sync') === 'true') {
+  //     Settings.syncSingleToStorage('dial_width');
+  //   }
+  // });
+  // document.getElementById('thumbnails_update_delay').addEventListener('input', handleSetRange);
 
   document.getElementById('background_image').addEventListener('change', handleSelectBackground);
   document.getElementById('background_local').addEventListener('click', handleRemoveFile);
@@ -165,9 +184,13 @@ function getOptions() {
       elOption.checked = localStorage.getItem(id) === 'true';
     } else {
       elOption.value = localStorage.getItem(id);
-      if (elOption.id === 'dial_width') {
-        document.getElementById('dial_width_value').textContent = elOption.value;
+
+      // update range slider
+      if (elOption.type === 'range') {
+        $trigger('change', elOption);
       }
+
+
       // Triggering event at program input to the textarea(for autosize textarea)
       if (elOption === textareaInstance.el) {
         $trigger('input', textareaInstance.el);
@@ -240,10 +263,14 @@ function handleSetOptions(e) {
   }
 }
 
-function handleSetRangeWidth() {
+function handleSetRange() {
   const { id, value } = this;
   localStorage.setItem(id, value);
-  document.getElementById('dial_width_value').textContent = value;
+  const selectorOutput = this.dataset.selectorOutput;
+  const outputNode = document.querySelector(selectorOutput);
+  if (outputNode) {
+    outputNode.textContent = value;
+  }
 }
 
 async function handleUploadFile() {

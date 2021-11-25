@@ -58,6 +58,8 @@ export default class Range {
   }
 
   #change(e) {
+    this.#updateTrackFill(e.target.value);
+    this.#setOutput(e.target.value);
     this.#options.onChange && this.#options.onChange(e);
   }
 

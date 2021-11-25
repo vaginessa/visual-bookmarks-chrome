@@ -364,5 +364,11 @@
   },
   "error_input_url": {
     "message": "Érvénytelen URL"
+  },
+  "thumbnails_update_delay": {
+    "message": "Késleltetés a bélyegkép létrehozása előtt"
+  },
+  "thumbnails_update_delay_note": {
+    "message": "Hasznos lehet, ha az oldal tartalma hosszú ideig betöltődik. Minél hosszabb a késés, annál hosszabb a várakozás"
   }
 }
