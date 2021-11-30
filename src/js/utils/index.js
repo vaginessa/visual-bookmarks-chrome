@@ -121,15 +121,7 @@ export function $notifications(message, id) {
 export function $imageLoaded(img) {
   const image = new Image();
   image.src = img;
-  return image.decode()
-    .then(() => image);
-
-  // image.onload = () => {
-  //   cbObj.done && cbObj.done(img);
-  // };
-  // image.onerror = () => {
-  //   cbObj.fail && cbObj.fail(img);
-  // };
+  return image.decode().then(() => image);
 }
 
 export function $base64ToBlob(base64, type, callback) {
