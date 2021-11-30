@@ -39,16 +39,15 @@ export default {
     bgEl.style.backgroundImage = `url('${resource}')`;
 
     if (resource && resource !== '') {
-      $imageLoaded(resource, {
-        done() {
+      $imageLoaded(resource)
+        .then(() => {
           document.body.classList.add('has-image');
           bgEl.style.opacity = 1;
-        },
-        fail(e) {
+        })
+        .catch(e => {
           console.warn(`Local background image resource problem: ${e}`);
           bgEl.style.opacity = 1;
-        }
-      });
+        });
     }
   },
   calculateStyles() {
