@@ -290,11 +290,25 @@
             </div>
 
             <div class="tbl">
-              <div class="tbl__setting" data-locale-message="show_contextmenu_item">Item in context menu</div>
-              <div class="tbl__value">
-                <div class="switch">
-                  <input type="checkbox" class="switch__input js-change" name="contextmenu" id="show_contextmenu_item">
-                  <label class="switch__label" for="show_contextmenu_item"></label>
+              <div class="tbl__row">
+                <div class="tbl__setting" data-locale-message="show_contextmenu_item">Item in context menu</div>
+                <div class="tbl__value">
+                  <div class="switch">
+                    <input type="checkbox" class="switch__input js-change" name="contextmenu" id="show_contextmenu_item">
+                    <label class="switch__label" for="show_contextmenu_item"></label>
+                  </div>
+                </div>
+              </div>
+              <div class="tbl__row">
+                <div class="tbl__setting">
+                  <div data-locale-message="close_tab_after_adding_bookmark"></div>
+                  <small class="text-muted" data-locale-message="close_tab_after_adding_bookmark_note"></small>
+                </div>
+                <div class="tbl__value">
+                  <div class="switch">
+                    <input type="checkbox" class="switch__input js-change" name="closetab" id="close_tab_after_adding_bookmark">
+                    <label class="switch__label" for="close_tab_after_adding_bookmark"></label>
+                  </div>
                 </div>
               </div>
             </div>
@@ -399,8 +413,7 @@
           <img src="/icons/icon128.png" alt="Visual Bookmarks Logo">
           <h3 class="text-center">Version <span id="modal_changelog_version"></span></h3>
           <ul>
-            <li>Added delay option when creating thumbnail</li>
-            <li>background image loading optimization</li>
+            <li>The ability to automatically close a tab when saving a bookmark from the context menu (<a href="https://github.com/k-ivan/visual-bookmarks-chrome/issues/82" target="_blank" rel="noopener">issue</a>)</li>
           </ul>
 
           <p style="margin-top: 50px;">

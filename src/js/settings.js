@@ -33,7 +33,8 @@ const DEFAULTS = {
     { id: $uid(), name: 'drive', link: 'https://drive.google.com/' },
     { id: $uid(), name: 'photos', link: 'https://photos.google.com' }
   ],
-  folder_preview: false
+  folder_preview: false,
+  close_tab_after_adding_bookmark: false
 };
 
 export default {

@@ -370,5 +370,11 @@
   },
   "thumbnails_update_delay_note": {
     "message": "Może być przydatny, gdy zawartość strony ładuje się przez długi czas. Im dłuższe opóźnienie, tym dłuższe oczekiwanie"
+  },
+  "close_tab_after_adding_bookmark": {
+    "message": "Automatyczne zamykanie zakładki, jeśli dodałeś ją do zakładek"
+  },
+  "close_tab_after_adding_bookmark_note": {
+    "message": "Tylko podczas dodawania za pomocą menu kontekstowego"
   }
 }

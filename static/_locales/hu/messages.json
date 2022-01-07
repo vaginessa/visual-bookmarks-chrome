@@ -370,5 +370,11 @@
   },
   "thumbnails_update_delay_note": {
     "message": "Hasznos lehet, ha az oldal tartalma hosszú ideig betöltődik. Minél hosszabb a késés, annál hosszabb a várakozás"
+  },
+  "close_tab_after_adding_bookmark": {
+    "message": "Egy lap automatikus bezárása, ha felvette a könyvjelzők közé"
+  },
+  "close_tab_after_adding_bookmark_note": {
+    "message": "Csak a helyi menün keresztül történő hozzáadásakor"
   }
 }

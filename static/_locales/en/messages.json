@@ -370,5 +370,11 @@
   },
   "thumbnails_update_delay_note": {
     "message": "It can be useful when the page content is loading for a long time. The longer the delay, the longer the wait"
+  },
+  "close_tab_after_adding_bookmark": {
+    "message": "Automatically closing a tab if you have added it to bookmarks"
+  },
+  "close_tab_after_adding_bookmark_note": {
+    "message": "Only when adding via the context menu"
   }
 }

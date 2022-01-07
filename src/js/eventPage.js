@@ -135,30 +135,37 @@ function handlerCreateBookmark(data) {
       }).catch(err => {
         console.warn(err);
       });
+
       // do not generate a thumbnail if you could not create a bookmark or the auto-generation option is turned off
-      if (!response || localStorage.getItem('auto_generate_thumbnail') !== 'true') return;
+      if (!response) return;
 
+      if (localStorage.getItem('auto_generate_thumbnail') === 'true') {
+        captureScreen(response.url, async function(data) {
+          const image = await $resizeScreen(data.capture);
+          const blob = $base64ToBlob(image, 'image/jpg');
+          const name = `${$getDomain(response.url)}_${response.id}.jpg`;
+
+          const dirEntry = await FS.createDir('images').catch(err => console.log(err));
+          const fileEntry = await FS.createFile(`${dirEntry.fullPath}/${name}`, {
+            file: blob,
+            fileType: blob.type
+          }).catch(err => console.warn(err));
+
+          const obj = JSON.parse(localStorage.getItem('custom_dials'));
+          obj[response.id] = {
+            image: fileEntry.toURL(),
+            custom: false
+          };
+
+          localStorage.setItem('custom_dials', JSON.stringify(obj));
+          chrome.runtime.sendMessage({ autoGenerateThumbnail: true });
+        });
+      }
+
+      if (localStorage.getItem('close_tab_after_adding_bookmark') === 'true') {
+        chrome.tabs.remove(tabs[0].id);
+      }
       $notifications(chrome.i18n.getMessage('notice_bookmark_created'));
-      captureScreen(response.url, async function(data) {
-        const image = await $resizeScreen(data.capture);
-        const blob = $base64ToBlob(image, 'image/jpg');
-        const name = `${$getDomain(response.url)}_${response.id}.jpg`;
-
-        const dirEntry = await FS.createDir('images').catch(err => console.log(err));
-        const fileEntry = await FS.createFile(`${dirEntry.fullPath}/${name}`, {
-          file: blob,
-          fileType: blob.type
-        }).catch(err => console.warn(err));
-
-        const obj = JSON.parse(localStorage.getItem('custom_dials'));
-        obj[response.id] = {
-          image: fileEntry.toURL(),
-          custom: false
-        };
-
-        localStorage.setItem('custom_dials', JSON.stringify(obj));
-        chrome.runtime.sendMessage({ autoGenerateThumbnail: true });
-      });
     }
   });
 }
