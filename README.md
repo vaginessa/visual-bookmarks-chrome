@@ -1,6 +1,7 @@
 # Visual bookmarks chrome
 
 [<img alt="store" src="https://img.shields.io/chrome-web-store/v/jdbgjlehkajddoapdgpdjmlpdalfnenf.svg?style=for-the-badge">](https://chrome.google.com/webstore/detail/visual-bookmarks/jdbgjlehkajddoapdgpdjmlpdalfnenf)
+[<img alt="chrome rating" src="https://img.shields.io/chrome-web-store/rating/jdbgjlehkajddoapdgpdjmlpdalfnenf?style=for-the-badge">](https://chrome.google.com/webstore/detail/visual-bookmarks/jdbgjlehkajddoapdgpdjmlpdalfnenf)
 
 Simple visual bookmarks extension for browser. The extension includes editing, searching, dragging bookmarks.
 
