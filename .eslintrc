@@ -35,7 +35,7 @@
       "error",
       "always"
     ],
-    "no-console": "warn",
+    "no-console": ["error", { "allow": ["warn", "error"] }],
     "no-empty-function": "error",
     "brace-style": "error",
     "spaced-comment": "error",
