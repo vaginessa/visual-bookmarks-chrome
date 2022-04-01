@@ -2,7 +2,6 @@ import Sortable from 'sortablejs';
 import Toast from './toast';
 import FS from '../api/fs';
 import {
-  getFolders,
   move,
   getSubTree,
   search as searchBookmarks,
@@ -72,11 +71,10 @@ const Bookmarks = (() => {
     if (localStorage.getItem('show_toolbar') === 'true') {
       await import(/* webpackChunkName: "webcomponents/vb-header" */'./vb-header');
       const vbHeader = document.createElement('vb-header');
-      const folderList = await generateFolderList();
       vbHeader.setAttribute('placeholder', chrome.i18n.getMessage('placeholder_input_search'));
-      vbHeader.setAttribute('folder', localStorage.getItem('default_folder_id'));
+      vbHeader.setAttribute('initial-folder-id', localStorage.getItem('default_folder_id'));
+      vbHeader.setAttribute('folder-id', startFolder());
       document.querySelector('header').appendChild(vbHeader);
-      vbHeader.folders = folderList;
 
       const searchHandler = $debounce(({ detail }) => {
         search(detail.search);
@@ -101,13 +99,6 @@ const Bookmarks = (() => {
         bubbles: true
       });
     }, false);
-
-    container.addEventListener('updateFolderList', async function(e) {
-      const vbHeader = document.querySelector('vb-header');
-      if (e.detail?.isFolder && vbHeader) {
-        vbHeader.folders = await generateFolderList();
-      }
-    });
   }
 
   function observerDropzone() {
@@ -234,7 +225,7 @@ const Bookmarks = (() => {
             .then(() => {
               const isFolder = item.hasAttribute('is-folder');
               // if the folder run the updateFolderList trigger
-              isFolder && $customTrigger('updateFolderList', container, {
+              isFolder && $customTrigger('updateFolderList', document, {
                 detail: {
                   isFolder: true
                 }
@@ -259,38 +250,6 @@ const Bookmarks = (() => {
       folderId = window.location.hash.slice(1);
     }
     return folderId;
-  }
-
-  /**
-   * Generate folder list
-   * @param {string} [activeFolder=null] - parent folder id
-   * @param {string} [itemId=null] - bookmark id
-   * @returns
-   */
-  async function generateFolderList(activeFolder = null, itemId = null) {
-    const folders = await getFolders().catch(err => console.warn(err));
-    if (!folders) return;
-
-    const folderId = activeFolder ? activeFolder : startFolder();
-    const optionsArr = [];
-    const processTree = (three, pass = 0) => {
-      for (let folder of three) {
-        if (itemId !== folder.id && folder.parentId !== itemId) {
-          let prefix = '-'.repeat(pass);
-          if (pass > 0) {
-            prefix = `&nbsp;&nbsp;${prefix}` + '&nbsp;';
-          }
-
-          const name = `${prefix} ${folder.title}`;
-          optionsArr.push(`<option${folder.id === folderId ? ' selected' : ''} value="${folder.id}">${name}</option>`);
-          if (folder.children.length) {
-            processTree(folder.children, pass + 1);
-          }
-        }
-      }
-    };
-    processTree(folders);
-    return Promise.resolve(optionsArr);
   }
 
   function genBookmark(bookmark) {
@@ -668,7 +627,7 @@ const Bookmarks = (() => {
       .then(() => {
         bookmark.remove();
         rmCustomScreen(id);
-        $customTrigger('updateFolderList', container, {
+        $customTrigger('updateFolderList', document, {
           detail: {
             isFolder: true
           }
@@ -725,7 +684,7 @@ const Bookmarks = (() => {
             createScreen(bookmark, result.id, result.url);
           }
         } else {
-          $customTrigger('updateFolderList', container, {
+          $customTrigger('updateFolderList', document, {
             detail: {
               isFolder: true
             }
@@ -756,7 +715,7 @@ const Bookmarks = (() => {
             .then(() => {
               // if it is a folder update folderList
               if (!result.url) {
-                $customTrigger('updateFolderList', container, {
+                $customTrigger('updateFolderList', document, {
                   detail: {
                     isFolder: true
                   }
@@ -767,7 +726,7 @@ const Bookmarks = (() => {
         } else {
           // if it is a folder update folderList
           if (!result.url) {
-            $customTrigger('updateFolderList', container, {
+            $customTrigger('updateFolderList', document, {
               detail: {
                 isFolder: true
               }
@@ -788,7 +747,6 @@ const Bookmarks = (() => {
     updateBookmark,
     removeBookmark,
     removeFolder,
-    generateFolderList,
     createScreen,
     uploadScreen,
     rmCustomScreen,

@@ -1,66 +1,80 @@
+import '../vb-select';
 import html from './template.html';
 import { $createElement } from '../../utils';
+import { getFolders } from '../../api/bookmark';
 
 class VbHeader extends HTMLElement {
   connectedCallback() {
-    this._render();
-    this._attachEvents();
+    this.#render();
+    this.#attachEvents();
   }
 
   disconnectedCallback() {
-    this._dettachEvents();
+    this.#dettachEvents();
   }
 
-  _render() {
+  async #render() {
+    this.backNode = null;
+    this.initialHash = window.location.hash;
     this.insertAdjacentHTML('afterbegin', html);
-    this._headerNode = this.querySelector('.header');
-    this._inputNode = this.querySelector('input');
-    this._resetNode = this.querySelector('#searchReset');
-    this._selectNode = this.querySelector('select');
-    this._backNode = null;
-    this._initialHash = window.location.hash;
-    this._inputNode.placeholder = this.getAttribute('placeholder');
-    this._folderId = this.getAttribute('folder');
+    this.headerNode = this.querySelector('.header');
+    this.inputNode = this.querySelector('input');
+    this.resetNode = this.querySelector('#searchReset');
+    // get select component
+    this.selectNode = this.querySelector('vb-select-folders');
+    this.inputNode.placeholder = this.getAttribute('placeholder');
 
-    this._hashchange();
+    // initial folder id
+    this.initialFolderId = this.getAttribute('initial-folder-id');
+    // current folder id
+    this.folderId = this.getAttribute('folder-id');
+
+
+    // this.selectNode.setAttribute('initial-folder-id', this.initialFolderId);
+    this.selectNode.setAttribute('folder-id', this.folderId);
+    // get folders list for select component
+    this.selectNode.folders = await getFolders();
+
+    this.#hashchange();
   }
 
-  set folders(arr) {
-    if (!this._selectNode) {
-      throw new Error('custom item must be in the DOM');
+  #attachEvents() {
+    this.handleInput = this.#onInput.bind(this);
+    this.handleReset = this.#onReset.bind(this);
+    this.handleHash = this.#hashchange.bind(this);
+    this.handleSelectHash = this.#onSelectHash.bind(this);
+    this.handleUpdateFolders = this.#updateFolders.bind(this);
+
+    this.inputNode.addEventListener('input', this.handleInput);
+    this.resetNode.addEventListener('click', this.handleReset);
+    this.selectNode.addEventListener('vb:select:change', this.handleSelectHash);
+
+    // listen for folder change event
+    document.addEventListener('changeFolder', this.handleHash);
+    // listen for folders update event
+    document.addEventListener('updateFolderList', this.handleUpdateFolders);
+  }
+
+  #dettachEvents() {
+    this.inputNode.removeEventListener('input', this.handleInput);
+    this.resetNode.removeEventListener('click', this.handleReset);
+    this.selectNode.removeEventListener('vb:select:change', this.handleSelectHash);
+    document.removeEventListener('changeFolder', this.handleHash);
+    document.removeEventListener('updateFolderList', this.handleUpdateFolders);
+  }
+
+  async #updateFolders(e) {
+    if (e.detail?.isFolder && this.selectNode) {
+      this.selectNode.folders = await getFolders();
     }
-    this._selectNode.innerHTML = arr.join('');
   }
 
-  _attachEvents() {
-    this._inputHandler = this._input.bind(this);
-    this._resetHandler = this._reset.bind(this);
-    this._hashHandler = this._hashchange.bind(this);
-    this._selectHandler = this._select.bind(this);
-
-    this._inputNode.addEventListener('input', this._inputHandler);
-    this._resetNode.addEventListener('click', this._resetHandler);
-    this._selectNode.addEventListener('change', this._selectHandler);
-    document.addEventListener('changeFolder', this._hashHandler);
-  }
-
-  _dettachEvents() {
-    this._inputNode.removeEventListener('input', this.inputHandler);
-    this._resetNode.removeEventListener('click', this.resetHandler);
-    this._selectNode.removeEventListener('change', this.selectHandler);
-    document.removeEventListener('changeFolder', this.hashHandler);
-
-    delete this._inputHandler;
-    delete this._resetHandler;
-    delete this._hashHandler;
-    delete this._selectHandler;
-  }
-
-  _hashchange() {
+  #hashchange() {
     const hash = window.location.hash.slice(1);
-    if (hash && hash !== this._folderId) {
-      if (!this._backNode) {
-        this._backNode = $createElement(
+
+    if (hash && hash !== this.initialFolderId) {
+      if (!this.backNode) {
+        this.backNode = $createElement(
           'button',
           {
             class: 'back'
@@ -69,49 +83,48 @@ class VbHeader extends HTMLElement {
             innerHTML: `<svg width="20" height="20"><use xlink:href="/img/symbol.svg#arrow_back"/></svg>`
           }
         );
-        this._backHandler = this._back.bind(this);
-        this._headerNode.insertAdjacentElement('afterbegin', this._backNode);
-        this._backNode.addEventListener('click', this._backHandler);
+        this.handleBack = this.#onBack.bind(this);
+        this.headerNode.insertAdjacentElement('afterbegin', this.backNode);
+        this.backNode.addEventListener('click', this.handleBack);
       }
     } else {
-      if (this._backNode) {
-        this._backNode.removeEventListener('click', this._backHandler);
-        this._backNode.remove();
-        this._backNode = null;
-        delete this._backHandler;
+      if (this.backNode) {
+        this.backNode.removeEventListener('click', this.handleBack);
+        this.backNode.remove();
+        this.backNode = null;
       }
     }
-
-    const value = hash ? hash : this._folderId;
-    const option = this._selectNode.querySelector(`[value="${value}"]`);
-    option && (option.selected = true);
+    this.selectNode.setAttribute('folder-id', hash || this.initialFolderId);
   }
 
-  _select(e) {
-    window.location.hash = e.target.value;
+  #onSelectHash(e) {
+    window.location.hash = e.detail;
   }
 
-  _back() {
-    if (this._initialHash === window.location.hash) {
-      window.location.hash = this._folderId;
+  #onBack() {
+    // if initialHash does not match location hash
+    // can go back in history
+    // until the hashes are equal
+    if (this.initialHash === window.location.hash) {
+      window.location.hash = this.initialFolderId;
     } else {
       window.history.back();
     }
   }
 
-  _reset() {
-    this._inputNode.value = '';
-    this._inputNode.dispatchEvent(
+  #onReset() {
+    this.inputNode.value = '';
+    this.inputNode.dispatchEvent(
       new CustomEvent('vb:searchreset', {
         bubbles: true,
         cancelable: true
       })
     );
-    this._resetNode.classList.remove('is-show');
-    this._inputNode.focus();
+    this.resetNode.classList.remove('is-show');
+    this.inputNode.focus();
   }
 
-  _input(e) {
+  #onInput(e) {
     const search = e.target.value.trim();
     this.dispatchEvent(
       new CustomEvent('vb:search', {
@@ -123,7 +136,7 @@ class VbHeader extends HTMLElement {
       })
     );
 
-    this._resetNode.classList.toggle('is-show', search.length);
+    this.resetNode.classList.toggle('is-show', search.length);
   }
 }
 

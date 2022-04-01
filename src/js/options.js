@@ -1,4 +1,5 @@
 import '../css/options.css';
+import './components/vb-select';
 import Gmodal from 'glory-modal';
 import TabsSlider from 'tabs-slider';
 import FS from './api/fs';
@@ -263,16 +264,6 @@ function handleSetOptions(e) {
   }
 }
 
-function handleSetRange() {
-  const { id, value } = this;
-  localStorage.setItem(id, value);
-  const selectorOutput = this.dataset.selectorOutput;
-  const outputNode = document.querySelector(selectorOutput);
-  if (outputNode) {
-    outputNode.textContent = value;
-  }
-}
-
 async function handleUploadFile() {
   const file = this.files[0];
   if (!file) return;
@@ -387,33 +378,12 @@ function handleChangeSync() {
 }
 
 async function generateFolderList() {
-  const select = document.getElementById('default_folder_id');
-  // If not select element
-  if (!select) return;
-
   const folders = await getFolders().catch(err => console.warn(err));
-  if (!folders) return;
-
-  const folderId = localStorage.getItem('default_folder_id');
-  const optionsArr = [];
-
-  const processTree = (three, pass = 0) => {
-    for (let folder of three) {
-      let prefix = '-'.repeat(pass);
-      if (pass > 0) {
-        prefix = `&nbsp;&nbsp;${prefix}` + '&nbsp;';
-      }
-
-      const name = `${prefix} ${folder.title}`;
-      optionsArr.push(`<option${folder.id === folderId ? ' selected' : ''} value="${folder.id}">${name}</option>`);
-      if (folder.children.length) {
-        processTree(folder.children, pass + 1);
-      }
-
-    }
-  };
-  processTree(folders);
-  select.innerHTML = optionsArr.join('');
+  if (folders) {
+    const vbSelect = document.getElementById('default_folder_id');
+    vbSelect.value = localStorage.getItem('default_folder_id');
+    vbSelect.folders = folders;
+  }
 }
 
 init();

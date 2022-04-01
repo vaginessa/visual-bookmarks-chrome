@@ -1,4 +1,5 @@
 import '../css/newtab.css';
+import './components/vb-select';
 import Gmodal from 'glory-modal';
 import Validator from 'form-validation-plugin';
 import Settings from './settings';
@@ -10,7 +11,8 @@ import Ripple from './components/ripple';
 import confirmPopup from './plugins/confirmPopup.js';
 import {
   get,
-  getChildren
+  getChildren,
+  getFolders
 } from './api/bookmark';
 import {
   $getDomain,
@@ -23,7 +25,7 @@ const container = document.getElementById('bookmarks');
 const modal = document.getElementById('modal');
 const form = document.getElementById('formBookmark');
 const modalHead = document.getElementById('modalHead');
-const foldersList = document.getElementById('folderList');
+const modalSelectFolders = document.getElementById('modalSelectFolders');
 const titleField = document.getElementById('title');
 const urlField = document.getElementById('url');
 const urlWrap = document.getElementById('urlWrap');
@@ -101,9 +103,6 @@ async function init() {
   ctxMenuEl.addEventListener('contextMenuOpen', handleMenuOpen);
   document.getElementById('resetCustomImage').addEventListener('click', handleResetThumb);
   modal.addEventListener('gmodal:close', handleCloseModal);
-
-  const folderOptions = await Bookmarks.generateFolderList(foldersList);
-  foldersList.innerHTML = folderOptions.join('');
 
   // If thumbnail generation button
   if (localStorage.getItem('thumbnails_update_button') === 'true') {
@@ -393,7 +392,7 @@ function handleSubmitForm(evt) {
 
   let success = false;
   if (id !== 'New') {
-    const newLocation = foldersList.value;
+    const newLocation = modalSelectFolders.value;
     success = Bookmarks.updateBookmark(id, title, url, newLocation);
   } else {
     success = Bookmarks.createBookmark(title, url);
@@ -440,8 +439,9 @@ async function prepareModal(target) {
     const { image } = screen || {};
 
     // generate bookmark folder list
-    const folderOptions = await Bookmarks.generateFolderList(parentId, id);
-    foldersList.innerHTML = folderOptions.join('');
+    modalSelectFolders.setAttribute('parent-folder-id', parentId);
+    modalSelectFolders.setAttribute('bookmark-id', id);
+    modalSelectFolders.folders = await getFolders();
 
     if (image) {
       customScreen.style.display = 'block';
