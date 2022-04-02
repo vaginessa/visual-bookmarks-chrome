@@ -228,3 +228,25 @@ export function $copyStr(str) {
 export function $uid() {
   return `id${Math.floor(Math.random() * Date.now()).toString(36)}`;
 }
+
+// TODO: showOpenFilePicker instead upload inputs
+export async function $filePicker(pickerOpts = {
+  types: [{
+    description: 'Images',
+    accept: {
+      'image/*': ['.png', '.gif', '.jpeg', '.jpg', '.webp', '.avif']
+    }
+  }],
+  excludeAcceptAllOption: true,
+  multiple: false
+}) {
+  const [fileHandle] = await window.showOpenFilePicker(pickerOpts);
+  const file = await fileHandle.getFile();
+
+  if (!/image\/(jpe?g|png|webp)$/.test(file.type)) {
+    throw {
+      alert: chrome.i18n.getMessage('alert_file_type_fail')
+    };
+  }
+  return file;
+}
