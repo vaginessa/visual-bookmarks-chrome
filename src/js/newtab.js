@@ -419,7 +419,7 @@ async function handleResetThumb(evt) {
   const id = this.getAttribute('data-bookmark');
 
   Bookmarks.rmCustomScreen(id, () => {
-    const bookmark = document.getElementById(id);
+    const bookmark = document.getElementById(`vb-${id}`);
     bookmark.image = null;
     this.closest('#customScreen').style.display = '';
   });

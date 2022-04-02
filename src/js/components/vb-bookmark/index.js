@@ -222,11 +222,11 @@ class VbBookmark extends HTMLAnchorElement {
   }
 
   get id() {
-    return this.getAttribute('id');
+    return this.getAttribute('data-id');
   }
   set id(value) {
     if (value) {
-      this.setAttribute('id', value);
+      this.setAttribute('id', `vb-${value}`);
       this.setAttribute('data-id', value);
     }
   }

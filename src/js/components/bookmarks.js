@@ -473,7 +473,7 @@ const Bookmarks = (() => {
           updateStorageCustomDials(b.id, response, false);
           try {
             // if we can, then update the bookmark in the DOM
-            const bookmark = document.getElementById(b.id);
+            const bookmark = document.getElementById(`vb-${b.id}`);
             bookmark.image = `${response}?refresh=${Date.now()}`;
           } catch (err) {}
         }
@@ -522,7 +522,7 @@ const Bookmarks = (() => {
     }
     target.value = '';
 
-    const bookmark = document.getElementById(id);
+    const bookmark = document.getElementById(`vb-${id}`);
     bookmark.hasOverlay = true;
 
     const reader = new FileReader();
@@ -694,7 +694,7 @@ const Bookmarks = (() => {
 
   function updateBookmark(id, title, url, moveId) {
     let hash = buildBookmarkHash(title, url);
-    const bookmark = document.getElementById(id);
+    const bookmark = document.getElementById(`vb-${id}`);
     // Actually make sure the URL being modified is valid instead of always
     // prepending http:// to it creating new valid+invalid bookmark
     if (url.length !== 0 && !$isValidUrl(url)) {
