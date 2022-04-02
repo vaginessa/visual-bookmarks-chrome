@@ -374,8 +374,6 @@ const Bookmarks = (() => {
       }
     }
 
-    clearContainer();
-
     const hasCreate = (localStorage.getItem('show_create_column') === 'true');
 
     return getSubTree(id)
