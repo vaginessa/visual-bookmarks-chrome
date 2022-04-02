@@ -58,9 +58,9 @@
   },
   "dependencies": {
     "fast-average-color": "^6.4.2",
-    "form-validation-plugin": "^0.0.8",
-    "glory-modal": "^2.2.0",
+    "form-validation-plugin": "^0.0.11",
+    "glory-modal": "^2.3.1",
     "sortablejs": "1.8.4",
-    "tabs-slider": "^3.0.1"
+    "tabs-slider": "^3.1.1"
   }
 }
