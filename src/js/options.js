@@ -87,15 +87,6 @@ async function init() {
 
   // Delegate change settings
   document.querySelector('.tabs').addEventListener('change', handleSetOptions);
-
-  // document.getElementById('dial_width').addEventListener('input', handleSetRange);
-  // document.getElementById('dial_width').addEventListener('change', () => {
-  //   if (localStorage.getItem('enable_sync') === 'true') {
-  //     Settings.syncSingleToStorage('dial_width');
-  //   }
-  // });
-  // document.getElementById('thumbnails_update_delay').addEventListener('input', handleSetRange);
-
   document.getElementById('background_image').addEventListener('change', handleSelectBackground);
   document.getElementById('background_local').addEventListener('click', handleRemoveFile);
   document.getElementById('restore_local').addEventListener('click', handleResetLocalSettings);
