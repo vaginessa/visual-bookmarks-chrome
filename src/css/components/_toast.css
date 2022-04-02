@@ -1,8 +1,9 @@
 /* Snackbar */
 .toast {
   position: fixed;
-  display: none;
   z-index: 99999;
+  display: flex;
+  align-items: center;
   width: auto;
   min-width: 340px;
   max-width: 550px;
@@ -19,16 +20,12 @@
   box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12);
 }
 
-.toast__body {
-  display: flex;
-  align-items: center;
-}
-
 .toast__message {
   padding: 14px 16px;
   font-size: 0.875rem;
   line-height: 1.25rem;
   letter-spacing: 0.015em;
+  white-space: pre-line;
 }
 
 .toast__btn {
