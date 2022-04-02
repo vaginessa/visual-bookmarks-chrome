@@ -3,7 +3,13 @@ export default class Range {
   #outputEl = null;
   #options = {
     value: null,
-    postfix: ''
+    postfix: '',
+    format: false,
+    /* eslint-disable no-empty-function */
+    onInput: () => {},
+    onChange: () => {},
+    onBlur: () => {}
+    /* eslint-enable no-empty-function */
   };
   #min;
   #max;
@@ -47,6 +53,9 @@ export default class Range {
 
   #setOutput(value) {
     if (this.#outputEl) {
+      if (typeof this.#options.format === 'function') {
+        value = this.#options.format(value);
+      }
       this.#outputEl.textContent = `${value}${this.#options.postfix}`;
     }
   }
@@ -54,16 +63,16 @@ export default class Range {
   #input(e) {
     this.#updateTrackFill(e.target.value);
     this.#setOutput(e.target.value);
-    this.#options.onInput && this.#options.onInput(e);
+    this.#options.onInput(e);
   }
 
   #change(e) {
     this.#updateTrackFill(e.target.value);
     this.#setOutput(e.target.value);
-    this.#options.onChange && this.#options.onChange(e);
+    this.#options.onChange(e);
   }
 
   #blur(e) {
-    this.#options.onBlur && this.#options.onBlur(e);
+    this.#options.onBlur(e);
   }
 }

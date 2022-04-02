@@ -47,6 +47,11 @@ async function init() {
         if (localStorage.getItem('enable_sync') === 'true') {
           Settings.syncSingleToStorage(id);
         }
+      },
+      ...('thumbnails_update_delay' === id) && {
+        format(value) {
+          return parseFloat(value).toFixed(1);
+        }
       }
     });
   });
