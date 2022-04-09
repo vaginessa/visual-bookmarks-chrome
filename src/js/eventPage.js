@@ -177,8 +177,8 @@ function browserActionHandler() {
   ];
 
   chrome.tabs.query({ currentWindow: true }, function(tabs) {
-    for (let i = 0, tab; tab = tabs[i]; i++) { // eslint-disable-line no-cond-assign
-      if (tab.url && ~urls.indexOf(tab.url)) {
+    for (let tab of tabs) {
+      if (urls.some(url => tab.url.startsWith(url))) {
         return chrome.tabs.update(tab.id, { active: true });
       }
     }
