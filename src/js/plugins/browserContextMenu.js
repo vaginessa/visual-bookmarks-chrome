@@ -51,16 +51,26 @@ const generateFolderItems = (foldersThree, rootId) => {
   return flatRecursiveFolders(foldersThree, rootId);
 };
 
+let busy = false;
+
 const browserContextMenu = {
-  init() {
-    const isShow = localStorage.getItem('show_contextmenu_item') === 'true';
+  init(isShow) {
     if (!isShow) return;
+
+    // prevent a duplicate call, when 2 events fire at the same time
+    // for example: changing and moving a folder
+    if (busy) return;
+
+    busy = true;
 
     chrome.contextMenus.removeAll(() => {
       if (chrome.runtime.lastError) {
         console.warn(chrome.runtime.lastError);
       }
-      this.create();
+      this.create()
+        .then(() => {
+          busy = false;
+        });
     });
   },
   async create() {
@@ -97,9 +107,7 @@ const browserContextMenu = {
     }
 
   },
-  toggle() {
-    const isShow = localStorage.getItem('show_contextmenu_item') === 'true';
-
+  toggle(isShow) {
     if (isShow) {
       this.create();
     } else {

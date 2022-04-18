@@ -1,4 +1,5 @@
 import { $imageLoaded } from '../utils';
+import { settings } from '../settings';
 
 
 const colorScheme = window.matchMedia('(prefers-color-scheme: dark)');
@@ -6,7 +7,8 @@ const colorTheme = () => document.documentElement.classList.toggle('dark', color
 
 export default {
   toggleTheme() {
-    const theme = localStorage.getItem('color_theme');
+    const theme = settings.$.color_theme;
+
     if (theme === 'os') {
       colorScheme.removeListener(colorTheme);
       colorTheme();
@@ -21,7 +23,7 @@ export default {
     }
   },
   userStyles() {
-    const styles = localStorage.getItem('custom_style');
+    const styles = settings.$.custom_style;
     if (!styles) return;
 
     const style = document.createElement('style');
@@ -30,12 +32,16 @@ export default {
   },
   setBG() {
     const bgEl = document.getElementById('bg');
-    const bgState = localStorage.getItem('background_image');
+    const bgState = settings.$.background_image;
 
     if (!['background_local', 'background_external'].includes(bgState)) {
       return;
     }
-    const resource = localStorage.getItem(bgState);
+    // FIXME: undefined background_local=localSorage
+    // const resource = localStorage.getItem(bgState);
+    const resource = bgState === 'background_local'
+      ? localStorage.background_local
+      : settings.$.background_external;
     bgEl.style.backgroundImage = `url('${resource}')`;
 
     if (resource && resource !== '') {
@@ -54,11 +60,11 @@ export default {
     const doc = document.documentElement;
     const grid = document.getElementById('bookmarks');
     const gap = parseInt(window.getComputedStyle(doc).getPropertyValue('--grid-gap'), 10);
-    const columns = parseInt(localStorage.getItem('dial_columns'));
+    const columns = parseInt(settings.$.dial_columns);
     const ratio = 4 / 3;
 
     // Calculate and set container width
-    const lsGridWidth = parseInt(localStorage.getItem('dial_width'));
+    const lsGridWidth = parseInt(settings.$.dial_width);
     const gridWidth = Math.floor(window.innerWidth * (lsGridWidth / 100));
 
     doc.style.setProperty('--container-width', `${gridWidth}px`);

@@ -3,7 +3,7 @@ import './components/vb-select';
 import Gmodal from 'glory-modal';
 import TabsSlider from 'tabs-slider';
 import FS from './api/fs';
-import Settings from './settings';
+import { settings } from './settings';
 import UI from './components/ui';
 import Localization from './plugins/localization';
 import Ripple from './components/ripple';
@@ -27,7 +27,8 @@ async function init() {
   // Replacement underscore on the dash because underscore is not a valid language subtag
   document.documentElement.setAttribute('lang', chrome.i18n.getMessage('@@ui_locale').replace('_', '-'));
 
-  Settings.init();
+  // Settings.init();
+  await settings.init();
 
   UI.toggleTheme();
 
@@ -39,14 +40,11 @@ async function init() {
   Array.from(document.querySelectorAll('.js-range')).forEach(el => {
     const id = el.id;
     new Range(el, {
-      value: localStorage.getItem(id),
+      value: settings.$[id],
       postfix: el.dataset.outputPostfix,
       onBlur(e) {
         const { value } = e.target;
-        localStorage.setItem(id, value);
-        if (localStorage.getItem('enable_sync') === 'true') {
-          Settings.syncSingleToStorage(id);
-        }
+        settings.updateKey(id, value);
       },
       ...('thumbnails_update_delay' === id) && {
         format(value) {
@@ -107,12 +105,13 @@ function handleImportSettings(e) {
   if (input.files && input.files[0]) {
     const reader = new FileReader();
 
-    reader.addEventListener('load', function(e) {
+    reader.addEventListener('load', async(e) => {
       try {
-        const settings = JSON.parse(e.target.result);
-        Object.keys(settings).forEach(setting => {
-          localStorage.setItem(setting, settings[setting]);
-        });
+        const importSettings = JSON.parse(e.target.result);
+        await settings.updateAll(importSettings);
+        // Object.keys(settings).forEach(setting => {
+        //   localStorage.setItem(setting, settings[setting]);
+        // });
         $notifications(
           chrome.i18n.getMessage('import_settings_success')
         );
@@ -131,7 +130,7 @@ function handleImportSettings(e) {
 }
 
 function handleExportSettings() {
-  const data = Object.keys(localStorage).reduce((acc, cur) => {
+  const data = Object.keys(settings.$).reduce((acc, cur) => {
     if (
       ![
         'default_folder_id',
@@ -139,7 +138,7 @@ function handleExportSettings() {
         'background_local',
       ].includes(cur)
     ) {
-      acc[cur] = localStorage[cur];
+      acc[cur] = settings.$[cur];
     }
     return acc;
   }, {});
@@ -160,27 +159,20 @@ function handleExportSettings() {
 function getOptions() {
   generateFolderList();
 
-  const optionBg = document.getElementById('background_image');
-  const options = Array.from(optionBg.querySelectorAll('option'));
+  const optionBackgroundSelect = document.getElementById('background_image');
+  optionBackgroundSelect.value = settings.$.background_image;
+  toggleBackgroundControls(settings.$.background_image);
 
-  options.forEach((item) => {
-    if (item.value === localStorage.getItem('background_image')) {
-      item.selected = true;
-      toggleBackgroundControls(item.value);
-      return;
-    }
-  });
-
-  for (let id of Object.keys(localStorage)) {
+  for (let id of Object.keys(settings.$)) {
     const elOption = document.getElementById(id);
 
     // goto next if element not type
     if (!elOption || !elOption.type) continue;
 
     if (/checkbox|radio/.test(elOption.type)) {
-      elOption.checked = localStorage.getItem(id) === 'true';
+      elOption.checked = settings.$[id];
     } else {
-      elOption.value = localStorage.getItem(id);
+      elOption.value = settings.$[id];
 
       // update range slider
       if (elOption.type === 'range') {
@@ -205,6 +197,7 @@ function toggleBackgroundControls(value) {
     item.hidden = true;
   });
   if (value === 'background_local') {
+    // TODO: indexDB instead localStorage
     const imgSrc = localStorage.getItem('background_local');
     if (imgSrc) {
       document.querySelector('.c-upload__preview').hidden = false;
@@ -227,7 +220,7 @@ function handleSetOptions(e) {
   const id = target.id;
 
   if (/checkbox|radio/.test(target.type)) {
-    localStorage.setItem(id, target.checked);
+    settings.updateKey(id, target.checked);
 
     // Settings that depend on each other.
     // When enabling one setting, the related setting must be disabled
@@ -237,26 +230,18 @@ function handleSetOptions(e) {
       // disable the related option only if it was initially enabled
       if (relationEl.checked) {
         relationEl.checked = !target.checked;
-        localStorage.setItem(id, !target.checked);
+        settings.updateKey(id, !target.checked);
       }
     }
 
   } else {
-    localStorage.setItem(id, target.value);
+    // localStorage.setItem(id, target.value);
+    settings.updateKey(id, target.value);
   }
 
   // dark theme
   if (target.id === 'color_theme') {
     UI.toggleTheme();
-  }
-
-  if (target.id === 'show_contextmenu_item') {
-    const state = target.checked.toString();
-    chrome.runtime.sendMessage({ showContextMenuItem: state });
-  }
-
-  if (localStorage.getItem('enable_sync') === 'true' && id !== 'enable_sync') {
-    Settings.syncToStorage();
   }
 }
 
@@ -289,7 +274,6 @@ async function handleRemoveFile(evt) {
   const target = evt.target.closest('#delete_upload');
   if (!target) return;
 
-  // if (!confirm(chrome.i18n.getMessage('confirm_delete_image'), '')) return;
   const confirmAction = await confirmPopup(chrome.i18n.getMessage('confirm_delete_image'));
   if (!confirmAction) return;
 
@@ -316,7 +300,7 @@ function handleSelectBackground() {
 
 async function handleDeleteImages(evt) {
   evt.preventDefault();
-  // if (!confirm(chrome.i18n.getMessage('confirm_delete_images'), '')) return;
+
   const confirmAction = await confirmPopup(chrome.i18n.getMessage('confirm_delete_images'));
   if (!confirmAction) return;
 
@@ -330,11 +314,8 @@ async function handleResetLocalSettings() {
   const confirmAction = await confirmPopup(chrome.i18n.getMessage('confirm_restore_default_settings'));
   if (!confirmAction) return;
 
-  for (let property of Object.keys(localStorage)) {
-    if (property === 'background_local' || property === 'custom_dials') continue;
-    localStorage.removeItem(property);
-  }
-  Settings.init();
+  await settings.resetLocal();
+
   UI.toggleTheme();
   getOptions();
   Toast.show(chrome.i18n.getMessage('notice_reset_default_settings'));
@@ -343,13 +324,8 @@ async function handleResetSyncSettings() {
   const confirmAction = await confirmPopup(chrome.i18n.getMessage('confirm_clear_sync_settings'));
   if (!confirmAction) return;
 
-  chrome.storage.sync.clear(() => {
-    Toast.show(chrome.i18n.getMessage('notice_sync_settings_cleared'));
-    // after cleaning, if synch is enabled, force to synch the current settings
-    if (localStorage.getItem('enable_sync') === 'true') {
-      Settings.syncToStorage();
-    }
-  });
+  await settings.resetSync();
+  Toast.show(chrome.i18n.getMessage('notice_sync_settings_cleared'));
 }
 function handleChangeSync() {
   if (this.checked) {
@@ -358,16 +334,15 @@ function handleChangeSync() {
         const confirmAction = await confirmPopup(chrome.i18n.getMessage('confirm_sync_remote_settings'));
 
         if (confirmAction) {
-          Settings.restoreFromSync(() => {
-            getOptions();
-            UI.toggleTheme();
-          });
+          await settings.restoreFromSync();
+          getOptions();
+          UI.toggleTheme();
         } else {
           this.checked = false;
-          localStorage.setItem('enable_sync', 'false');
+          settings.updateKey('enable_sync', false);
         }
       } else {
-        Settings.syncToStorage();
+        settings.syncToStorage();
       }
     });
   }
@@ -377,7 +352,8 @@ async function generateFolderList() {
   const folders = await getFolders().catch(err => console.warn(err));
   if (folders) {
     const vbSelect = document.getElementById('default_folder_id');
-    vbSelect.value = localStorage.getItem('default_folder_id');
+    // vbSelect.value = localStorage.getItem('default_folder_id');
+    vbSelect.value = settings.$.default_folder_id;
     vbSelect.folders = folders;
   }
 }

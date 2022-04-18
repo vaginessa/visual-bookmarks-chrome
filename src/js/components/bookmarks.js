@@ -1,6 +1,7 @@
 import Sortable from 'sortablejs';
 import Toast from './toast';
 import FS from '../api/fs';
+import { settings } from '../settings';
 import {
   move,
   getSubTree,
@@ -39,6 +40,8 @@ const Bookmarks = (() => {
       localStorage.setItem('custom_dials', '{}');
     }
 
+    await settings.init();
+
     await FS.init(500);
     const used = await FS.usedAndRemaining();
     // if fileSystem is empty, reset LS settings
@@ -48,31 +51,31 @@ const Bookmarks = (() => {
     }
 
     // Vertical center
-    if (localStorage.getItem('vertical_center') === 'true') {
+    if (settings.$.vertical_center) {
       container.classList.add('grid--vcenter');
     }
 
     // Hide the settings icon if setting_icon disable
-    if (localStorage.getItem('show_settings_icon') === 'false') {
+    if (!settings.$.show_settings_icon) {
       const icon = document.getElementById('settings_icon');
       icon.parentNode.removeChild(icon);
     }
 
     // Dragging option
     if (
-      localStorage.getItem('drag_and_drop') === 'true' &&
-      localStorage.getItem('sort_by_newest') !== 'true'
+      settings.$.drag_and_drop &&
+      !settings.$.sort_by_newest
     ) {
       observerDropzone();
       initDrag(container);
     }
 
     // Search bookmarks if toolbar enable
-    if (localStorage.getItem('show_toolbar') === 'true') {
+    if (settings.$.show_toolbar) {
       await import(/* webpackChunkName: "webcomponents/vb-header" */'./vb-header');
       const vbHeader = document.createElement('vb-header');
       vbHeader.setAttribute('placeholder', chrome.i18n.getMessage('placeholder_input_search'));
-      vbHeader.setAttribute('initial-folder-id', localStorage.getItem('default_folder_id'));
+      vbHeader.setAttribute('initial-folder-id', settings.$.default_folder_id);
       vbHeader.setAttribute('folder-id', startFolder());
       document.querySelector('header').appendChild(vbHeader);
 
@@ -245,7 +248,8 @@ const Bookmarks = (() => {
   }
 
   function startFolder() {
-    let folderId = localStorage.getItem('default_folder_id');
+    let folderId = String(settings.$.default_folder_id);
+
     if (window.location.hash !== '') {
       folderId = window.location.hash.slice(1);
     }
@@ -265,9 +269,9 @@ const Bookmarks = (() => {
       title: $escapeHtml(bookmark.title),
       image,
       isCustomImage: custom,
-      openNewTab: localStorage.getItem('open_link_newtab') === 'true',
-      hasTitle: localStorage.getItem('show_bookmark_title') === 'true',
-      hasFavicon: localStorage.getItem('show_favicon') === 'true'
+      openNewTab: settings.$.open_link_newtab,
+      hasTitle: settings.$.show_bookmark_title,
+      hasFavicon: settings.$.show_favicon
     });
     return vbBookmark;
   }
@@ -275,7 +279,7 @@ const Bookmarks = (() => {
   function genFolder(bookmark) {
     let image;
     const screen = getCustomDial(bookmark.id);
-    const folderPreview = localStorage.getItem('folder_preview') === 'true';
+    const folderPreview = settings.$.folder_preview;
 
     if (!folderPreview) {
       image = screen?.image;
@@ -290,10 +294,10 @@ const Bookmarks = (() => {
       hasFolderPreview: folderPreview,
       folderChidlren: folderPreview ? renderFolderChildren(bookmark) : [],
       image,
-      openNewTab: localStorage.getItem('open_link_newtab') === 'true',
-      hasTitle: localStorage.getItem('show_bookmark_title') === 'true',
-      hasFavicon: localStorage.getItem('show_favicon') === 'true',
-      isDND: localStorage.getItem('drag_and_drop') === 'true'
+      openNewTab: settings.$.open_link_newtab,
+      hasTitle: settings.$.show_bookmark_title,
+      hasFavicon: settings.$.show_favicon,
+      isDND: settings.$.drag_and_drop
     });
     return vbBookmark;
   }
@@ -366,15 +370,12 @@ const Bookmarks = (() => {
   }
 
   function createSpeedDial(id) {
-    const dnd = (localStorage.getItem('drag_and_drop') === 'true');
-    if (dnd) {
+    if (settings.$.drag_and_drop) {
       // if dnd instance exist and disabled(after search) turn it on
       if (container.sortInstance?.options?.disabled) {
         container.sortInstance?.option('disabled', false);
       }
     }
-
-    const hasCreate = (localStorage.getItem('show_create_column') === 'true');
 
     return getSubTree(id)
       .then(item => {
@@ -383,10 +384,10 @@ const Bookmarks = (() => {
           container.classList.add('grid');
         }
         // sort by newest
-        if (localStorage.getItem('sort_by_newest') === 'true') {
+        if (settings.$.sort_by_newest) {
           item[0].children.sort((a, b) => b.dateAdded - a.dateAdded);
         }
-        render(item[0].children, hasCreate);
+        render(item[0].children, settings.$.show_create_column);
         container.setAttribute('data-folder', id);
       })
       .catch(() => {
@@ -443,14 +444,14 @@ const Bookmarks = (() => {
     getSubTree(id)
       .then(async(items) => {
         // check recursively or not
-        const children = (localStorage.getItem('thumbnails_update_recursive') === 'true')
+        const children = settings.$.thumbnails_update_recursive
           // create a flat array of nested bookmarks
           ? flattenArrayBookmarks(items[0].children)
           // only first level bookmarks without folders
           : items[0].children.filter(item => item.url);
 
         // sort by newest
-        if (localStorage.getItem('sort_by_newest') === 'true') {
+        if (settings.$.sort_by_newest) {
           children.sort((a, b) => b.dateAdded - a.dateAdded);
         }
 
@@ -512,7 +513,6 @@ const Bookmarks = (() => {
    * @param {(string|undefined)} data.site - domain
    */
   function uploadScreen(data) {
-    const folderPreviewOff = localStorage.getItem('folder_preview') !== 'true';
     const { target, id, site } = data;
     const file = target.files[0];
     if (!file) return;
@@ -541,7 +541,7 @@ const Bookmarks = (() => {
       updateStorageCustomDials(id, fileEntry.toURL(), true);
 
       // update view only if folder_preview option is off or if the tab is not a folder
-      if (folderPreviewOff || site) {
+      if (!settings.$.folder_preview || site) {
         bookmark.isCustomImage = true;
         bookmark.image = `${fileEntry.toURL()}?refresh=${Date.now()}`;
       }
@@ -583,11 +583,10 @@ const Bookmarks = (() => {
   }
 
   function search(query) {
-    const dnd = localStorage.getItem('drag_and_drop') === 'true';
     searchBookmarks(query)
       .then(match => {
         if (match.length > 0) {
-          if (dnd) {
+          if (settings.$.drag_and_drop) {
             // if dnd we turn off sorting and destroy nested instances
             container.sortInstance?.option('disabled', true);
           }
@@ -599,7 +598,7 @@ const Bookmarks = (() => {
   }
 
   async function removeBookmark(bookmark) {
-    if (localStorage.getItem('without_confirmation') === 'false') {
+    if (!settings.$.without_confirmation) {
       const confirmAction = await confirmPopup(chrome.i18n.getMessage('confirm_delete_bookmark'));
       if (!confirmAction) return;
     }
@@ -614,8 +613,7 @@ const Bookmarks = (() => {
   }
 
   async function removeFolder(bookmark) {
-    if (localStorage.getItem('without_confirmation') === 'false') {
-      // if (!confirm(chrome.i18n.getMessage('confirm_delete_folder'), '')) return;
+    if (!settings.$.without_confirmation) {
       const confirmAction = await confirmPopup(chrome.i18n.getMessage('confirm_delete_folder'));
       if (!confirmAction) return;
     }
@@ -678,7 +676,7 @@ const Bookmarks = (() => {
         container.querySelector('.bookmark--nosort').insertAdjacentElement('beforeBegin', bookmark);
 
         if (result.url) {
-          if (localStorage.getItem('auto_generate_thumbnail') === 'true') {
+          if (settings.$.auto_generate_thumbnail) {
             createScreen(bookmark, result.id, result.url);
           }
         } else {

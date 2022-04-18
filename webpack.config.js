@@ -12,6 +12,9 @@ module.exports = (env, arg) => {
   const isDev = arg.mode === 'development'
   return {
     mode: arg.mode,
+    experiments: {
+      topLevelAwait: true
+    },
     stats: {
       assets: false
     },

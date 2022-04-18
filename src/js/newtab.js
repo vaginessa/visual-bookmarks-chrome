@@ -2,7 +2,7 @@ import '../css/newtab.css';
 import './components/vb-select';
 import Gmodal from 'glory-modal';
 import Validator from 'form-validation-plugin';
-import Settings from './settings';
+import { settings } from './settings';
 import Bookmarks from './components/bookmarks';
 import Localization from './plugins/localization';
 import UI from './components/ui';
@@ -56,7 +56,7 @@ async function init() {
   /**
    * Settings
    */
-  Settings.init();
+  await settings.init();
 
   /**
    * UI
@@ -95,7 +95,7 @@ async function init() {
     onError: handleFormError
   });
 
-  (localStorage.getItem('services_enable') === 'true') && runServices();
+  settings.$.services_enable && runServices();
 
   upload.addEventListener('change', handleUploadScreen);
   container.addEventListener('click', handleDelegateClick);
@@ -105,7 +105,7 @@ async function init() {
   modal.addEventListener('gmodal:close', handleCloseModal);
 
   // If thumbnail generation button
-  if (localStorage.getItem('thumbnails_update_button') === 'true') {
+  if (settings.$.thumbnails_update_button) {
     generateThumbsBtn = $createElement('button', {
       class: 'circ-btn update-thumbnails'
     }, {
@@ -143,7 +143,7 @@ async function init() {
   // if the tab is open but not active, then when you change bookmarks from other places,
   // we will do a reload of the bookmarks page to display the latest changes
   if ('hidden' in document) {
-    if (localStorage.getItem('auto_generate_thumbnail') !== 'true') {
+    if (!settings.$.auto_generate_thumbnail) {
       chrome.bookmarks.onCreated.addListener(handlePageVisibility);
     }
     chrome.bookmarks.onChanged.addListener(handlePageVisibility);
@@ -152,7 +152,7 @@ async function init() {
   }
 
   // if there is auto-generation of thumbnails, and a tab with bookmarks is open, we need to reload, after saving the thumbnail
-  if (localStorage.getItem('auto_generate_thumbnail') === 'true') {
+  if (settings.$.auto_generate_thumbnail) {
     chrome.runtime.onMessage.addListener(
       function(request) {
         if (request.autoGenerateThumbnail) {
@@ -311,13 +311,12 @@ function runServices() {
   import(/* webpackChunkName: "webcomponents/vb-services" */'./components/vb-services').then(() => {
     const el = document.createElement('vb-services');
     el.classList.add('sticky');
-    el.servicesList = JSON.parse(localStorage.services_list);
+    el.servicesList = settings.$.services_list;
     document.body.append(el);
 
     // update storage after sorting
     el.addEventListener('update', e => {
-      localStorage.services_list = JSON.stringify(e.detail.services);
-      Settings.syncSingleToStorage('services_list');
+      settings.updateKey('services_list', e.detail.services);
     });
   }).catch(err => {
     console.warn(err);
@@ -410,7 +409,7 @@ function handleFormError(err) {
 }
 
 async function handleResetThumb(evt) {
-  if (localStorage.getItem('without_confirmation') === 'false') {
+  if (!settings.$.without_confirmation) {
     const confirmAction = await confirmPopup(chrome.i18n.getMessage('confirm_delete_image'));
     if (!confirmAction) return;
   }
