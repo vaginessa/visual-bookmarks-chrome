@@ -22,11 +22,14 @@ module.exports = (env, arg) => {
     entry: {
       newtab: './src/js/newtab.js',
       options: './src/js/options.js',
-      eventPage: './src/js/eventPage.js',
+      background: './src/js/background.js',
     },
     output: {
       path: path.resolve(__dirname, 'extension'),
-      filename: 'js/[name].js',
+      filename(pathData) {
+        return pathData.chunk.name === 'background' ? '[name].js' : 'js/[name].js';
+      },
+      chunkFilename: 'js/[name].js'
     },
     resolve: {
       modules: ['node_modules']
