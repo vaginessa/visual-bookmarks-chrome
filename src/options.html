@@ -10,22 +10,25 @@
 <body class="options">
 
   <div class="wrap">
-
+    <button class="info-btn md-ripple" data-ripple-center id="info">
+      <svg width="24" height="24">
+        <use xlink:href="/img/symbol.svg#info_outline"/>
+      </svg>
+    </button>
     <div class="settings-container">
-
       <div class="tabs">
         <div class="tabs__bar-wrap">
           <div class="tabs__bar">
             <div class="tabs__controls md-ripple" data-locale-message="view_setting">View</div>
             <div class="tabs__controls md-ripple" data-locale-message="general_setting">General</div>
             <div class="tabs__controls md-ripple" data-locale-message="advanced_setting">Advanced</div>
-            <div class="tabs__info">
+            <!-- <div class="tabs__info">
               <button class="info-btn md-ripple" id="info">
                 <svg width="24" height="24">
                   <use xlink:href="/img/symbol.svg#info_outline"/>
                 </svg>
               </button>
-            </div>
+            </div> -->
           </div>
         </div>
         <div class="tabs__content">
@@ -415,7 +418,9 @@
           <img src="/icons/icon128.png" alt="Visual Bookmarks Logo">
           <h3 class="text-center">Version <span id="modal_changelog_version"></span></h3>
           <ul>
-            <li>The ability to automatically close a tab when saving a bookmark from the context menu (<a href="https://github.com/k-ivan/visual-bookmarks-chrome/issues/82" target="_blank" rel="noopener">issue</a>)</li>
+            <li>Migrating settings to a new storage (preparing to move to manifest v3)</li>
+            <li>UI fixes</li>
+            <li>Icon click behavior fixes</li>
           </ul>
 
           <p style="margin-top: 50px;">
