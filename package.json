@@ -17,7 +17,7 @@
     "url": "git@github.com:k-ivan/visual-bookmarks-chrome.git"
   },
   "browserslist": [
-    "last 10 Chrome versions"
+    "chrome >= 80"
   ],
   "author": "ivan_k",
   "license": "ISC",
