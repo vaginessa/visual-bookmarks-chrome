@@ -213,6 +213,9 @@ chrome.storage.onChanged.addListener((changes, area) => {
 });
 
 chrome.runtime.onInstalled.addListener(async(event) => {
+  if (event.reason === 'install') {
+    await storage.local.set({ upgraded_settings: true });
+  }
   if (event.reason === 'update') {
     // TODO: temporary code to migrate existing settings to new storage
     // trying to transfer existing settings from localStorage to new chrome.storage
@@ -224,7 +227,7 @@ chrome.runtime.onInstalled.addListener(async(event) => {
     const { upgraded_settings } = await storage.local.get('upgraded_settings');
     if (!upgraded_settings) {
       await settings.init();
-      await storage.local.set({upgraded_settings: true});
+      await storage.local.set({ upgraded_settings: true });
       // transfer only those parameters that exist in the new settings object
       const restoreLegacySettings = Object.keys(settings.$).reduce((acc, key) => {
         if (localStorage[key]) {
