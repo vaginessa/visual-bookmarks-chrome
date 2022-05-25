@@ -10,7 +10,8 @@
     "start": "webpack --mode=development --watch",
     "build": "webpack --mode=production",
     "zip": "bestzip extension.zip extension/*",
-    "release": "npm run build && npm run zip"
+    "release": "npm run build && npm run zip",
+    "locales": "node autocompleteLocales.js"
   },
   "repository": {
     "type": "git",
