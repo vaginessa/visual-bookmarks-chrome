@@ -80,8 +80,7 @@ async function init() {
   const formBookmarkEl = document.getElementById('formBookmark');
 
   Validator.i18n = {
-    required: chrome.i18n.getMessage('error_input_required'),
-    url: chrome.i18n.getMessage('error_input_url')
+    required: chrome.i18n.getMessage('error_input_required')
   };
 
   Validator.run(formBookmarkEl, {
@@ -91,6 +90,14 @@ async function init() {
     containerSelector: '.group',
     errorClass: 'has-error',
     errorHintClass: 'error-hint',
+    validators: {
+      regex: {
+        isValidUrl: {
+          pattern: /^(https?|ftp|file|edge|chrome|(chrome-)?extension):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/i,
+          error: chrome.i18n.getMessage('error_input_url')
+        }
+      }
+    },
     onSuccess: handleSubmitForm,
     onError: handleFormError
   });
