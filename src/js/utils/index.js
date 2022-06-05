@@ -93,7 +93,7 @@ export function $unescapeHtml(unsafe) {
     .replace(/&#039;/g, '\'');
 }
 
-export function $notifications(message, id) {
+export function $notifications(message, id, buttons = []) {
   id = id || message;
 
   // For requireInteraction
@@ -106,7 +106,8 @@ export function $notifications(message, id) {
     type: 'basic',
     iconUrl: 'icons/icon128.png',
     title: 'Visual bookmarks',
-    message: message
+    message,
+    buttons
     // requireInteraction: true
   }, function() {
     // For requireInteraction
@@ -115,7 +116,6 @@ export function $notifications(message, id) {
     //   window.timerNotice = null;
     // }, delay)
   });
-
 }
 
 export function $imageLoaded(img) {
