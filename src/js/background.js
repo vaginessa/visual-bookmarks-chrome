@@ -1,20 +1,41 @@
 import { settings } from './settings';
 import FS from './api/fs';
+import ImageDB from './api/imageDB';
+import { storage } from './api/storage';
 import browserContextMenu from './plugins/browserContextMenu';
 import {
   $notifications,
-  $resizeScreen,
   $base64ToBlob,
-  $getDomain
+  $resizeThumbnail
 } from './utils';
 import {
   create,
   search
 } from './api/bookmark';
-import { storage } from './api/storage';
+import {
+  THUMBNAIL_POPUP_HEIGHT,
+  THUMBNAIL_POPUP_WIDTH
+} from './constants';
 
-// FIXME: ??? indexDB ???
-FS.init(500);
+// TODO: transfer current thumbnails to indexDB
+// preparing to move to manifest
+function convertImageToDB(path) {
+  return new Promise(resolve => {
+    const image = new Image();
+    image.onload = () => {
+      const canvas = new OffscreenCanvas(image.width, image.height);
+      const ctx = canvas.getContext('2d');
+
+      ctx.drawImage(image, 0, 0, image.width, image.height);
+
+      resolve(canvas.convertToBlob({
+        type: 'image/webp',
+        quality: 0.75
+      }));
+    };
+    image.src = path;
+  });
+}
 
 function browserActionHandler() {
   // TODO: need current hash folder
@@ -38,23 +59,23 @@ async function initContextMenu() {
   browserContextMenu.init(settings.show_contextmenu_item);
 }
 
-function captureScreen(link, callback) {
+async function captureScreen(link, callback) {
+  const { screen } = await storage.local.get('screen');
+
   chrome.windows.create({
     url: link,
-    focused: false,
+    state: 'normal',
     left: 1e5,
     top: 1e5,
     width: 1,
     height: 1,
     type: 'popup'
   }, async function(w) {
-
     // capture timeout
     let timeout = 25000;
 
-    // delay in milliseconds
-    // const captureDelay = (parseFloat(localStorage.getItem('thumbnails_update_delay')) || 0.5) * 1000;
     const { settings } = await storage.local.get('settings');
+    // delay in milliseconds
     const captureDelay = (parseFloat(settings.thumbnails_update_delay) || 0.5) * 1000;
 
     if (captureDelay > 500) {
@@ -74,20 +95,6 @@ function captureScreen(link, callback) {
       muted: true
     });
 
-    try {
-      chrome.tabs.executeScript(tab.id, {
-        code: 'document.addEventListener("DOMContentLoaded", function(){document.body.style.overflow = "hidden";});',
-        runAt: 'document_start'
-      }, () => {
-        let e = chrome.runtime.lastError;
-        if (e !== undefined) {
-          console.log(tab.id, e);
-        }
-      });
-    } catch (e) {
-      console.warn(e);
-    }
-
     let closeWindow = setTimeout(function() {
       chrome.windows.remove(w.id);
       callback({ error: 'long_load', url: tab.url });
@@ -104,9 +111,15 @@ function captureScreen(link, callback) {
 
       chrome.tabs.get(tab.id, function(tabInfo) {
         if (tabInfo.status === 'complete') {
+          chrome.tabs.insertCSS(tab.id, {
+            code: 'html, body { overflow-y: hidden !important; }'
+          });
           chrome.windows.update(w.id, {
-            width: 1170,
-            height: 720
+            left: screen.availWidth - THUMBNAIL_POPUP_WIDTH,
+            top: screen.availHeight - THUMBNAIL_POPUP_HEIGHT,
+            width: THUMBNAIL_POPUP_WIDTH,
+            height: THUMBNAIL_POPUP_HEIGHT,
+            focused: true
           }, function(win) {
             setTimeout(() => {
               chrome.tabs.captureVisibleTab(win.id, function(dataUrl) {
@@ -133,7 +146,7 @@ function captureScreen(link, callback) {
 }
 
 function handlerCreateBookmark(data) {
-  chrome.tabs.query({active: true, currentWindow: true}, async function(tabs){
+  chrome.tabs.query({ active: true, currentWindow: true }, async function(tabs){
     const matches = await search(data.pageUrl);
     if (!matches) return;
 
@@ -149,8 +162,7 @@ function handlerCreateBookmark(data) {
       const menuItemId = data.menuItemId.replace('save-', '');
 
       const parentId = (menuItemId === 'current_folder')
-      // window.localStorage.getItem('default_folder_id') :
-        ? settings.default_folder_id
+        ? String(settings.default_folder_id)
         : menuItemId;
 
       // Create
@@ -165,31 +177,15 @@ function handlerCreateBookmark(data) {
       // do not generate a thumbnail if you could not create a bookmark or the auto-generation option is turned off
       if (!response) return;
 
-      // if (localStorage.getItem('auto_generate_thumbnail') === 'true') {
       if (settings.auto_generate_thumbnail) {
         captureScreen(response.url, async function(data) {
-          const image = await $resizeScreen(data.capture);
-          const blob = $base64ToBlob(image, 'image/jpg');
-          const name = `${$getDomain(response.url)}_${response.id}.jpg`;
-
-          const dirEntry = await FS.createDir('images').catch(err => console.log(err));
-          const fileEntry = await FS.createFile(`${dirEntry.fullPath}/${name}`, {
-            file: blob,
-            fileType: blob.type
-          }).catch(err => console.warn(err));
-
-          const obj = JSON.parse(localStorage.getItem('custom_dials'));
-          obj[response.id] = {
-            image: fileEntry.toURL(),
-            custom: false
-          };
-
-          localStorage.setItem('custom_dials', JSON.stringify(obj));
+          const fileBlob = $base64ToBlob(data.capture, 'image/webp');
+          const blob = await $resizeThumbnail(fileBlob);
+          await ImageDB.update({ id: response.id, blob, custom: false });
           chrome.runtime.sendMessage({ autoGenerateThumbnail: true });
         });
       }
 
-      // if (localStorage.getItem('close_tab_after_adding_bookmark') === 'true') {
       if (settings.close_tab_after_adding_bookmark) {
         chrome.tabs.remove(tabs[0].id);
       }
@@ -214,8 +210,10 @@ chrome.storage.onChanged.addListener((changes, area) => {
 
 chrome.runtime.onInstalled.addListener(async(event) => {
   if (event.reason === 'install') {
+    await settings.init();
     await storage.local.set({ upgraded_settings: true });
   }
+  initContextMenu();
   if (event.reason === 'update') {
     // TODO: temporary code to migrate existing settings to new storage
     // trying to transfer existing settings from localStorage to new chrome.storage
@@ -246,8 +244,55 @@ chrome.runtime.onInstalled.addListener(async(event) => {
         return acc;
       }, {});
       // save the transferred settings in the new storage
-      await storage.local.set({settings: restoreLegacySettings});
+      await storage.local.set({ settings: restoreLegacySettings });
+    }
 
+    // TODO: transfer current thumbnails to indexDB
+    // preparing to move to manifest
+    // if (localStorage.custom_dials || localStorage.background_local) {
+    if (localStorage.custom_dials || localStorage.background_local) {
+      const images = [];
+      const customDials = JSON.parse(localStorage.custom_dials);
+
+      $notifications(
+        chrome.i18n.getMessage('transferring_thumbnails_notification'),
+        'changelog',
+        [{ title: chrome.i18n.getMessage('transferring_thumbnails_notification_btn') }]
+      );
+
+      for (const [key, value] of Object.entries(customDials)) {
+        const blob = await convertImageToDB(value.image);
+        images.push({
+          id: key,
+          custom: value.custom,
+          blob
+        });
+      }
+      localStorage.removeItem('custom_dials');
+
+      if (localStorage.background_local) {
+        const blob = await convertImageToDB(localStorage.background_local);
+        images.push({
+          id: 'background',
+          blob,
+          blobThumbnail: blob
+        });
+        localStorage.removeItem('background_local');
+      }
+
+      try {
+        await FS.init();
+        FS.purge();
+      } catch (error) {
+        console.warn('error: failed to clean up the images folder');
+      }
+
+      if (images.length) {
+        await ImageDB.add(images);
+        chrome.runtime.sendMessage({
+          event: 'transfered_thumbnails'
+        });
+      }
     }
   }
 });
@@ -260,10 +305,21 @@ chrome.bookmarks.onMoved.addListener(initContextMenu);
 chrome.contextMenus.onClicked.addListener(handlerCreateBookmark);
 chrome.browserAction.onClicked.addListener(browserActionHandler);
 chrome.notifications.onClicked.addListener(browserActionHandler);
+chrome.notifications.onButtonClicked.addListener((id) => {
+  // TODO: updates info
+  // more about updates
+  // go to options page with hash to show modal info
+  if (id === 'changelog') {
+    return chrome.tabs.create({ url: chrome.runtime.getURL('options.html#changelog') });
+  }
+});
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-  if (request.captureUrl) {
-    captureScreen(request.captureUrl, async function(data) {
+  if (request.capture) {
+    const { id, captureUrl } = request.capture;
+
+    // captureScreen(request.captureUrl, async function(data) {
+    captureScreen(captureUrl, async function(data) {
       if (data && data.error) {
         try {
           sendResponse({ warning: 'Timeout waiting for a screenshot' });
@@ -277,25 +333,17 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         try {
           sendResponse({ warning: 'Cannot access contents of url' });
         } catch (e) {}
-        console.warn(`Cannot access contents of url: ${request.captureUrl}`);
+        console.warn(`Cannot access contents of url: ${captureUrl}`);
         return false;
       }
 
-      const image = await $resizeScreen(data.capture);
-      const blob = $base64ToBlob(image, 'image/jpg');
-      const name = `${$getDomain(request.captureUrl)}_${request.id}.jpg`;
-
-      const dirEntry = await FS.createDir('images');
-      const fileEntry = await FS.createFile(`${dirEntry.fullPath}/${name}`, { file: blob, fileType: blob.type });
-      // console.info(`Image file saved as ${fileEntry.toURL()}`);
+      const fileBlob = $base64ToBlob(data.capture, 'image/webp');
+      const blob = await $resizeThumbnail(fileBlob);
+      await ImageDB.update({ id, blob, custom: false });
       try {
-        sendResponse(fileEntry.toURL());
+        sendResponse('success');
       } catch (e) {}
     });
-
-    // send a response asynchronously (return true)
-    // this will keep the message channel open to the other end until sendResponse is called
-    return true;
   }
 
   // Toggle contextmenu item
@@ -303,8 +351,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     const { checked } = request.showContextMenuItem;
     browserContextMenu.toggle(checked);
   }
-});
 
-//
-await settings.init();
-initContextMenu();
+  // send a response asynchronously (return true)
+  // this will keep the message channel open to the other end until sendResponse is called
+  return true;
+});

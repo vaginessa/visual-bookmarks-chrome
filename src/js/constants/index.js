@@ -12,3 +12,8 @@ export const SVG_LOADER =
 `</svg>`;
 
 export const SERVICES_COUNT = 20;
+
+export const REGEXP_URL_PATTERN = /^(https?|ftp|file|edge|chrome|(chrome-)?extension):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/i;
+
+export const THUMBNAIL_POPUP_WIDTH = 1170;
+export const THUMBNAIL_POPUP_HEIGHT = 720;

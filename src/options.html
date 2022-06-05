@@ -22,13 +22,6 @@
             <div class="tabs__controls md-ripple" data-locale-message="view_setting">View</div>
             <div class="tabs__controls md-ripple" data-locale-message="general_setting">General</div>
             <div class="tabs__controls md-ripple" data-locale-message="advanced_setting">Advanced</div>
-            <!-- <div class="tabs__info">
-              <button class="info-btn md-ripple" id="info">
-                <svg width="24" height="24">
-                  <use xlink:href="/img/symbol.svg#info_outline"/>
-                </svg>
-              </button>
-            </div> -->
           </div>
         </div>
         <div class="tabs__content">
@@ -417,19 +410,20 @@
         <div class="gmodal__body whats-new">
           <img src="/icons/icon128.png" alt="Visual Bookmarks Logo">
           <h3 class="text-center">Version <span id="modal_changelog_version"></span></h3>
-          <ul>
-            <li>Migrating settings to a new storage (preparing to move to manifest v3)</li>
-            <li>UI fixes</li>
-            <li>Icon click behavior fixes</li>
-          </ul>
-
-          <p style="margin-top: 50px;">
-            <strong>Please pay attention</strong><br>
-            At the moment, there may be problems with generating thumbnails. I am aware of the problem, but I do not see the correct solution for this problem yet.
-          </p>
           <p>
-            Temporary dirty solution, don't run multiple screen captures at the same time. In the case when generating thumbnails for a folder, it is better not to switch to other tabs until the process of creating thumbnails is completed
+            Major update<br>
+            Preparing to move to manifest v3:
           </p>
+          <ul>
+            <li><span class="badge badge--primary">Primary</span> New storage for saving thumbnails</li>
+            <li><span class="badge badge--primary">Primary</span> Migrating settings to a new storage</li>
+            <li><span class="badge badge--primary">Note</span> Thumbnail creation now takes place in the foreground (user sees a popup with a page capture)</li>
+            <li>Improved thumbnail quality at smaller size</li>
+            <li>Updated translations(thanks to <a href="https://github.com/miroslaw-zylewicz" target="_blank" rel="noopener noreferrer">@miroslaw-zylewicz</a>)</li>
+            <li>UI improvements</li>
+          </ul>
+          <hr>
+          <p>⚠️<b>Note</b>: New storage for saving thumbnails (preparing for the transition to manifest v3). Existing thumbnails will be transferred in the background, the process will start immediately after updating the extension. At this time, if the bookmarks tab is open, you may see logos instead of thumbnails, after the transfer process, the tab will be reloaded with your thumbnails. The transfer process may take time if there are a large number of thumbnails.</p>
         </div>
       </div>
     </div>

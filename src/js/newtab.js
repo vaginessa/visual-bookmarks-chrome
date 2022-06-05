@@ -18,8 +18,11 @@ import {
   $getDomain,
   $createElement,
   $copyStr,
-  $unescapeHtml
+  $unescapeHtml,
+  $notifications
 } from './utils';
+import ImageDB from './api/imageDB';
+import { REGEXP_URL_PATTERN } from './constants';
 
 const container = document.getElementById('bookmarks');
 const modal = document.getElementById('modal');
@@ -39,9 +42,20 @@ let generateThumbsBtn = null;
 
 
 async function init() {
+  // TODO: while transferring thumbnails from the folder to the database
+  chrome.runtime.onMessage.addListener(request => {
+    if (request.event === 'transfered_thumbnails') {
+      $notifications(chrome.i18n.getMessage('transferring_thumbnails_notification_done'));
+      location.reload();
+    }
+  });
+
   // Set lang attr
   // Replacement underscore on the dash because underscore is not a valid language subtag
-  document.documentElement.setAttribute('lang', chrome.i18n.getMessage('@@ui_locale').replace('_', '-'));
+  document.documentElement.setAttribute(
+    'lang',
+    chrome.i18n.getMessage('@@ui_locale').replace('_', '-')
+  );
 
   /**
    * Localization
@@ -93,7 +107,7 @@ async function init() {
     validators: {
       regex: {
         isValidUrl: {
-          pattern: /^(https?|ftp|file|edge|chrome|(chrome-)?extension):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/i,
+          pattern: REGEXP_URL_PATTERN,
           error: chrome.i18n.getMessage('error_input_url')
         }
       }
@@ -260,7 +274,7 @@ function handleMenuOpen(evt) {
   }
 }
 
-async function handleMenuSelection(evt) {
+function handleMenuSelection(evt) {
   const target = evt.detail.trigger;
   const action = evt.detail.selection;
 
@@ -284,9 +298,7 @@ async function handleMenuSelection(evt) {
       $copyStr(target.href);
       break;
     case 'capture': {
-      const idBookmark = target.id;
-      const captureUrl = target.href;
-      Bookmarks.createScreen(target, idBookmark, captureUrl);
+      Bookmarks.createScreen(target);
       break;
     }
     case 'upload': {
@@ -389,7 +401,7 @@ function openTab(url, options = {}) {
   } catch (e) {}
 }
 
-function handleSubmitForm(evt) {
+async function handleSubmitForm(evt) {
   evt.preventDefault();
   const form = evt.target;
   const id = form.getAttribute('data-action');
@@ -399,9 +411,9 @@ function handleSubmitForm(evt) {
   let success = false;
   if (id !== 'New') {
     const newLocation = modalSelectFolders.value;
-    success = Bookmarks.updateBookmark(id, title, url, newLocation);
+    success = await Bookmarks.updateBookmark(id, title, url, newLocation);
   } else {
-    success = Bookmarks.createBookmark(title, url);
+    success = await Bookmarks.createBookmark(title, url);
   }
   success && modalApi.close();
 }
@@ -424,11 +436,12 @@ async function handleResetThumb(evt) {
   evt.preventDefault();
   const id = this.getAttribute('data-bookmark');
 
-  Bookmarks.rmCustomScreen(id, () => {
-    const bookmark = document.getElementById(`vb-${id}`);
-    bookmark.image = null;
-    this.closest('#customScreen').style.display = '';
-  });
+  Bookmarks.removeThumbnail(id)
+    .then(() => {
+      const bookmark = document.getElementById(`vb-${id}`);
+      bookmark.image = null;
+      this.closest('#customScreen').style.display = '';
+    });
 }
 
 async function prepareModal(target) {
@@ -440,18 +453,22 @@ async function prepareModal(target) {
 
     const { id, url, parentId } = bookmarkNode[0];
     const title = $unescapeHtml(bookmarkNode[0].title);
-
-    const screen = Bookmarks.getCustomDial(id);
-    const { image } = screen || {};
+    const imageData = await ImageDB.get(id);
 
     // generate bookmark folder list
     modalSelectFolders.setAttribute('parent-folder-id', parentId);
     modalSelectFolders.setAttribute('bookmark-id', id);
     modalSelectFolders.folders = await getFolders();
 
-    if (image) {
+    if (imageData) {
+      const image = URL.createObjectURL(imageData.blob);
+      const imgElement = customScreen.querySelector('img');
+
       customScreen.style.display = 'block';
-      customScreen.querySelector('img').src = `${image}?refresh=${Date.now()}`;
+      imgElement.onload = () => {
+        URL.revokeObjectURL(image);
+      };
+      imgElement.src = image;
       customScreen.querySelector('#resetCustomImage').setAttribute('data-bookmark', id);
     }
 

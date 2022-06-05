@@ -168,6 +168,33 @@ export function $resizeScreen(image) {
   });
 }
 
+export async function $resizeThumbnail(
+  fileBlob,
+  resizeHeight = 500,
+  resizeQuality = 'high',
+  quality = 0.75
+) {
+  let imageBitmap = await createImageBitmap(fileBlob);
+
+  if (resizeHeight && imageBitmap.height > resizeHeight) {
+    imageBitmap.close();
+    imageBitmap = await createImageBitmap(fileBlob, {
+      resizeHeight,
+      resizeQuality
+    });
+  }
+
+  const canvas = new OffscreenCanvas(500, 500);
+  const ctx = canvas.getContext('bitmaprenderer');
+  ctx.transferFromImageBitmap(imageBitmap);
+  imageBitmap.close();
+
+  return canvas.convertToBlob({
+    type: 'image/webp',
+    quality
+  });
+}
+
 export function $shuffle([...arr]) {
   let m = arr.length;
   while (m) {

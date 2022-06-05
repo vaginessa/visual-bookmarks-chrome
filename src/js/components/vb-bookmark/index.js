@@ -16,6 +16,15 @@ class VbBookmark extends HTMLAnchorElement {
     this.#isRendered = true;
   }
 
+  disconnectedCallback() {
+    document.dispatchEvent(new CustomEvent('bookmark-removed', {
+      detail: {
+        id: this.id,
+        image: this.image
+      }
+    }));
+  }
+
   static get observedAttributes() {
     return [
       'href',
@@ -168,8 +177,7 @@ class VbBookmark extends HTMLAnchorElement {
             ? /* html*/
               `<div class="bookmark__img${this.isCustomImage ? ' bookmark__img--contain' : ''}" style="background-image: url('${this.image}');"></div>`
             : /* html*/
-              `<div class="bookmark__img bookmark__img--logo" style="background-image: url('${this.faviconUrl}')">
-              </div>`
+              `<div class="bookmark__img bookmark__img--logo" style="background-image: url('${this.faviconUrl}')"></div>`
         }
         ${
           // bookmark title

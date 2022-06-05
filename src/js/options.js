@@ -13,21 +13,25 @@ import confirmPopup from './plugins/confirmPopup.js';
 import { getFolders } from './api/bookmark';
 import {
   $notifications,
+  $resizeThumbnail,
   $trigger
 } from './utils';
 import Range from './components/range';
+import ImageDB from './api/imageDB';
 
 let modalInstance = null;
 let tabsSliderInstance = null;
 let textareaInstance = null;
+let backgroundImage = null;
 
 async function init() {
-  await FS.init(500);
   // Set lang attr
   // Replacement underscore on the dash because underscore is not a valid language subtag
-  document.documentElement.setAttribute('lang', chrome.i18n.getMessage('@@ui_locale').replace('_', '-'));
+  document.documentElement.setAttribute(
+    'lang',
+    chrome.i18n.getMessage('@@ui_locale').replace('_', '-')
+  );
 
-  // Settings.init();
   await settings.init();
 
   UI.toggleTheme();
@@ -35,6 +39,11 @@ async function init() {
   Localization();
 
   Ripple.init('.md-ripple');
+
+  const background = await ImageDB.get('background');
+  if (background) {
+    backgroundImage = URL.createObjectURL(background.blobThumbnail);
+  }
 
   // range settings
   Array.from(document.querySelectorAll('.js-range')).forEach(el => {
@@ -98,6 +107,9 @@ async function init() {
   document.querySelector('.info-btn').addEventListener('click', () => {
     modalInstance.open();
   });
+  if (window.location.hash === '#changelog') {
+    modalInstance.open();
+  }
 }
 
 function handleImportSettings(e) {
@@ -109,9 +121,6 @@ function handleImportSettings(e) {
       try {
         const importSettings = JSON.parse(e.target.result);
         await settings.updateAll(importSettings);
-        // Object.keys(settings).forEach(setting => {
-        //   localStorage.setItem(setting, settings[setting]);
-        // });
         $notifications(
           chrome.i18n.getMessage('import_settings_success')
         );
@@ -119,14 +128,13 @@ function handleImportSettings(e) {
           location.reload();
         }, 0);
       } catch (error) {
-        Toast.show(chrome.i18n.getMessage('import_settings_failed'));
         input.value = '';
+        Toast.show(chrome.i18n.getMessage('import_settings_failed'));
         console.warn(error);
       }
     });
     reader.readAsBinaryString(input.files[0]);
   }
-
 }
 
 function handleExportSettings() {
@@ -135,7 +143,7 @@ function handleExportSettings() {
       ![
         'default_folder_id',
         'custom_dials',
-        'background_local',
+        'background_local'
       ].includes(cur)
     ) {
       acc[cur] = settings.$[cur];
@@ -143,7 +151,7 @@ function handleExportSettings() {
     return acc;
   }, {});
 
-  const file = new Blob([JSON.stringify(data)], {type: 'text/plain'});
+  const file = new Blob([JSON.stringify(data)], { type: 'text/plain' });
   // TODO: permission is required to download
   // chrome.downloads.download({
   //   url: URL.createObjectURL(file),
@@ -197,17 +205,13 @@ function toggleBackgroundControls(value) {
     item.hidden = true;
   });
   if (value === 'background_local') {
-    // TODO: indexDB instead localStorage
-    const imgSrc = localStorage.getItem('background_local');
-    if (imgSrc) {
-      document.querySelector('.c-upload__preview').hidden = false;
-      document.getElementById('preview_upload').innerHTML = `
-          <div class="c-upload__preview-image" style="background-image: url(${imgSrc}?new=${Date.now()});"><div>
-        `;
+    if (backgroundImage) {
+      document.getElementById('preview_upload').innerHTML = /* html */
+        `<div class="c-upload__preview-image" style="background-image: url(${backgroundImage});"><div>`;
     } else {
-      document.querySelector('.c-upload__preview').hidden = true;
       document.getElementById('preview_upload').innerHTML = '';
     }
+    document.querySelector('.c-upload__preview').hidden = !backgroundImage;
   }
   document.getElementById(value).hidden = false;
   tabsSliderInstance.recalcStyles();
@@ -233,7 +237,6 @@ function handleSetOptions(e) {
         settings.updateKey(id, !target.checked);
       }
     }
-
   } else {
     // localStorage.setItem(id, target.value);
     settings.updateKey(id, target.value);
@@ -254,18 +257,26 @@ async function handleUploadFile() {
   if (!/image\/(jpe?g|png|webp)$/.test(file.type)) {
     return alert(chrome.i18n.getMessage('alert_file_type_fail'));
   }
-  const fileName = `background.${file.type.replace('image/', '')}`;
-
-  await FS.createDir('images');
-  const fileEntry = await FS.createFile('/images/' + fileName, { file: file, fileType: file.type }).catch(err => err);
+  const blob = new Blob([new Uint8Array(await file.arrayBuffer())], {
+    type: file.type
+  });
+  const blobThumbnail = await $resizeThumbnail(blob);
+  if (backgroundImage) {
+    URL.revokeObjectURL(backgroundImage);
+  }
+  backgroundImage = URL.createObjectURL(blobThumbnail);
+  ImageDB.update({
+    id: 'background',
+    blob,
+    blobThumbnail
+  });
 
   document.querySelector('.c-upload__preview').hidden = false;
-  document.getElementById('preview_upload').innerHTML = `
-          <div class="c-upload__preview-image"
-            style="background-image: url(${fileEntry.toURL()}?new=${Date.now()});">
-          <div>
-        `;
-  localStorage.setItem('background_local', fileEntry.toURL());
+  document.getElementById('preview_upload').innerHTML = /* html */
+          `<div class="c-upload__preview-image"
+            style="background-image: url(${backgroundImage});">
+          <div>`;
+
   Toast.show(chrome.i18n.getMessage('notice_bg_image_updated'));
   tabsSliderInstance.recalcStyles();
 }
@@ -280,18 +291,17 @@ async function handleRemoveFile(evt) {
   evt.preventDefault();
   const preview = document.getElementById('preview_upload');
   const previewParent = preview.closest('.c-upload__preview');
-  const img = localStorage.getItem('background_local');
 
-  if (!img) return;
+  await ImageDB.delete('background');
+  if (backgroundImage) {
+    URL.revokeObjectURL(backgroundImage);
+    backgroundImage = null;
+  }
 
-  const name = img.split('/').pop();
-
-  await FS.removeFile(`/images/${name}`);
-  Toast.show(chrome.i18n.getMessage('notice_image_removed'));
-  localStorage.removeItem('background_local');
   preview.innerHTML = '';
   previewParent.hidden = true;
   tabsSliderInstance.recalcStyles();
+  Toast.show(chrome.i18n.getMessage('notice_image_removed'));
 }
 
 function handleSelectBackground() {
@@ -304,10 +314,8 @@ async function handleDeleteImages(evt) {
   const confirmAction = await confirmPopup(chrome.i18n.getMessage('confirm_delete_images'));
   if (!confirmAction) return;
 
-  await FS.purge();
+  await ImageDB.clear();
   Toast.show(chrome.i18n.getMessage('notice_images_removed'));
-  localStorage.setItem('background_local', '');
-  localStorage.setItem('custom_dials', '{}');
 }
 
 async function handleResetLocalSettings() {
@@ -352,7 +360,6 @@ async function generateFolderList() {
   const folders = await getFolders().catch(err => console.warn(err));
   if (folders) {
     const vbSelect = document.getElementById('default_folder_id');
-    // vbSelect.value = localStorage.getItem('default_folder_id');
     vbSelect.value = settings.$.default_folder_id;
     vbSelect.folders = folders;
   }

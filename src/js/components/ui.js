@@ -1,5 +1,6 @@
 import { $imageLoaded } from '../utils';
 import { settings } from '../settings';
+import ImageDB from '../api/imageDB';
 
 
 const colorScheme = window.matchMedia('(prefers-color-scheme: dark)');
@@ -30,23 +31,32 @@ export default {
     style.appendChild(document.createTextNode(styles));
     document.head.appendChild(style);
   },
-  setBG() {
+  async setBG() {
     const bgEl = document.getElementById('bg');
     const bgState = settings.$.background_image;
 
     if (!['background_local', 'background_external'].includes(bgState)) {
       return;
     }
-    // FIXME: undefined background_local=localSorage
-    // const resource = localStorage.getItem(bgState);
-    const resource = bgState === 'background_local'
-      ? localStorage.background_local
-      : settings.$.background_external;
+
+    let resource;
+    if (bgState === 'background_local') {
+      const image = await ImageDB.get('background');
+      if (image?.blob) {
+        resource = URL.createObjectURL(image.blob);
+      }
+    } else {
+      resource = settings.$.background_external;
+    }
+
+    if (!resource) return;
+
     bgEl.style.backgroundImage = `url('${resource}')`;
 
     if (resource && resource !== '') {
       $imageLoaded(resource)
         .then(() => {
+          (bgState === 'background_local') && URL.revokeObjectURL(resource);
           document.body.classList.add('has-image');
           bgEl.style.opacity = 1;
         })
