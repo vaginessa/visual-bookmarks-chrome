@@ -376,5 +376,14 @@
   },
   "close_tab_after_adding_bookmark_note": {
     "message": "Only when adding via the context menu"
+  },
+  "transferring_thumbnails_notification": {
+    "message": "Transferring thumbnails from the file system to storage. After that, the visual bookmarks page will be reloaded."
+  },
+  "transferring_thumbnails_notification_btn": {
+    "message": "More"
+  },
+  "transferring_thumbnails_notification_done": {
+    "message": "Thumbnail transfer process completed"
   }
 }

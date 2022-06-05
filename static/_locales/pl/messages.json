@@ -376,5 +376,14 @@
   },
   "close_tab_after_adding_bookmark_note": {
     "message": "Tylko w przypadku dodania za pomocą menu kontekstowego"
+  },
+  "transferring_thumbnails_notification": {
+    "message": "Przenoszenie miniatur z systemu plików do pamięci. Następnie strona zakładek wizualnych zostanie ponownie załadowana."
+  },
+  "transferring_thumbnails_notification_btn": {
+    "message": "Więcej"
+  },
+  "transferring_thumbnails_notification_done": {
+    "message": "Proces przenoszenia miniatur zakończony"
   }
 }

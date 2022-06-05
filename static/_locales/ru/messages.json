@@ -376,5 +376,14 @@
   },
   "close_tab_after_adding_bookmark_note": {
     "message": "Только при добавлении через контекстное меню"
+  },
+  "transferring_thumbnails_notification": {
+    "message": "Перенос эскизов из файловой системы в хранилище. После этого страница визуальных закладок будет перезагружена."
+  },
+  "transferring_thumbnails_notification_btn": {
+    "message": "Подробнее"
+  },
+  "transferring_thumbnails_notification_done": {
+    "message": "Процесс переноса миниатюр завершен"
   }
 }

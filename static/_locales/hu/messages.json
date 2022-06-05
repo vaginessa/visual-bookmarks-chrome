@@ -376,5 +376,14 @@
   },
   "close_tab_after_adding_bookmark_note": {
     "message": "Csak a helyi menün keresztül történő hozzáadásakor"
+  },
+  "transferring_thumbnails_notification": {
+    "message": "Bélyegképek átvitele a fájlrendszerből a tárolóba. Ezt követően a vizuális könyvjelzők oldala újra betöltődik."
+  },
+  "transferring_thumbnails_notification_btn": {
+    "message": "Több"
+  },
+  "transferring_thumbnails_notification_done": {
+    "message": "A miniatűrök átviteli folyamata befejeződött"
   }
 }
