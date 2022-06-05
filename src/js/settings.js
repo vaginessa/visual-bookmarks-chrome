@@ -10,7 +10,7 @@ const DEFAULTS = Object.freeze({
   color_theme: 'os',
   background_image: 'background_noimage',
   background_external: '',
-  default_folder_id: 1,
+  default_folder_id: '1',
   dial_columns: 7,
   dial_width: 70, // value in percent (50,60,70,80,90)
   vertical_center: false,
@@ -86,7 +86,7 @@ const settingsStore = () => {
      * @param {<any>} value
      * @returns
      */
-    async updateKey(key, value) {
+    updateKey(key, value) {
       if (!$settings) {
         throw Error('Settings store must be initialized with the init method');
       }
