@@ -1,8 +1,8 @@
 {
   "env": {
-      "browser": true,
-      "es6": true,
-      "node": true
+    "browser": true,
+    "es6": true,
+    "node": true
   },
   "extends": "eslint:recommended",
   "parser": "babel-eslint",
@@ -80,6 +80,11 @@
     "arrow-spacing": "error",
     "no-var": "error",
     "no-duplicate-imports": "error",
-    "no-unneeded-ternary": "error"
+    "no-unneeded-ternary": "error",
+    "object-curly-spacing": ["error", "always"],
+    "key-spacing": ["error", { "afterColon": true }],
+    "comma-dangle": ["error", "never"],
+    "padded-blocks": ["error", "never"],
+    "require-await": "error"
   }
 }
