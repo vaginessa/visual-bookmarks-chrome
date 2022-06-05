@@ -1,22 +1,3 @@
-export function getLS(key) {
-  let value = null;
-  try {
-    value = JSON.parse(localStorage[key]);
-  } catch (error) {
-    value = localStorage[key];
-  }
-  return value;
-}
-
-export function setLS(key, value) {
-  if (typeof value === 'object') {
-    localStorage[key] = JSON.stringify(value);
-
-  } else {
-    localStorage[key] = value;
-  }
-}
-
 export const storage = {
   local: {
     get(key) {
