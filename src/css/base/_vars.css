@@ -40,7 +40,6 @@
   --bookmark-radius: var(--base-radius);
   --bookmark-bg: var(--theme-background-3-alpha-65);
   --bookmark-overlay-bg: var(--theme-background-3-alpha-95);
-  --bookmark-caption-height: 30px;
   --bookmark-caption-bg: var(--theme-background-3);
   --bookmark-caption-after-transparent: var(--theme-background-3-alpha-0);
   --bookmark-caption-color: var(--theme-text-color);

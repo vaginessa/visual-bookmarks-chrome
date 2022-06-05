@@ -35,13 +35,10 @@ body {
   font-family: var(--font-family);
   font-size: var(--font-size-base);
   overflow-y: scroll;
+  overflow-y: overlay;
   overflow-x: hidden;
   background-color: var(--body-background);
   color: var(--theme-text-color);
-}
-
-body:not(.options) {
-  overflow-y: hidden;
 }
 
 h1 {

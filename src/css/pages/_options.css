@@ -142,11 +142,15 @@
   padding: 1px 3px;
   font-size: 85%;
   line-height: 1.1;
-  font-weight: 500;
-  letter-spacing: 0;
-  border-radius: 2px;
+  font-weight: 600;
+  letter-spacing: 0.025rem;
+  border-radius: 4px;
   color: #333;
   background: #e4dcdc;
+}
+.badge--primary {
+  color: #fff;
+  background-color: var(--color-primary);
 }
 
 p {
@@ -203,4 +207,10 @@ pre {
     max-width: 100%;
     height: auto;
   }
+}
+
+hr {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border: 1px solid var(--modal-footer-border-color);
 }

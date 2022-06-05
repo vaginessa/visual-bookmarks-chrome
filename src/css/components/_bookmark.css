@@ -145,8 +145,11 @@
 
 .bookmark__caption {
   position: relative;
-  height: var(--bookmark-caption-height);
-  line-height: var(--bookmark-caption-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 35%;
+  max-height: 30px;
   padding-left: 7px;
   padding-right: 7px;
   overflow: hidden;
@@ -167,16 +170,12 @@
 }
 
 .bookmark__favicon {
-  position: relative;
-  top: -2px;
   margin-right: 5px;
-  display: inline-block;
-  vertical-align: middle;
 }
 
 .bookmark__title {
+  min-width: 0;
   font-weight: 600;
-  display: inline;
   color: var(--bookmark-caption-color);
 }
 
