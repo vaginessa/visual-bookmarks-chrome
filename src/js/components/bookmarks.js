@@ -661,7 +661,7 @@ const Bookmarks = (() => {
       blob,
       blobUrl,
       custom: true,
-      ...(thumbnail.children && { children: thumbnail.children })
+      ...(thumbnail?.children && { children: thumbnail.children })
     });
 
     if (!settings.$.folder_preview || site) {
