@@ -385,5 +385,8 @@
   },
   "transferring_thumbnails_notification_done": {
     "message": "Процесс переноса миниатюр завершен"
+  },
+  "empty_search": {
+    "message": "Закладки не найдены"
   }
 }

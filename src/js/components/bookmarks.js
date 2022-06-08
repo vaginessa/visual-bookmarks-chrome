@@ -32,6 +32,7 @@ const Bookmarks = (() => {
   const THUMBNAILS_MAP = new Map();
   const THUMBNAILS_CREATION_QUEUE = [];
   const container = document.getElementById('bookmarks');
+  const dialLoading = document.getElementById('dial_loading');
   let isGeneratedThumbs = false;
 
   async function init() {
@@ -74,10 +75,20 @@ const Bookmarks = (() => {
       vbHeader.setAttribute('folder-id', startFolder());
       document.querySelector('header').append(vbHeader);
 
+      let hasSearch = false;
       const searchHandler = $debounce(({ detail }) => {
-        search(detail.search);
+        const query = detail.search.trim();
+        if (!query.length && hasSearch) {
+          hasSearch = false;
+          return createSpeedDial(startFolder());
+        }
+        if (query.length > 1) {
+          hasSearch = true;
+          search(query);
+        }
       }, 500);
       const searchResetHandler = () => {
+        hasSearch = false;
         createSpeedDial(startFolder());
       };
 
@@ -415,6 +426,7 @@ const Bookmarks = (() => {
    * @param {boolean} [isCreate=false] - show add bookmark button
    */
   async function render(arr, isCreate = false) {
+    dialLoading.hidden = false;
     clearContainer();
 
     // bookmarks ids array
@@ -471,6 +483,7 @@ const Bookmarks = (() => {
         'data-create': 'New'
       })
     );
+    dialLoading.hidden = true;
   }
 
   /**
@@ -733,7 +746,7 @@ const Bookmarks = (() => {
    * Search bookmarks
    * @param {String} query
    */
-  function search(query) {
+  function  search(query) {
     searchBookmarks(query)
       .then(match => {
         if (match.length > 0) {
@@ -743,7 +756,7 @@ const Bookmarks = (() => {
           }
           render(match);
         } else {
-          createSpeedDial(startFolder());
+          container.innerHTML = `<div class="empty-search">🙁 ${chrome.i18n.getMessage('empty_search')}</div>`;
         }
       });
   }

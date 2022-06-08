@@ -385,5 +385,8 @@
   },
   "transferring_thumbnails_notification_done": {
     "message": "Proces przenoszenia miniatur zakończony"
+  },
+  "empty_search": {
+    "message": "Nie znaleziono zakładek"
   }
 }

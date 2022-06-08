@@ -385,5 +385,8 @@
   },
   "transferring_thumbnails_notification_done": {
     "message": "A miniatűrök átviteli folyamata befejeződött"
+  },
+  "empty_search": {
+    "message": "A könyvjelzők nem találhatók"
   }
 }

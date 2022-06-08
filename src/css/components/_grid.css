@@ -9,9 +9,6 @@
   grid-auto-rows: var(--grid-row-height);
   grid-gap: var(--grid-gap);
   justify-content: center;
-  &:empty ~ .dial-loading {
-    display: block;
-  }
 }
 
 .grid--vcenter {

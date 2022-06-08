@@ -125,7 +125,7 @@ class VbHeader extends HTMLElement {
   }
 
   #onInput(e) {
-    const search = e.target.value.trim();
+    const search = e.target.value;
     this.dispatchEvent(
       new CustomEvent('vb:search', {
         detail: {
@@ -136,7 +136,7 @@ class VbHeader extends HTMLElement {
       })
     );
 
-    this.resetNode.classList.toggle('is-show', search.length);
+    this.resetNode.classList.toggle('is-show', search.trim().length);
   }
 }
 

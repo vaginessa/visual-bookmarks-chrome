@@ -385,5 +385,8 @@
   },
   "transferring_thumbnails_notification_done": {
     "message": "Thumbnail transfer process completed"
+  },
+  "empty_search": {
+    "message": "Bookmarks not found"
   }
 }

@@ -25,20 +25,11 @@
 /* Page loading */
 .dial-loading {
   position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  top: calc(50% - 30px);
+  left: calc(50% - 30px);
+  width: 60px;
+  height: 60px;
   z-index: 100;
-  display: none;
-  &.is-initial {
-    right: -20px;
-    background-color: var(--theme-background);
-
-    @nest .has-image & {
-      background-color: transparent;
-    }
-  }
 }
 
 /**
@@ -127,5 +118,17 @@
       hsla(0, 0%, 0%, 0) 96.8%,
       hsla(0, 0%, 0%, 0) 100%
     );
+  }
+}
+
+.empty-search {
+  place-self: center;
+  grid-column: 1 / -1;
+  padding: 15px 30px;
+  font-weight: 600;
+  font-size: 15px;
+  border-radius: var(--base-radius);
+  @nest .has-image & {
+    background-color: var(--theme-background-3-alpha-65);
   }
 }
