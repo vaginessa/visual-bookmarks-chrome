@@ -488,21 +488,20 @@ const Bookmarks = (() => {
 
     return getSubTree(id)
       .then(item => {
-        // folder by id exists
-        if (!container.classList.contains('grid')) {
-          container.classList.add('grid');
+        if (!item[0].children) {
+          throw new Error('not_folder');
         }
         // sort by newest
         if (settings.$.sort_by_newest) {
           item[0].children.sort((a, b) => b.dateAdded - a.dateAdded);
         }
+        // folder by id exists
         render(item[0].children, settings.$.show_create_column);
         container.setAttribute('data-folder', id);
       })
       .catch(() => {
         Toast.show(chrome.i18n.getMessage('notice_cant_find_id'));
-        container.classList.remove('grid');
-        container.innerHTML =
+        container.innerHTML = /* html */
             `<div class="not-found">
               <div class="not-found__wrap">
                 <div class="not-found__icon"></div>

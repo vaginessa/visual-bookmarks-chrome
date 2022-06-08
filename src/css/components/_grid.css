@@ -23,3 +23,9 @@
     min-height: calc(100vh - 60px);
   }
 }
+
+.grid {
+  & .not-found {
+    grid-column: 1 / -1;
+  }
+}
