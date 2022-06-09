@@ -388,5 +388,8 @@
   },
   "empty_search": {
     "message": "Закладки не найдены"
+  },
+  "logo_external": {
+    "message": "Внешниие логотипы от Clearbit"
   }
 }

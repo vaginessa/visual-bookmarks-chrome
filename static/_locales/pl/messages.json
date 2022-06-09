@@ -388,5 +388,8 @@
   },
   "empty_search": {
     "message": "Nie znaleziono zakładek"
+  },
+  "logo_external": {
+    "message": "Logo zewnętrzne firmy Clearbit"
   }
 }

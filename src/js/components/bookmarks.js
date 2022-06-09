@@ -36,8 +36,6 @@ const Bookmarks = (() => {
   let isGeneratedThumbs = false;
 
   async function init() {
-    await settings.init();
-
     // screen sizes needed for the service worker
     storage.local.set({
       screen: {
@@ -299,6 +297,7 @@ const Bookmarks = (() => {
       parentId: bookmark.parentId,
       image,
       isCustomImage: custom,
+      externalLogo: settings.$.logo_external,
       openNewTab: settings.$.open_link_newtab,
       hasTitle: settings.$.show_bookmark_title,
       hasFavicon: settings.$.show_favicon

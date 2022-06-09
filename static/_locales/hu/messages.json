@@ -388,5 +388,8 @@
   },
   "empty_search": {
     "message": "A könyvjelzők nem találhatók"
+  },
+  "logo_external": {
+    "message": "A Clearbit külső logói"
   }
 }

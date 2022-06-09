@@ -388,5 +388,8 @@
   },
   "empty_search": {
     "message": "Bookmarks not found"
+  },
+  "logo_external": {
+    "message": "External logos by Clearbit"
   }
 }

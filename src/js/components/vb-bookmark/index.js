@@ -1,11 +1,12 @@
 // import styles from '../../../css/components/_bookmark.css';
-import { $createElement } from '../../utils';
-import { SVG_LOADER, FAVICON_SRC } from '../../constants';
+import { $createElement, $getDomain } from '../../utils';
+import { SVG_LOADER, FAVICON_SRC, LOGO_CLEARBIT } from '../../constants';
 
 class VbBookmark extends HTMLAnchorElement {
   #isRendered = false;
   #overlayEl = null;
   #_folderChildren = [];
+  #externalLogo = false;
 
   constructor() {
     super();
@@ -55,8 +56,11 @@ class VbBookmark extends HTMLAnchorElement {
 
   #updateLogo() {
     const imageEl = this.querySelector('.bookmark__img');
-    imageEl.className = 'bookmark__img bookmark__img--logo';
-    imageEl.style.backgroundImage = `url('${this.faviconUrl}')`;
+    imageEl.classList.add('bookmark__img', 'bookmark__img--logo');
+    if (this.#externalLogo) {
+      imageEl.classList.add('bookmark__img--external');
+    }
+    imageEl.style.backgroundImage = `url('${this.logoUrl}')`;
   }
 
   #updateFavicon() {
@@ -177,7 +181,7 @@ class VbBookmark extends HTMLAnchorElement {
             ? /* html*/
               `<div class="bookmark__img${this.isCustomImage ? ' bookmark__img--contain' : ''}" style="background-image: url('${this.image}');"></div>`
             : /* html*/
-              `<div class="bookmark__img bookmark__img--logo" style="background-image: url('${this.faviconUrl}')"></div>`
+              `<div class="bookmark__img bookmark__img--logo${this.#externalLogo ? ' bookmark__img--external' : ''}" style="background-image: url('${this.logoUrl}')"></div>`
         }
         ${
           // bookmark title
@@ -203,8 +207,21 @@ class VbBookmark extends HTMLAnchorElement {
       : this.#renderBookmark();
   }
 
+  get serviceLogo() {
+    return this.#externalLogo;
+  }
+  set externalLogo(value) {
+    this.#externalLogo = value;
+  }
+
   get faviconUrl() {
     return `${FAVICON_SRC}/${this.url}`;
+  }
+
+  get logoUrl() {
+    return this.#externalLogo
+      ? `${LOGO_CLEARBIT}/${$getDomain(this.url)}`
+      : `${FAVICON_SRC}/${this.url}`;
   }
 
   get hasOverlay() {

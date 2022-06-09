@@ -1,4 +1,5 @@
 export const FAVICON_SRC = `chrome://favicon/size/16@2x`;
+export const LOGO_CLEARBIT = `https://logo.clearbit.com/`;
 
 export const SVG_LOADER =
 `<svg class="loading" id="loading" viewBox="0 0 100 100">` +

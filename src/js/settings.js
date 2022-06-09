@@ -40,7 +40,8 @@ const DEFAULTS = Object.freeze({
     { id: $uid(), name: 'photos', link: 'https://photos.google.com' }
   ],
   folder_preview: false,
-  close_tab_after_adding_bookmark: false
+  close_tab_after_adding_bookmark: false,
+  logo_external: false
 });
 
 const SETTINGS_NOT_SYNCED = ['default_folder_id', 'enable_sync'];
@@ -68,6 +69,11 @@ const settingsStore = () => {
       if (!settings) {
         settings = Object.assign({}, DEFAULTS);
         storage.local.set({ settings });
+      } else {
+        // if the settings are already there
+        // but default settings object is expanded
+        // we need to add these properties immediately
+        Object.assign($settings, DEFAULTS, settings);
       }
 
       // if synchronization is enabled, we take data from the cloud

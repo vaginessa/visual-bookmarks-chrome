@@ -80,6 +80,15 @@
               </div>
             </div>
             <div class="tbl">
+              <div class="tbl__setting" data-locale-message="logo_external"></div>
+              <div class="tbl__value">
+                <div class="switch">
+                  <input type="checkbox" class="switch__input js-change" name="logo_external" id="logo_external">
+                  <label class="switch__label" for="logo_external"></label>
+                </div>
+              </div>
+            </div>
+            <div class="tbl">
               <div class="tbl__setting" data-locale-message="background">Background</div>
               <div class="tbl__value">
                 <select name="bg" id="background_image" class="form-control js-change">
@@ -389,9 +398,11 @@
     <!--end settings-->
 
     <footer class="footer">
-      <div class="footer__pull--left" id="ext_name"></div>
-      <div class="footer__pull--right" id="ext_version"></div>
+      <div class="footer__pull-left" id="ext_name"></div>
+      <div class="footer__pull-right" id="ext_version"></div>
     </footer>
+
+    <a class="special-link text-center" href="https://clearbit.com" target="_blank" rel="noopener">Logos provided by Clearbit</a>
 
   </div>
   <!--end wrap-->
@@ -415,6 +426,7 @@
             Preparing to move to manifest v3:
           </p>
           <ul>
+            <li>Display of logos using an external service(clearbit) as an option in the settings</li>
             <li><span class="badge badge--primary">Primary</span> New storage for saving thumbnails</li>
             <li><span class="badge badge--primary">Primary</span> Migrating settings to a new storage</li>
             <li><span class="badge badge--primary">Note</span> Thumbnail creation now takes place in the foreground (user sees a popup with a page capture)</li>
