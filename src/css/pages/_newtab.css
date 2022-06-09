@@ -5,6 +5,7 @@
   z-index: 999;
   display: grid;
   grid-gap: 10px;
+  will-change: opacity;
   opacity: 0.3;
   transition: opacity 3s linear;
   &:hover,

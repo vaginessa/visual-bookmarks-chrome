@@ -54,10 +54,16 @@ p {
 }
 
 a {
+  text-decoration-line: underline;
+  text-underline-offset: 0.12em;
+  text-decoration-thickness: 1px;
   color: var(--color-primary);
 
   &:not([href]) {
     cursor: default;
+  }
+  &:hover {
+    text-decoration: none;
   }
 }
 

@@ -148,10 +148,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 35%;
-  max-height: 30px;
+  height: min(35%, 30px);
   padding-left: 7px;
   padding-right: 7px;
+  line-height: 1;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -195,7 +195,7 @@
   opacity: 0;
   position: absolute;
   top: 0;
-  bottom: 30px;
+  bottom: min(35%, 30px);
   left: 0;
   right: 0;
   padding: var(--bookmark-dropzone-outline-width);
