@@ -323,6 +323,7 @@ const Bookmarks = (() => {
       isFolder: true,
       hasFolderPreview: folderPreview,
       folderChidlren: folderPreview ? renderFolderChildren(bookmark) : [],
+      externalLogo: settings.$.logo_external,
       image,
       openNewTab: settings.$.open_link_newtab,
       hasTitle: settings.$.show_bookmark_title,

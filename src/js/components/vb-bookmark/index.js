@@ -116,13 +116,16 @@ class VbBookmark extends HTMLAnchorElement {
   #renderFolderPreview() {
     if (this.#hasChildren) {
       const childs = this.#_folderChildren.map(child => {
+        const imageUrl = this.#externalLogo
+          ? `${LOGO_CLEARBIT}/${$getDomain(child.url)}`
+          : `${FAVICON_SRC}/${child.url}`;
+
         return child.image
           ? /* html */
               `<div class="bookmark__img bookmark__img--contain bookmark__img--children" style="background-image: url(${child.image})"></div>`
           : /* html */
             `<div class="bookmark__img bookmark__img--logo bookmark__img--children"
-              style="background-image: url('${FAVICON_SRC}/${child.url}')">
-            </div>`;
+              style="background-image: url('${imageUrl}')"></div>`;
       }).join('');
 
       return /* html */`<div class="bookmark__summary-folder">${childs}</div>`;
