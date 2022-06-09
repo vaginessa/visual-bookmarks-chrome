@@ -23,7 +23,7 @@ const DEFAULTS = Object.freeze({
   show_settings_icon: true,
   show_create_column: true,
   show_bookmark_title: true,
-  show_favicon: false,
+  show_favicon: true,
   open_link_newtab: false,
   thumbnails_update_button: true,
   thumbnails_update_recursive: false,
