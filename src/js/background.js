@@ -20,7 +20,7 @@ import {
 // TODO: transfer current thumbnails to indexDB
 // preparing to move to manifest
 function convertImageToDB(path) {
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     const image = new Image();
     image.onload = () => {
       const canvas = new OffscreenCanvas(image.width, image.height);
@@ -33,6 +33,7 @@ function convertImageToDB(path) {
         quality: 0.75
       }));
     };
+    image.onerror = reject;
     image.src = path;
   });
 }
@@ -261,12 +262,19 @@ chrome.runtime.onInstalled.addListener(async(event) => {
       );
 
       for (const [key, value] of Object.entries(customDials)) {
-        const blob = await convertImageToDB(value.image);
-        images.push({
-          id: key,
-          custom: value.custom,
-          blob
-        });
+        try {
+          const blob = await convertImageToDB(value.image);
+          images.push({
+            id: key,
+            custom: value.custom,
+            blob
+          });
+        } catch (error) {
+          console.error(error);
+          if (error.target?.src) {
+            console.error('load error - ' + error.target.src);
+          }
+        }
       }
       localStorage.removeItem('custom_dials');
 
