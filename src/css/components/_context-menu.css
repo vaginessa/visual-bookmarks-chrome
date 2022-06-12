@@ -34,8 +34,10 @@
   padding: 5px 15px;
   color: var(--context-menu-color);
   text-decoration: none;
-  cursor: pointer;
   white-space: nowrap;
+  &:not([href]) {
+    cursor: pointer;
+  }
   &:not(.is-disabled):hover,
   &.hover {
     background-color: rgba(0, 0, 0, 0.1);

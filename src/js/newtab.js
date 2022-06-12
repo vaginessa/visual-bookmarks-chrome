@@ -1,12 +1,12 @@
 import '../css/newtab.css';
 import './components/vb-select';
+import './components/vb-context-menu';
 import Gmodal from 'glory-modal';
 import Validator from 'form-validation-plugin';
 import { settings } from './settings';
 import Bookmarks from './components/bookmarks';
 import Localization from './plugins/localization';
 import UI from './components/ui';
-import ContextMenu from './components/contextmenu';
 import Ripple from './components/ripple';
 import confirmPopup from './plugins/confirmPopup.js';
 import {
@@ -22,7 +22,7 @@ import {
   $notifications
 } from './utils';
 import ImageDB from './api/imageDB';
-import { REGEXP_URL_PATTERN } from './constants';
+import { REGEXP_URL_PATTERN, CONTEXT_MENU } from './constants';
 
 const container = document.getElementById('bookmarks');
 const modal = document.getElementById('modal');
@@ -37,7 +37,6 @@ const ctxMenuEl = document.getElementById('context-menu');
 const upload = document.getElementById('upload');
 let isGenerateThumbs = false;
 let modalApi;
-let ctxMenuInstance;
 let generateThumbsBtn = null;
 
 
@@ -86,10 +85,6 @@ async function init() {
     stickySelectors: ['.sticky'],
     closeBackdrop: false
   });
-  ctxMenuInstance = new ContextMenu(ctxMenuEl, {
-    delegateSelector: '.bookmark',
-    scrollContainer: '.app'
-  });
 
   const formBookmarkEl = document.getElementById('formBookmark');
 
@@ -120,8 +115,8 @@ async function init() {
 
   upload.addEventListener('change', handleUploadScreen);
   container.addEventListener('click', handleDelegateClick);
-  ctxMenuEl.addEventListener('contextMenuSelection', handleMenuSelection);
-  ctxMenuEl.addEventListener('contextMenuOpen', handleMenuOpen);
+  ctxMenuEl.addEventListener('vb:contextmenu:select', handleMenuSelection);
+  ctxMenuEl.addEventListener('vb:contextmenu:open', handleMenuOpen);
   document.getElementById('resetCustomImage').addEventListener('click', handleResetThumb);
   modal.addEventListener('gmodal:close', handleCloseModal);
 
@@ -186,7 +181,7 @@ async function init() {
 function handlePopstate() {
   // when navigating through the history
   // hide the context menu or the modal window if they are active
-  ctxMenuInstance.close();
+  ctxMenuEl.close();
   modalApi.close();
 }
 
@@ -234,7 +229,7 @@ function handleDelegateClick(evt) {
   } else if (evt.target.closest('.bookmark__action')) {
     evt.preventDefault();
     evt.stopPropagation();
-    ctxMenuInstance.handlerTrigger(evt);
+    ctxMenuEl.trigger(evt);
   } else if (evt.target.closest('.bookmark')) {
     const url = evt.target.closest('.bookmark').href;
 
@@ -260,17 +255,10 @@ function handleUploadScreen(evt) {
 }
 
 function handleMenuOpen(evt) {
-  const bookmark = evt.detail.trigger;
-  const menuItems = Array.from(ctxMenuEl.querySelectorAll('[data-action]'));
-
-  if (bookmark.isFolder) {
-    menuItems.forEach(item => {
-      item.classList.toggle('is-disabled', item.classList.contains('is-bookmark'));
-    });
+  if (evt.detail.isFolder) {
+    ctxMenuEl.listItems = CONTEXT_MENU.filter(item => !item.isBookmark);
   } else {
-    menuItems.forEach(item => {
-      item.classList.toggle('is-disabled', item.classList.contains('is-folder'));
-    });
+    ctxMenuEl.listItems = CONTEXT_MENU.filter(item => !item.isFolder);
   }
 }
 

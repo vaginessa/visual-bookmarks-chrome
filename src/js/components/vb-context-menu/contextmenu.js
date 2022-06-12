@@ -1,9 +1,13 @@
-import { $customTrigger } from '../utils';
+import { $customTrigger } from '../../utils';
+
+const EVENTS = {
+  OPEN: 'contextmenu:open',
+  CLOSE: 'contextmenu:close',
+  SELECTION: 'contextmenu:selection'
+};
 
 class ContextMenu {
-
   constructor(menu, options) {
-
     if (typeof menu === 'string') {
       menu = document.querySelector(menu);
     }
@@ -33,6 +37,8 @@ class ContextMenu {
     if (this.settings.scrollContainer !== window) {
       const el = document.querySelector(this.settings.scrollContainer);
       this.scrollContainer = el ? el : window;
+    } else {
+      this.scrollContainer = window;
     }
 
     // links
@@ -205,8 +211,7 @@ class ContextMenu {
 
   select(action) {
     if (action && !action.classList.contains('disabled')) {
-
-      $customTrigger('contextMenuSelection', this.menu, {
+      $customTrigger(EVENTS.SELECTION, this.menu, {
         detail: {
           selection: action.dataset.action,
           trigger: this.trigger
@@ -223,7 +228,7 @@ class ContextMenu {
     this.state = true;
     this.menu.classList.add('context-menu--open');
 
-    $customTrigger('contextMenuOpen', this.menu, {
+    $customTrigger(EVENTS.OPEN, this.menu, {
       detail: {
         trigger: this.trigger
       }
@@ -243,7 +248,7 @@ class ContextMenu {
     }
     this.currentIndex = -1;
 
-    $customTrigger('contextMenuClose', this.menu, {
+    $customTrigger(EVENTS.CLOSE, this.menu, {
       detail: {
         trigger: this.trigger
       }
@@ -261,7 +266,6 @@ class ContextMenu {
       delete this[property];
     });
   }
-
 }
 
 export default ContextMenu;
