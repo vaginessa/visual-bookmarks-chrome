@@ -338,14 +338,22 @@ function runServices() {
 function openAll(id, action) {
   getChildren(id)
     .then(childrens => {
+      const folderUrl = (id) => `newtab.html#${id}`;
+
       if (action === 'open_all_window') {
         chrome.windows.create({
           focused: true
         }, win => {
-          childrens.forEach(children => openTab(children.url, { windowId: win.id }));
+          childrens.forEach(children => {
+            const url = children.url ?? folderUrl(children.id);
+            openTab(url, { windowId: win.id });
+          });
         });
       } else {
-        childrens.forEach(children => openTab(children.url));
+        childrens.forEach(children => {
+          const url = children.url ?? folderUrl(children.id);
+          openTab(url);
+        });
       }
     });
 }
