@@ -56,7 +56,7 @@ class VbBookmark extends HTMLAnchorElement {
 
   #updateLogo() {
     const imageEl = this.querySelector('.bookmark__img');
-    imageEl.classList.add('bookmark__img', 'bookmark__img--logo');
+    imageEl.className = 'bookmark__img bookmark__img--logo';
     if (this.#externalLogo) {
       imageEl.classList.add('bookmark__img--external');
     }
