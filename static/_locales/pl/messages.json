@@ -391,5 +391,8 @@
   },
   "logo_external": {
     "message": "Logo zewnętrzne firmy Clearbit"
+  },
+  "delete_thumbnail": {
+    "message": "Usuń miniaturę"
   }
 }

@@ -255,11 +255,17 @@ function handleUploadScreen(evt) {
 }
 
 function handleMenuOpen(evt) {
+  let items;
   if (evt.detail.isFolder) {
-    ctxMenuEl.listItems = CONTEXT_MENU.filter(item => !item.isBookmark);
+    items = CONTEXT_MENU.filter(item => !item.isBookmark);
   } else {
-    ctxMenuEl.listItems = CONTEXT_MENU.filter(item => !item.isFolder);
+    items = CONTEXT_MENU.filter(item => !item.isFolder);
   }
+  if (!evt.detail.image) {
+    // hide the menu item if there is no thumbnail
+    items = items.filter(item => item.action !== 'delete_thumbnail');
+  }
+  ctxMenuEl.listItems = items;
 }
 
 function handleMenuSelection(evt) {
@@ -296,6 +302,13 @@ function handleMenuSelection(evt) {
         upload.dataset.site = $getDomain(target.href);
       }
       upload.click();
+      break;
+    }
+    case 'delete_thumbnail': {
+      Bookmarks.removeThumbnail(target.id)
+        .then(() => {
+          target.image = null;
+        });
       break;
     }
     case 'remove': {

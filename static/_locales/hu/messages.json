@@ -391,5 +391,8 @@
   },
   "logo_external": {
     "message": "A Clearbit külső logói"
+  },
+  "delete_thumbnail": {
+    "message": "Miniatűr törlése"
   }
 }

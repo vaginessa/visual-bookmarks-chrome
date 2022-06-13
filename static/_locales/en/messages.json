@@ -391,5 +391,8 @@
   },
   "logo_external": {
     "message": "External logos by Clearbit"
+  },
+  "delete_thumbnail": {
+    "message": "Delete thumbnail"
   }
 }

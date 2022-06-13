@@ -391,5 +391,8 @@
   },
   "logo_external": {
     "message": "Внешниие логотипы от Clearbit"
+  },
+  "delete_thumbnail": {
+    "message": "Удалить миниатюру"
   }
 }

@@ -69,6 +69,11 @@ export const CONTEXT_MENU = [
     icon: '<svg height="24" width="24" fill="currentColor"><use xlink:href="/img/symbol.svg#upload_outline"/></svg>'
   },
   {
+    action: 'delete_thumbnail',
+    title: chrome.i18n.getMessage('delete_thumbnail'),
+    icon: '<svg height="24" width="24" fill="currentColor"><use xlink:href="/img/symbol.svg#hide_image"/></svg>'
+  },
+  {
     action: 'remove',
     title: chrome.i18n.getMessage('contextmenu_remove'),
     icon: '<svg height="24" width="24" fill="currentColor"><use xlink:href="/img/symbol.svg#delete_outline"/></svg>'
