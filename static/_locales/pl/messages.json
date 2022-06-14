@@ -372,13 +372,13 @@
     "message": "Może to być przydatne, gdy zawartość strony ładuje się przez długi czas. Im dłuższe opóźnienie, tym dłuższe oczekiwanie"
   },
   "close_tab_after_adding_bookmark": {
-    "message": "Automatyczne zamykanie karty, jeśli została ona dodana do zakładek"
+    "message": "Automatyczne zamykanie karty po dodaniu do zakładek"
   },
   "close_tab_after_adding_bookmark_note": {
     "message": "Tylko w przypadku dodania za pomocą menu kontekstowego"
   },
   "transferring_thumbnails_notification": {
-    "message": "Przenoszenie miniatur z systemu plików do pamięci. Następnie strona zakładek wizualnych zostanie ponownie załadowana."
+    "message": "Przenoszenie miniatur z systemu plików do magazynu danych. Po zakończeniu strona wizualnych zakładek zostanie ponownie załadowana."
   },
   "transferring_thumbnails_notification_btn": {
     "message": "Więcej"
@@ -390,7 +390,7 @@
     "message": "Nie znaleziono zakładek"
   },
   "logo_external": {
-    "message": "Logo zewnętrzne firmy Clearbit"
+    "message": "Loga zewnętrzne firmy Clearbit"
   },
   "delete_thumbnail": {
     "message": "Usuń miniaturę"
