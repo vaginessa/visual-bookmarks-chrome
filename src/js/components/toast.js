@@ -85,9 +85,8 @@ const Toast = (() => {
   }
 
   return {
-    show,
+    show
   };
-
 })();
 
 export default Toast;

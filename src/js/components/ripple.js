@@ -1,13 +1,11 @@
 const Ripple = function() {
-
   let module = {};
   let handlerShow;
   let isInit = false;
 
   function createRipple(target) {
-
     const rippleEl = Object.assign(document.createElement('span'), {
-      'className': 'ripple',
+      'className': 'ripple'
     });
     target.appendChild(rippleEl);
 
@@ -68,7 +66,6 @@ const Ripple = function() {
   }
 
   function hideRipple() {
-
     const el = this;
     if (!el) return;
 
@@ -94,9 +91,7 @@ const Ripple = function() {
           return false;
         }
         if (ripples.length < 1) el.style.position = '';
-
       }, delayDuration);
-
     }, 0);
   }
 

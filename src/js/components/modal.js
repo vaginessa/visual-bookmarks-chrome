@@ -1,7 +1,5 @@
 export default class Modal {
-
   constructor(el) {
-
     this.body = document.body;
     this.modal = el;
     this.backdrop = null;
@@ -15,11 +13,11 @@ export default class Modal {
     this.active = false;
 
     this.classNames = {
-      BACKDROP   : 'modal-backdrop',
-      OPEN       : 'modal-open',
-      SHOW       : 'show',
-      FADE       : 'fade',
-      FIXED      : 'fixed'
+      BACKDROP: 'modal-backdrop',
+      OPEN: 'modal-open',
+      SHOW: 'show',
+      FADE: 'fade',
+      FIXED: 'fixed'
     };
 
     this.wrapElem = document.querySelector('main');
@@ -133,7 +131,6 @@ export default class Modal {
       setTimeout(() => {
         this.active = true;
       }, this.duration);
-
     }, 10);
   }
 
@@ -154,10 +151,7 @@ export default class Modal {
       this.modal.dispatchEvent(event);
 
       this.active = false;
-
     }, this.duration);
-
   }
-
 }
 

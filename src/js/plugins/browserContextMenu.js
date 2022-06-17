@@ -105,7 +105,6 @@ const browserContextMenu = {
         }
       });
     }
-
   },
   toggle(isShow) {
     if (isShow) {
