@@ -19,10 +19,12 @@
   text-decoration: none;
   white-space: nowrap;
   outline: none;
-  &:focus-visible {
+  &:focus-visible,
+  &[data-popup='resolve']:focus {
     outline: 2px solid var(--color-primary);
     outline-offset: 2px;
   }
+
 }
 
 .btn-group {

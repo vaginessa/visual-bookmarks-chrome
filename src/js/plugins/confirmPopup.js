@@ -32,9 +32,13 @@ const popupEl = $createElement('div',
 document.body.appendChild(popupEl);
 
 const popupBody = document.getElementById('popupBody');
-const controls = popupEl.querySelectorAll('[data-popup]');
+const controls = Array.from(popupEl.querySelectorAll('[data-popup]'));
+const resolveControl = popupEl.querySelector('[data-popup="resolve"]');
 const popupInstance = new Gmodal(popupEl, {
   closeBackdrop: false
+});
+popupInstance.element.addEventListener('gmodal:open', () => {
+  resolveControl.focus();
 });
 
 function preparePopup(message) {
@@ -46,7 +50,6 @@ function confirmPopup(message) {
   popupInstance.open();
 
   return new Promise((resolve) => {
-
     const handleClick = function() {
       const target = this.dataset.popup;
       confirm = (target === 'resolve');
