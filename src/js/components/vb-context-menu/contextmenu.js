@@ -41,11 +41,6 @@ class ContextMenu {
       this.scrollContainer = window;
     }
 
-    // links
-    this.items = this.menu.querySelectorAll('.context-menu__link');
-    this.itemsLength = this.items.length;
-    this.currentIndex = -1;
-
     // Menu size
     this.menuWidth = null;
     this.menuHeight = null;
@@ -234,6 +229,11 @@ class ContextMenu {
       }
     });
     this.position(e);
+
+    // links
+    this.items = Array.from(this.menu.querySelectorAll('.context-menu__link'));
+    this.itemsLength = this.items.length;
+    this.currentIndex = -1;
   }
 
   close() {
