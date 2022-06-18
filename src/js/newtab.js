@@ -85,6 +85,14 @@ async function init() {
     stickySelectors: ['.sticky'],
     closeBackdrop: false
   });
+  modalApi.element.addEventListener('gmodal:open', () => {
+    // UX focus when modal open
+    if (form.getAttribute('data-action') === 'New') {
+      form.elements.title.focus();
+    } else {
+      form.elements.title.select();
+    }
+  });
 
   const formBookmarkEl = document.getElementById('formBookmark');
 
@@ -493,11 +501,6 @@ async function prepareModal(target) {
     form.setAttribute('data-action', id);
   } else {
     modal.classList.add('has-add');
-
-    setTimeout(() => {
-      titleField.focus();
-    }, 200);
-
     modalHead.textContent = chrome.i18n.getMessage('add_bookmark');
     urlWrap.style.display = '';
     titleField.value = '';
