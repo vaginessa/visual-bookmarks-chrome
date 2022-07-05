@@ -181,9 +181,9 @@ class VbBookmark extends HTMLAnchorElement {
           // bookmark img
           (this.image)
             ? /* html*/
-              `<div class="bookmark__img${this.isCustomImage ? ' bookmark__img--contain' : ''}" style="background-image: url('${this.image}');"></div>`
+              `<img class="bookmark__img${this.isCustomImage ? ' bookmark__img--contain' : ''}" data-src="${this.image}" alt="logo">`
             : /* html*/
-              `<div class="bookmark__img bookmark__img--logo${this.#externalLogo ? ' bookmark__img--external' : ''}" style="background-image: url('${this.logoUrl}')"></div>`
+              `<img class="bookmark__img bookmark__img--logo${this.#externalLogo ? ' bookmark__img--external' : ''}" data-src="${this.logoUrl}" alt="logo" width="32" height="32">`
         }
         ${
           // bookmark title
@@ -193,7 +193,7 @@ class VbBookmark extends HTMLAnchorElement {
                 ${
                   (this.hasFavicon)
                     ? /* html*/
-                      `<img class="bookmark__favicon" width="16" height="16" src="${this.faviconUrl}" alt="">`
+                      `<img class="bookmark__favicon" width="16" height="16" data-src="${this.faviconUrl}" alt="logo">`
                     : ``
                 }
                 <span class="bookmark__title">${this.title}</span>

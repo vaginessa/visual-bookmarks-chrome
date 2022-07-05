@@ -34,6 +34,7 @@ const Bookmarks = (() => {
   const container = document.getElementById('bookmarks');
   const dialLoading = document.getElementById('dial_loading');
   let isGeneratedThumbs = false;
+  let imageObserver = null;
 
   async function init() {
     // screen sizes needed for the service worker
@@ -189,6 +190,9 @@ const Bookmarks = (() => {
       preventOnFilter: false,
       onStart(evt) {
         showDropzone(evt.item);
+      },
+      onChange() {
+        imagesObserve();
       },
       onEnd(evt) {
         if (!evt.pullMode) {
@@ -484,6 +488,7 @@ const Bookmarks = (() => {
       })
     );
     dialLoading.hidden = true;
+    imagesObserve();
   }
 
   /**
@@ -509,8 +514,8 @@ const Bookmarks = (() => {
           item[0].children.sort((a, b) => b.dateAdded - a.dateAdded);
         }
         // folder by id exists
-        render(item[0].children, settings.$.show_create_column);
         container.setAttribute('data-folder', id);
+        return render(item[0].children, settings.$.show_create_column);
       })
       .catch(() => {
         Toast.show(chrome.i18n.getMessage('notice_cant_find_id'));
@@ -525,6 +530,30 @@ const Bookmarks = (() => {
               </div>
             </div>`;
       });
+  }
+
+  // FIXME
+  function imagesObserve() {
+    if (imageObserver) {
+      imageObserver.disconnect();
+    }
+    const lazyImages = container.querySelectorAll('[data-src]');
+    imageObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          let image = entry.target;
+          image.src = image.dataset.src;
+          image.removeAttribute('data-src');
+          observer.unobserve(image);
+        }
+      });
+    }, {
+      rootMargin: '0px'
+    });
+
+    lazyImages.forEach((image) => {
+      imageObserver.observe(image);
+    });
   }
 
   /**

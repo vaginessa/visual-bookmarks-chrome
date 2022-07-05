@@ -1,4 +1,7 @@
 /* Bookmark */
+.bookmark img:not([src]) {
+  opacity: 0;
+}
 .bookmark,
 .bookmark--create {
   display: block;
@@ -72,14 +75,23 @@
 
 .bookmark__img {
   flex-grow: 1;
-  background-repeat: no-repeat;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  /* background-repeat: no-repeat;
   background-position: center top;
-  background-size: cover;
+  background-size: cover; */
 }
 
 .bookmark__img--logo {
-  background-size: var(--bookmark-logo-size);
-  background-position: center;
+  /* background-size: var(--bookmark-logo-size); */
+  width: var(--bookmark-logo-size);
+  height: var(--bookmark-logo-size);
+  object-fit: contain;
+  object-position: center;
+  margin: auto;
+  /* background-position: center; */
 }
 
 .bookmark__img--external {
